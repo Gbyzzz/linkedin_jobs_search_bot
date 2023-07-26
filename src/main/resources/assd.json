@@ -1,0 +1,620 @@
+{
+  "standardizedTitle": "urn:li:fs_title:14109",
+  "companyDetails": {
+    "com.linkedin.voyager.deco.jobs.web.shared.WebJobPostingCompany": {
+      "companyResolutionResult": {
+        "description": "ForSight Robotics is redefining quality surgical eye care with ORYOM, the first robotic surgery platform for widespread eye diseases. We aim to democratize quality surgical ophthalmic care and bring hope to millions of patients by restoring sight, worldwide. \n\nFounded in 2020 by surgical robotics pioneers, ForSight Robotics is transforming global healthcare through technological innovation. Utilizing advanced computer visualization, AI-based machine learning, and microsurgical robotics, we seek to empower ophthalmic surgeons and improve patients lives. \n\nVision is our mission. Check out our open positions and join us today: https://www.linkedin.com/company/forsightrobotics/jobs/ ",
+        "staffCount": 49,
+        "viewerFollowingJobsUpdates": false,
+        "entityUrn": "urn:li:fs_normalized_company:67343110",
+        "staffCountRange": {
+          "start": 11,
+          "end": 50
+        },
+        "logo": {
+          "image": {
+            "com.linkedin.common.VectorImage": {
+              "artifacts": [
+                {
+                  "width": 200,
+                  "fileIdentifyingUrlPathSegment": "200_200/0/1656252162625?e=1697673600&v=beta&t=q0cBYxKuGy6ntfWoO52OKmdACH3TWA9tXogXIANsWZA",
+                  "expiresAt": 1697673600000,
+                  "height": 200
+                },
+                {
+                  "width": 100,
+                  "fileIdentifyingUrlPathSegment": "100_100/0/1656252162625?e=1697673600&v=beta&t=u_NVJD2SDbVmoiYLkDZpA63StppP47vOleO1jshTXLc",
+                  "expiresAt": 1697673600000,
+                  "height": 100
+                },
+                {
+                  "width": 400,
+                  "fileIdentifyingUrlPathSegment": "400_400/0/1656252162625?e=1697673600&v=beta&t=6gq8Uv50TGyCzZqrskPYkvMcZkN2HUCF_WTN1pp6F4Y",
+                  "expiresAt": 1697673600000,
+                  "height": 400
+                }
+              ],
+              "rootUrl": "https://media.licdn.com/dms/image/C4D0BAQHmzntabFmsOw/company-logo_"
+            }
+          },
+          "type": "SQUARE_LOGO"
+        },
+        "universalName": "forsightrobotics",
+        "specialities": [
+          "Robotics",
+          "Medical Devices",
+          "Ophthalmology",
+          "Ophthalmic Surgery",
+          "Robotic Surgery",
+          "Digital Surgery"
+        ],
+        "followingInfo": {
+          "entityUrn": "urn:li:fs_followingInfo:urn:li:company:67343110",
+          "dashFollowingStateUrn": "urn:li:fsd_followingState:urn:li:fsd_company:67343110",
+          "following": false,
+          "followingType": "DEFAULT",
+          "followerCount": 6449
+        },
+        "url": "https://www.linkedin.com/company/forsightrobotics",
+        "lcpTreatment": false,
+        "industries": [
+          "Medical Device"
+        ],
+        "name": "ForSight Robotics",
+        "$recipeType": "com.linkedin.voyager.deco.organization.shared.WebJobCompany",
+        "backgroundCoverImage": {
+          "image": {
+            "com.linkedin.common.VectorImage": {
+              "artifacts": [
+                {
+                  "width": 10000,
+                  "fileIdentifyingUrlPathSegment": "10000/0/1638280712856?e=1690383600&v=beta&t=O845_qTM16xL7hY8DIh7Kx9KqypJ1LW_aLbdlKsIsOg",
+                  "expiresAt": 1690383600000,
+                  "height": 10000
+                },
+                {
+                  "width": 400,
+                  "fileIdentifyingUrlPathSegment": "400/0/1638280712856?e=1690383600&v=beta&t=4d8ooIy597SePDiTJMNYyok6F84bggGohqxkxLbREBs",
+                  "expiresAt": 1690383600000,
+                  "height": 400
+                },
+                {
+                  "width": 200,
+                  "fileIdentifyingUrlPathSegment": "200/0/1638280712856?e=1690383600&v=beta&t=41Pag-gg2gWOaop1EZ6DQ437MEScvQuA_XMufhG3HNc",
+                  "expiresAt": 1690383600000,
+                  "height": 200
+                }
+              ],
+              "rootUrl": "https://media.licdn.com/dms/image/C4D1BAQFY8RKHgtiLvg/company-background_"
+            }
+          },
+          "cropInfo": {
+            "x": 0,
+            "width": 2256,
+            "y": 0,
+            "height": 382
+          }
+        }
+      },
+      "company": "urn:li:fs_normalized_company:67343110",
+      "$recipeType": "com.linkedin.voyager.deco.jobs.web.shared.WebJobPostingCompany"
+    }
+  },
+  "employmentStatusResolutionResult": {
+    "localizedName": "Full-time",
+    "$recipeType": "com.linkedin.voyager.deco.jobs.shared.WebFullEmploymentStatus",
+    "entityUrn": "urn:li:fs_employmentStatus:FULL_TIME"
+  },
+  "employmentStatus": "urn:li:fs_employmentStatus:FULL_TIME",
+  "ownerViewEnabled": false,
+  "hiringDashboardViewEnabled": false,
+  "talentHubJob": false,
+  "formattedLocation": "Yoqneam Illit, North District, Israel",
+  "jobPostingUrl": "https://www.linkedin.com/jobs/view/3659196567/?trk=jobs_biz_prem_srch",
+  "applies": 69,
+  "$recipeType": "com.linkedin.voyager.deco.jobs.web.shared.WebFullJobPosting",
+  "applyingInfo": {
+    "closed": false,
+    "entityUrn": "urn:li:fs_jobApplyingInfo:3659196567",
+    "applied": false
+  },
+  "workplaceTypesResolutionResults": {
+    "urn:li:fs_workplaceType:1": {
+      "localizedName": "On-site",
+      "$recipeType": "com.linkedin.voyager.deco.jobs.shared.WebJobDetailsWorkplaceType",
+      "entityUrn": "urn:li:fs_workplaceType:1"
+    }
+  },
+  "dashEntityUrn": "urn:li:fsd_jobPosting:3659196567",
+  "eligibleForLearningCourseRecsUpsell": true,
+  "eligibleForSharingProfileWithPoster": false,
+  "originalListedAt": 1688900738000,
+  "entityUrn": "urn:li:fs_normalized_jobPosting:3659196567",
+  "workRemoteAllowed": false,
+  "applyMethod": {
+    "com.linkedin.voyager.jobs.ComplexOnsiteApply": {
+      "unifyApplyEnabled": true,
+      "easyApplyUrl": "https://www.linkedin.com/job-apply/3659196567"
+    }
+  },
+  "benefitsDataSource": "JOB_POSTER",
+  "savingInfo": {
+    "saved": false,
+    "entityUrn": "urn:li:fs_jobSavingInfo:3659196567",
+    "dashSaveStateUrn": "urn:li:fsd_saveState:(SAVE,urn:li:fsd_jobPosting:3659196567)"
+  },
+  "formattedJobFunctions": [],
+  "dashJobPostingCardUrn": "urn:li:fsd_jobPostingCard:(3659196567,JOB_DETAILS)",
+  "locationVisibility": "ADDRESS",
+  "expireAt": 1704452732000,
+  "claimableByViewer": false,
+  "inferredBenefits": [],
+  "formattedIndustries": [],
+  "industries": [
+    17
+  ],
+  "salaryInsights": {
+    "lockModuleShown": true,
+    "salaryExplorerUrl": "https://www.linkedin.com/salary/",
+    "insightExists": false,
+    "jobCompensationAvailable": true
+  },
+  "country": "urn:li:fs_country:il",
+  "jobPosterEntitlements": {
+    "entitledToViewFreeJobInfo": false,
+    "entitledToPromoteJob": false,
+    "entitledToEditJob": true,
+    "entitledToCopyJob": true,
+    "entitledToAccessJobDashboard": true,
+    "entitledToViewBillingInfo": true
+  },
+  "standardizedTitleResolutionResult": {
+    "localizedName": "System Verification Engineer",
+    "$recipeType": "com.linkedin.voyager.deco.jobs.web.shared.WebFullTitle",
+    "entityUrn": "urn:li:fs_title:14109"
+  },
+  "locationUrn": "urn:li:fs_geo:102298012",
+  "jobApplicationLimitReached": false,
+  "new": false,
+  "applicantTrackingSystem": "LinkedIn",
+  "workplaceTypes": [
+    "urn:li:fs_workplaceType:1"
+  ],
+  "contentSource": "JOBS_PREMIUM",
+  "formattedExperienceLevel": "",
+  "jobFunctions": [
+    "QA"
+  ],
+  "benefits": [],
+  "encryptedPricingParams": "CwIAAAGJbnUB_c74q4BeD_r6R6pfemQqQw0CGraQzreqeEnpD-iW4EVwCw_t-NWgN2Yku00MrqGTQuEDzG_Gy8J_3M3p9EinGGfUhrysJJwUPHVq9IvG-exhcvmWDUF30rjYq8LNiMVZ0PHLlPGEfVOMoG80iEVkuXehxP770-ziNdcl_5Dz2nBMNpvA4hYq42ZCpGq4uAlIOcmzVEy39nFFVbMOB5gzmQ",
+  "jobState": "LISTED",
+  "trackingUrn": "urn:li:jobPosting:3659196567",
+  "description": {
+    "attributes": [
+      {
+        "start": 0,
+        "length": 11,
+        "type": {
+          "com.linkedin.pemberly.text.Underline": {}
+        },
+        "attributeKindUnion": {
+          "underline": {}
+        }
+      },
+      {
+        "start": 0,
+        "length": 11,
+        "type": {
+          "com.linkedin.pemberly.text.Bold": {}
+        },
+        "attributeKindUnion": {
+          "bold": {}
+        }
+      },
+      {
+        "start": 0,
+        "length": 11,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 11,
+        "length": 497,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 508,
+        "length": 1,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 510,
+        "length": 23,
+        "type": {
+          "com.linkedin.pemberly.text.Underline": {}
+        },
+        "attributeKindUnion": {
+          "underline": {}
+        }
+      },
+      {
+        "start": 510,
+        "length": 23,
+        "type": {
+          "com.linkedin.pemberly.text.Bold": {}
+        },
+        "attributeKindUnion": {
+          "bold": {}
+        }
+      },
+      {
+        "start": 509,
+        "length": 24,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 533,
+        "length": 405,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 938,
+        "length": 1,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 939,
+        "length": 1,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 940,
+        "length": 502,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1442,
+        "length": 1,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1443,
+        "length": 16,
+        "type": {
+          "com.linkedin.pemberly.text.Underline": {}
+        },
+        "attributeKindUnion": {
+          "underline": {}
+        }
+      },
+      {
+        "start": 1443,
+        "length": 16,
+        "type": {
+          "com.linkedin.pemberly.text.Bold": {}
+        },
+        "attributeKindUnion": {
+          "bold": {}
+        }
+      },
+      {
+        "start": 1443,
+        "length": 16,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1459,
+        "length": 146,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1605,
+        "length": 71,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1676,
+        "length": 67,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1743,
+        "length": 42,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1785,
+        "length": 28,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1813,
+        "length": 65,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1878,
+        "length": 72,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 1950,
+        "length": 90,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2040,
+        "length": 42,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2082,
+        "length": 1,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2083,
+        "length": 1,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2084,
+        "length": 14,
+        "type": {
+          "com.linkedin.pemberly.text.Underline": {}
+        },
+        "attributeKindUnion": {
+          "underline": {}
+        }
+      },
+      {
+        "start": 2084,
+        "length": 14,
+        "type": {
+          "com.linkedin.pemberly.text.Bold": {}
+        },
+        "attributeKindUnion": {
+          "bold": {}
+        }
+      },
+      {
+        "start": 2084,
+        "length": 14,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2098,
+        "length": 85,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2183,
+        "length": 42,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2225,
+        "length": 58,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2283,
+        "length": 145,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2428,
+        "length": 62,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2490,
+        "length": 107,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2597,
+        "length": 142,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2739,
+        "length": 62,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2801,
+        "length": 83,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2884,
+        "length": 100,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      },
+      {
+        "start": 2984,
+        "length": 53,
+        "type": {
+          "com.linkedin.pemberly.text.Paragraph": {}
+        },
+        "attributeKindUnion": {
+          "paragraph": {}
+        }
+      }
+    ],
+    "text": "Who are we?At ForSight Robotics, we are united behind our mission: we believe that robotic ophthalmic surgery is life-enhancing care. Through ingenuity and intelligent technology, we expand the potential of physicians to heal without constraints. As a pioneer and market leader in ophthalmic robotic-assisted surgery, we strive to foster an inclusive and diverse team, committed to making a difference. We lead with inclusion and empower our team members to do their best work as their most authentic selves.  Who are we looking for?Passionate people who want to make a difference drive our culture - our team members are grounded in integrity, have a strong capacity to learn, have the energy to get things done and bring diverse, real-world experiences to help us think in new ways. We actively invest in our team members to support their long-term growth so they can continue to advance our mission and achieve their highest potential.  We are looking for a candidate with the ability to thrive in an environment with complex software and hardware designs, who will be responsible for testing the performance and functionality of a novel ophthalmic robotic platform. You will join a growing team and take part in the group that is responsible for verification and validation processes. This is an ideal opportunity for someone who is motivated and passionate to make an impact in creating the next generation of ophthalmic robotic surgery. Responsibilities● Design, develop, and execute verification and validation tests (SW, HW, mechanics, environmental, and RA) of a complex multidisciplinary systems● Establish clear traceability between requirements and test procedures● Document verification and validation test results in test reports● Defect reporting, tracking, and analysis● Maintaining V&V activities● Work with R&D and Engineering to design and build test fixtures● Write and review test protocols and reports and recommend improvements● Supporting system engineering activities, such as integration and requirements reviewing● Collaborate with members of the R&D team  Qualifications● Degree in Biomedical, Mechanical, Electrical, or other relevant engineering degrees● 5+ years of experience as a V&V Engineer● Experience with medical device regulations and standards● Experience with technologically complex multidisciplinary systems including HW and SW experience at multi-disciplinary medical device companies● Strong knowledge of software and hardware test methodologies● Experience in working with test instruments, such as Oscilloscope, Current Probe, DVM, Power Supply, etc.● Experience with the environmental, safety, reliability, biocompatibility, sterilization, and essential performance tests (e.g. IEC 60601-1) ● Good analytical, problem-solving, and troubleshooting skills● Good organizational skills and strong written and verbal communication in English● Good documentation skills and ability to communicate effectively at all levels of the organization● Ability to self-manage, and communicate effectively"
+  },
+  "formattedEmploymentStatus": "Full-time",
+  "title": "System Validation & Verification Engineer ",
+  "thirdPartySourced": false,
+  "views": 527,
+  "eligibleForReferrals": false,
+  "allJobHiringTeamMembersInjectionResult": {
+    "hiringTeamMembers": [],
+    "$recipeType": "com.linkedin.voyager.deco.jobs.web.shared.WebAllJobHiringTeamMembers",
+    "entityUrn": "urn:li:fs_jobHiringTeam:3659196567"
+  },
+  "listedAt": 1688900738000,
+  "jobPostingId": 3659196567,
+  "allowedToEdit": false
+}
