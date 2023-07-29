@@ -40,7 +40,8 @@ public class UserProfile {
         ADD_FILTER_INCLUDE,
         ADD_FILTER_EXCLUDE,
         ADD_FILTER_JOB_TYPE,
-        ADD_FILTER_WORKPLACE
+        ADD_FILTER_WORKPLACE,
+        SUBSCRIBED
     }
 
     @Override

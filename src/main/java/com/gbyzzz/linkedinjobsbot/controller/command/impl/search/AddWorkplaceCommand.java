@@ -7,6 +7,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.MainMenuKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
@@ -21,13 +22,12 @@ import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKe
 @AllArgsConstructor
 public class AddWorkplaceCommand implements Command {
 
-    private final SearchParamsService searchParamsService;
     private final UserProfileService userProfileService;
     private final WorkplaceKeyboard workplaceKeyboard;
-    private final AfterAddingSearchKeyboard afterAddingSearchKeyboard;
+    private final RedisService redisService;
 
-    private static final String REPLY = "Now add workplace type:";
-    private static final String REPLY_NEXT = "All set";
+    private static final String REPLY = "Enter keywords that should be included(separate them by space)";
+    private static final String REPLY_NEXT = "Enter keywords that should be included(separate them by space)";
 
     @Override
     public SendMessage execute(Update update) {
@@ -38,14 +38,13 @@ public class AddWorkplaceCommand implements Command {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_FILTER_INCLUDE);
             userProfileService.save(userProfile);
-            SearchParams searchParams = searchParamsService.getFromTempRepository(id);
+            SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
             searchParams.getSearchFilters().put("workplaceType", getWorkplaceValue());
-            sendMessage = new SendMessage(id.toString(), REPLY_NEXT);
-            sendMessage.setReplyMarkup(afterAddingSearchKeyboard.getReplyButtons());
+            sendMessage = new SendMessage(id.toString(), REPLY);
         } else {
             getWorkplaceCallbackAction(data);
-            sendMessage = new SendMessage(id.toString(), REPLY);
-//            sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
+            sendMessage = new SendMessage(id.toString(), REPLY_NEXT);
+            sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
 
         }
         return sendMessage;

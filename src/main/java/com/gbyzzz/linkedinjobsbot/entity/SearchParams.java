@@ -1,14 +1,12 @@
 package com.gbyzzz.linkedinjobsbot.entity;
 
 import com.gbyzzz.linkedinjobsbot.entity.converter.KeywordConverter;
-import com.gbyzzz.linkedinjobsbot.entity.converter.SearchFiltersConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -16,7 +14,8 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "search_params")
+@Table(name = "search_params",uniqueConstraints = @UniqueConstraint(columnNames =
+        {"keywords", "location", "user_chat_id"}))
 public class SearchParams {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +28,10 @@ public class SearchParams {
     @Column(name = "location")
     private String location;
 
-    @OneToOne
+    @OneToOne()
     @JoinColumn(name = "user_chat_id")
     private UserProfile userProfile;
+
 
     @ElementCollection
     @CollectionTable(name = "search_filters", joinColumns = @JoinColumn(name = "search_id"))
@@ -39,7 +39,7 @@ public class SearchParams {
     @Column(name = "value")
     private Map<String, String> searchFilters;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "searchParams")
     @JoinTable( name = "filter_params", joinColumns = @JoinColumn(name = "search_id"))
     private FilterParams filterParams;
 }

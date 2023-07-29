@@ -4,6 +4,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.entity.FilterParams;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class AddFilterIncludeCommand implements Command {
 
     private final UserProfileService userProfileService;
-    private final SearchParamsService searchParamsService;
+    private final RedisService redisService;
 
     @Override
     public SendMessage execute(Update update) {
@@ -26,9 +27,9 @@ public class AddFilterIncludeCommand implements Command {
         filterParams.setInclude(keywords);
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage().getChatId()).get();
 //        searchParamsService.save(searchParams);
-        SearchParams searchParams = searchParamsService.getFromTempRepository(id);
+        SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
         searchParams.setFilterParams(filterParams);
-        searchParamsService.saveToTempRepository(searchParams, id);
+        redisService.saveToTempRepository(searchParams, id);
         userProfile.setBotState(UserProfile.BotState.ADD_FILTER_EXCLUDE);
         userProfileService.save(userProfile);
 
@@ -36,7 +37,7 @@ public class AddFilterIncludeCommand implements Command {
         for (String word : keywords) {
             reply.append(word).append("\n");
         }
-        reply.append("\nPlease enter keywords, that should be in the results(separate them by space):");
+        reply.append("\nPlease enter keywords, that shouldn't be in the results(separate them by space):");
 
         return new SendMessage(update.getMessage().getChatId().toString(), reply.toString());
     }

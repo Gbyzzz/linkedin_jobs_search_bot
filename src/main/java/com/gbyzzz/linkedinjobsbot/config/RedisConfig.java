@@ -11,6 +11,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.List;
+
 @Configuration
 @EnableCaching
 public class RedisConfig {
@@ -27,7 +29,19 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, SearchParams> redisTemplate() {
+    public RedisTemplate<String, List<String>> redisTemplate1() {
+        RedisTemplate<String, List<String>> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
+
+        // Use a custom key serializer appropriate for your custom key type
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
+
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, SearchParams> redisTemplate2() {
         RedisTemplate<String, SearchParams> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
 

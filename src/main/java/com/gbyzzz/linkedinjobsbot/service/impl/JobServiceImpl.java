@@ -7,13 +7,9 @@ import com.gbyzzz.linkedinjobsbot.entity.Job;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.repository.JobsRepository;
 import com.gbyzzz.linkedinjobsbot.service.JobService;
+import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -53,14 +49,21 @@ public class JobServiceImpl implements JobService {
     private final ObjectMapper mapper;
     private String location;
 
+    private final SavedJobService savedJobService;
+
+
     public JobServiceImpl(JobsRepository jobsRepository,
-                          SearchParamsService searchParamsService, @Qualifier("getJobsTaskExecutor") Executor getJobsTaskExecutor,
-                          EntityManager entityManager, @Qualifier("searchTaskExecutor") Executor searchTaskExecutor) {
+                          SearchParamsService searchParamsService,
+                          @Qualifier("getJobsTaskExecutor") Executor getJobsTaskExecutor,
+                          EntityManager entityManager,
+                          @Qualifier("searchTaskExecutor") Executor searchTaskExecutor,
+                          SavedJobService savedJobService) {
         this.jobsRepository = jobsRepository;
         this.searchParamsService = searchParamsService;
         this.getJobsTaskExecutor = getJobsTaskExecutor;
         this.entityManager = entityManager;
         this.searchTaskExecutor = searchTaskExecutor;
+        this.savedJobService = savedJobService;
         this.mapper = new ObjectMapper();
     }
 
@@ -133,47 +136,23 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<String> filterResults(SearchParams searchParams) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Job> criteriaQuery = criteriaBuilder.createQuery(Job.class);
-        Root<Job> root = criteriaQuery.from(Job.class);
-        List<Predicate> predicates = new ArrayList<>();
 
-        if (searchParams.getFilterParams().getInclude() != null) {
-            for(String ex : searchParams.getFilterParams().getInclude()){
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("name")), "%" + ex + "%"));
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("description")), "%" + ex + "%"));
-            }
+        String include = "\\b(?:" +
+                String.join("|", searchParams.getFilterParams().getInclude())
+                + ")\\b";
 
-        }
-        if (searchParams.getFilterParams().getExclude() != null) {
-            for(String ex : searchParams.getFilterParams().getExclude()){
-                predicates.add(criteriaBuilder.notLike(
-                        criteriaBuilder.lower(root.get("name")), "%" + ex + "%"));
-                predicates.add(criteriaBuilder.notLike(
-                        criteriaBuilder.lower(root.get("description")), "%" + ex + "%"));
-            }
-        }
-        if (searchParams.getFilterParams().getType() != null) {
-            for(String ex : searchParams.getFilterParams().getType()){
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("type")), "%" + ex + "%"));
-            }
-        }
-        if (searchParams.getFilterParams().getWorkplace() != null) {
-            for(String ex : searchParams.getFilterParams().getWorkplace()){
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("workplace")), "%" + ex + "%"));
-            }
-        }
-
-        criteriaQuery.where(predicates.toArray(new Predicate[0]));
-
-        TypedQuery<Job> query = entityManager.createQuery(criteriaQuery);
-
-        return query.getResultList().stream().map((a) -> a.getId().toString())
+        String exclude = "^(?!" +
+                String.join("|", searchParams.getFilterParams().getExclude())
+                + ").*";
+        List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude)
+                .stream().map((a) -> a.getId().toString())
                 .collect(Collectors.toList());
+        System.out.println(jobs.size());
+
+        deleteSavedJobs(jobs, searchParams.getUserProfile().getChatId());
+
+        System.out.println(jobs.size());
+        return jobs;
     }
 
     private void getTotalResults() throws IOException {
@@ -216,6 +195,13 @@ public class JobServiceImpl implements JobService {
             in.close();
         }
         return content.toString();
+    }
+
+    private void deleteSavedJobs(List<String> jobs, Long id){
+        List<String> saved = savedJobService.getJobsByUserId(id)
+                .stream().map((a) -> a.getJobId().toString())
+                .toList();
+        jobs.removeAll(saved);
     }
 
     class JobRequestTask implements Runnable {

@@ -17,10 +17,12 @@ public class AddSearchCommand implements Command {
 
     @Override
     public SendMessage execute(Update update) {
-        UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage().getChatId()).get();
+        UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
+                .getChatId()).get();
         userProfile.setBotState(UserProfile.BotState.ADD_KEYWORDS);
         userProfileService.save(userProfile);
-        String reply  = "Enter keywords(separate them by space) or /main_menu to return to main menu";
+        String reply  = "Enter keywords(separate them by space) or /main_menu to return" +
+                " to main menu";
         return new SendMessage(update.getMessage().getChatId().toString(), reply);
     }
 }

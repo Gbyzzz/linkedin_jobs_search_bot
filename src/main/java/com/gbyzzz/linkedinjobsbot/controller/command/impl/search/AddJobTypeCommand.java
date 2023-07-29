@@ -6,6 +6,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
@@ -21,10 +22,10 @@ import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKe
 @AllArgsConstructor
 public class AddJobTypeCommand implements Command {
 
-    private final SearchParamsService searchParamsService;
     private final UserProfileService userProfileService;
     private final JobTypeKeyboard jobTypeKeyboard;
     private final WorkplaceKeyboard workplaceKeyboard;
+    private final RedisService redisService;
 
     private static final String REPLY = "Now add job type:";
     private static final String REPLY_NEXT = "Now add workplace type:";
@@ -39,9 +40,9 @@ public class AddJobTypeCommand implements Command {
             userProfile.setBotState(UserProfile.BotState.ADD_WORKPLACE);
             userProfileService.save(userProfile);
             sendMessage = new SendMessage(id.toString(), REPLY_NEXT);
-            SearchParams searchParams = searchParamsService.getFromTempRepository(id);
+            SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
             searchParams.getSearchFilters().put("jobType", getJobTypeValue());
-            searchParamsService.saveToTempRepository(searchParams, id);
+            redisService.saveToTempRepository(searchParams, id);
             setWorkplaceKeyboardFalse();
             sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
         } else {

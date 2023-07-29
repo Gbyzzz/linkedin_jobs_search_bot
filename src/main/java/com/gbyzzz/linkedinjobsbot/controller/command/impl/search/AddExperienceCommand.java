@@ -5,6 +5,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
@@ -21,11 +22,10 @@ import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyb
 @AllArgsConstructor
 public class AddExperienceCommand implements Command {
 
-
-    private final SearchParamsService searchParamsService;
     private final UserProfileService userProfileService;
     private final ExperienceKeyboard experienceKeyboard;
     private final JobTypeKeyboard jobTypeKeyboard;
+    private final RedisService redisService;
 
     private static final String REPLY = "Search parameters added\n" +
             "Now you can add additional search parameters, experience:";
@@ -41,12 +41,12 @@ public class AddExperienceCommand implements Command {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_JOB_TYPE);
             userProfileService.save(userProfile);
-            SearchParams searchParams = searchParamsService.getFromTempRepository(id);
+            SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
             HashMap<String, String> searchFilters = new HashMap<>(){{
                 put("experience", getExperienceValue());
             }};
             searchParams.setSearchFilters(searchFilters);
-            searchParamsService.saveToTempRepository(searchParams, id);
+            redisService.saveToTempRepository(searchParams, id);
             sendMessage = new SendMessage(id.toString(), REPLY_NEXT);
             setJobTypeKeyboardFalse();
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
@@ -55,6 +55,7 @@ public class AddExperienceCommand implements Command {
             sendMessage = new SendMessage(id.toString(), REPLY);
             sendMessage.setReplyMarkup(experienceKeyboard.getReplyButtons());
         }
+
         return sendMessage;
     }
 }

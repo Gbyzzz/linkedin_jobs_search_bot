@@ -20,8 +20,11 @@ public class StartCommand implements Command {
     @Override
     public SendMessage execute(Update update) {
         if (!userProfileService.userProfileExistsByChatId(update.getMessage().getChatId())) {
+            String username = update.getMessage().getFrom().getUserName() != null ?
+            update.getMessage().getFrom().getUserName() :
+                    update.getMessage().getFrom().getFirstName();
             userProfileService.save(new UserProfile(update.getMessage().getChatId(),
-                    update.getMessage().getFrom().getUserName(),
+                    username,
                     UserProfile.BotState.NA, null));
             String reply = "\uD83D\uDE80 Starting \uD83D\uDE80 \n Input /add_search to add search to you account";
             SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(), reply);

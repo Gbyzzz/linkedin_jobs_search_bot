@@ -22,22 +22,6 @@ public class SearchParamsServiceImpl implements SearchParamsService {
     }
 
     @Override
-    public void saveToTempRepository(SearchParams searchParams, Long chatId) {
-        redisTemplate.opsForValue().set(chatId.toString(), searchParams);
-//        searchParamsRepository.save(searchParams, chatId);
-    }
-
-    @Override
-    public SearchParams getFromTempRepository(Long chatId) {
-        return redisTemplate.opsForValue().get(chatId.toString());
-    }
-
-    @Override
-    public void deleteFromTempRepository(Long chatId) {
-        redisTemplate.delete(chatId.toString());
-    }
-
-    @Override
     public SearchParams findById(Long id) {
         return searchParamsRepository.findById(id).orElseThrow();
     }

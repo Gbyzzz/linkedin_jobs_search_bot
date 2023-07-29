@@ -3,6 +3,7 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl.search;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @AllArgsConstructor
 public class AddKeywordsCommand implements Command {
 
-    private final SearchParamsService searchParamsService;
     private final UserProfileService userProfileService;
+    private final RedisService redisService;
 
     @Override
     public SendMessage execute(Update update) {
@@ -28,7 +29,7 @@ public class AddKeywordsCommand implements Command {
         searchParams.setUserProfile(userProfile);
 //        searchParamsService.save(searchParams);
 
-        searchParamsService.saveToTempRepository(searchParams, update.getMessage().getChatId());
+        redisService.saveToTempRepository(searchParams, update.getMessage().getChatId());
         userProfile.setBotState(UserProfile.BotState.ADD_LOCATION);
         userProfileService.save(userProfile);
 

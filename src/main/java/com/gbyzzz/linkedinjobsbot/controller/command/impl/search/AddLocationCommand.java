@@ -4,6 +4,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
@@ -18,23 +19,22 @@ import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceK
 @AllArgsConstructor
 public class AddLocationCommand extends BotCommand implements Command {
 
-
-    private final SearchParamsService searchParamsService;
     private final UserProfileService userProfileService;
     private final ExperienceKeyboard experienceKeyboard;
+    private final RedisService redisService;
     private static final String REPLY_TEXT = "Search parameters added\n" +
             "Now you can add additional search parameters, experience :";
 
     @Override
     public SendMessage execute(Update update) {
+        Long id = update.getMessage().getChatId();
         SendMessage sendMessage;
-        sendMessage = new SendMessage(update.getMessage().getChatId().toString(), REPLY_TEXT);
-        SearchParams searchParams = searchParamsService
-                .getFromTempRepository(update.getMessage().getChatId());
+        sendMessage = new SendMessage(id.toString(), REPLY_TEXT);
+        SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
         searchParams.setLocation(update.getMessage().getText());
-        searchParamsService.saveToTempRepository(searchParams, update.getMessage().getChatId());
+        redisService.saveToTempRepository(searchParams, id);
         UserProfile userProfile = userProfileService
-                .getUserProfileById(update.getMessage().getChatId()).orElse(null);
+                .getUserProfileById(id).orElse(null);
         userProfile.setBotState(UserProfile.BotState.ADD_EXPERIENCE);
         userProfileService.save(userProfile);
         setExperienceKeyboardFalse();

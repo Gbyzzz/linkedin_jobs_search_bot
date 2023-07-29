@@ -24,10 +24,12 @@ public class Job {
     @Id
     @JsonProperty("jobPostingId")
     private Long id;
+
     @JsonProperty("title")
     private String name;
 
     private String description;
+
     @JsonProperty("formattedEmploymentStatus")
     private String type;
 
@@ -64,7 +66,11 @@ public class Job {
 
     @JsonProperty("workplaceTypes")
     private void setWorkplace(JsonNode workplaceNode) {
-        this.workplace = Workplace.getWorkplace(workplaceNode.get("text").asText());
+        if(!workplaceNode.isEmpty()) {
+            this.workplace = Workplace.getWorkplace(workplaceNode.get(0).asText());
+        } else {
+            this.workplace = "";
+        }
     }
 
     @JsonProperty("companyDetails")

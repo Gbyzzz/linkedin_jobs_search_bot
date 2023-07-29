@@ -14,22 +14,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "filter_params")
 public class FilterParams {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "include")
     @Convert(converter = KeywordConverter.class)
     private String[] include;
 
+    @OneToOne
+    @JoinColumn(name = "search_id")
+    private SearchParams searchParams;
+
     @Column(name = "exclude")
     @Convert(converter = KeywordConverter.class)
     private String[] exclude;
-
-    @Column(name = "type")
-    @Convert(converter = KeywordConverter.class)
-    private String[] type;
-
-    @Column(name = "workplace")
-    @Convert(converter = KeywordConverter.class)
-    private String[]workplace;
 }
