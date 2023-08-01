@@ -8,6 +8,7 @@ import com.gbyzzz.linkedinjobsbot.service.impl.JobServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @SpringBootApplication
 @Component
+@EnableScheduling
 public class LinkedinJobsBotApplication {
 
     private static JobService jobService;
@@ -29,9 +31,9 @@ public class LinkedinJobsBotApplication {
     public static void main(String[] args) throws IOException {
         SpringApplication.run(LinkedinJobsBotApplication.class, args);
 
-        SearchParams searchParams = searchParamsService.findById(1L);
-        List<String> strings = jobService.filterResults(searchParams);
-        System.out.println(strings);
+//        SearchParams searchParams = searchParamsService.findById(1L);
+//        List<String> strings = jobService.filterResults(searchParams);
+//        System.out.println(strings);
 //        jobService.makeInitialScan(new String[]{"java"}, "Israel", new HashMap<>(){{
 //            put("experience","1,2");
 //            put("timePostedRange","");

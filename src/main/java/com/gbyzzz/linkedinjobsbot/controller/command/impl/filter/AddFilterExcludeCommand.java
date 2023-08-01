@@ -29,12 +29,12 @@ public class AddFilterExcludeCommand implements Command {
         String [] keywords = update.getMessage().getText().split(" ");
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
-        SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
+        SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.getFilterParams().setExclude(keywords);
         redisService.saveToTempRepository(searchParams, id);
         userProfile.setBotState(UserProfile.BotState.SUBSCRIBED);
         userProfileService.save(userProfile);
 
-        return makeFirstSearchCommand.execute(update);
+        return new SendMessage(id.toString(), "To start first scan please input /make_first_search");
     }
 }

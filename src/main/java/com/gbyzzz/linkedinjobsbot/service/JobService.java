@@ -8,6 +8,6 @@ import java.util.Map;
 
 public interface JobService {
 
-    void makeScan(SearchParams searchParams) throws IOException;
+    void makeScan(SearchParams searchParams, Long timePostedRange) throws IOException;
     List<String> filterResults(SearchParams searchParams);
 }

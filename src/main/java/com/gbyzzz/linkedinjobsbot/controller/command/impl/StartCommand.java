@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.Date;
+
 @Component("START")
 @AllArgsConstructor
 public class StartCommand implements Command {
@@ -25,7 +27,7 @@ public class StartCommand implements Command {
                     update.getMessage().getFrom().getFirstName();
             userProfileService.save(new UserProfile(update.getMessage().getChatId(),
                     username,
-                    UserProfile.BotState.NA, null));
+                    UserProfile.BotState.NA, new Date(System.currentTimeMillis())));
             String reply = "\uD83D\uDE80 Starting \uD83D\uDE80 \n Input /add_search to add search to you account";
             SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(), reply);
             sendMessage.setReplyMarkup(mainMenuKeyboard.getReplyButtons());
