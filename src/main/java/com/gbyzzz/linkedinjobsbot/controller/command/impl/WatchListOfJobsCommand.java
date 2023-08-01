@@ -47,13 +47,45 @@ public class WatchListOfJobsCommand implements Command {
                 savedJobService.saveJob(savedJob);
                 jobs.remove(Integer.parseInt(command[1]));
                 redisService.saveToTempRepository(jobs, id);
+                if (!jobs.isEmpty()) {
+                    sendMessage = new SendMessage(id.toString(),
+                            "https://www.linkedin.com/jobs/view/" +
+                                    jobs.get(Integer.parseInt(command[1])) + "\n" +
+                                    (Integer.parseInt(command[1]) + 1) + " of " +
+                                    jobs.size());
+                    sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
+                            Integer.parseInt(command[1]), jobs.size()));
+                } else {
+                    sendMessage = new SendMessage(id.toString(), "Nothing left, we will " +
+                            "notify if something will appear.\nStay tuned!");
+                }
+            }
+            case "delete" -> {
+                SavedJob savedJob = new SavedJob(
+                        Long.parseLong(jobs.get(Integer.parseInt(command[1]))),
+                        userProfileService.getUserProfileById(id).get(),
+                        false, SavedJob.ReplyState.DELETED);
+                savedJobService.saveJob(savedJob);
+                jobs.remove(Integer.parseInt(command[1]));
+                redisService.saveToTempRepository(jobs, id);
+                if (!jobs.isEmpty()) {
                 sendMessage = new SendMessage(id.toString(),
                         "https://www.linkedin.com/jobs/view/" +
                                 jobs.get(Integer.parseInt(command[1])) + "\n" +
                                 (Integer.parseInt(command[1])+1) + " of " +
-                        jobs.size());
+                                jobs.size());
                 sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
                         Integer.parseInt(command[1]), jobs.size()));
+                } else {
+                    sendMessage = new SendMessage(id.toString(), "Nothing left, we will " +
+                            "notify if something will appear.\nStay tuned!");
+                }
+            }
+            case "notify" -> {sendMessage = new SendMessage(id.toString(),
+                    "https://www.linkedin.com/jobs/view/" +
+                            jobs.get(0) + "\n1 of " + jobs.size());
+                sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0,
+                        jobs.size()));
             }
 
         }

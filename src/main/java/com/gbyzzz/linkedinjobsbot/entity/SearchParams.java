@@ -33,13 +33,13 @@ public class SearchParams {
     private UserProfile userProfile;
 
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "search_filters", joinColumns = @JoinColumn(name = "search_id"))
     @MapKeyColumn(name = "filter_name")
     @Column(name = "value")
     private Map<String, String> searchFilters;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "searchParams")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "searchParams", fetch = FetchType.EAGER)
     @JoinTable( name = "filter_params", joinColumns = @JoinColumn(name = "search_id"))
     private FilterParams filterParams;
 }

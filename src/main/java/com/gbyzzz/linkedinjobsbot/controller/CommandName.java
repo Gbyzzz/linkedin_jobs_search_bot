@@ -21,7 +21,8 @@ public enum CommandName {
     ADD_FILTER_JOB_TYPE(UserProfile.BotState.ADD_FILTER_JOB_TYPE.name()),
     ADD_FILTERS(UserProfile.BotState.ADD_FILTERS.name()),
     ADD_FILTER_WORKPLACE(UserProfile.BotState.ADD_FILTER_WORKPLACE.name()),
-    WATCH_LIST_OF_JOBS(UserProfile.BotState.SUBSCRIBED.name());
+    WATCH_LIST_OF_JOBS(UserProfile.BotState.SUBSCRIBED.name()),
+    MAKE_FIRST_SEARCH("/make_first_search");
 
     private final String value;
 

@@ -50,14 +50,14 @@ public class LinkedInJobsBot extends TelegramLongPollingBot {
         return "LinkedIn_Job_Search_Bot";
     }
 
-    private void sendMessage(EditMessageText editMessageText) {
+    public void sendMessage(EditMessageText editMessageText) {
         try {
             execute(editMessageText);
         } catch (TelegramApiException e) {
             System.out.println("Ошибка отправки сообщения: " + e);
         }
     }
-    private void sendMessage(SendMessage message) {
+    public void sendMessage(SendMessage message) {
         try {
             execute(message);
         } catch (TelegramApiException e) {

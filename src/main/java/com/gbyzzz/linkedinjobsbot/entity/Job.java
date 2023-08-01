@@ -59,6 +59,8 @@ public class Job {
 
     private Date expiredAt;
 
+    private Set<Long> searchParamsId;
+
     @JsonProperty("description")
     private void setDescription(JsonNode descriptionNode) {
         this.description = descriptionNode.get("text").asText();

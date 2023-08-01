@@ -12,6 +12,10 @@ public class PaginationKeyboard {
 
     public InlineKeyboardMarkup getReplyButtons(int index, int size) {
 
+        InlineKeyboardButton deleteButton = new InlineKeyboardButton();
+        deleteButton.setText("❌ Delete");
+        deleteButton.setCallbackData("delete_" + index);
+
         InlineKeyboardButton appliedButton = new InlineKeyboardButton();
         appliedButton.setText("✅ Applied");
         appliedButton.setCallbackData("apply_" + index);
@@ -25,6 +29,7 @@ public class PaginationKeyboard {
             previousButton.setCallbackData("previous_" + (index - 1));
             row1.add(previousButton);
         }
+        row1.add(deleteButton);
 
         row1.add(appliedButton);
 

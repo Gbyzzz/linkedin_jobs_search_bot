@@ -8,8 +8,6 @@ import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.repository.JobsRepository;
 import com.gbyzzz.linkedinjobsbot.service.JobService;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -40,36 +38,36 @@ public class JobServiceImpl implements JobService {
     private static final String CSRF_TOKEN = "ajax:5674202658019567459";
     private int totalResults = 0;
     private final JobsRepository jobsRepository;
-    private final SearchParamsService searchParamsService;
     private final Executor getJobsTaskExecutor;
-    private final EntityManager entityManager;
     private final Executor searchTaskExecutor;
     private static StringBuilder urlBuilder;
     private CopyOnWriteArraySet<String> results = new CopyOnWriteArraySet<>();
     private final ObjectMapper mapper;
     private String location;
 
+    private Long searchParamId;
+    private List<String> newJobs = new ArrayList<>();
+
     private final SavedJobService savedJobService;
 
 
     public JobServiceImpl(JobsRepository jobsRepository,
-                          SearchParamsService searchParamsService,
                           @Qualifier("getJobsTaskExecutor") Executor getJobsTaskExecutor,
-                          EntityManager entityManager,
                           @Qualifier("searchTaskExecutor") Executor searchTaskExecutor,
                           SavedJobService savedJobService) {
         this.jobsRepository = jobsRepository;
-        this.searchParamsService = searchParamsService;
         this.getJobsTaskExecutor = getJobsTaskExecutor;
-        this.entityManager = entityManager;
         this.searchTaskExecutor = searchTaskExecutor;
         this.savedJobService = savedJobService;
         this.mapper = new ObjectMapper();
     }
 
     @Override
-    public void makeScan(SearchParams searchParams) throws IOException {
-        this.location = location;
+    public void makeScan(SearchParams searchParams, Long timePostedRange) throws IOException {
+        results = new CopyOnWriteArraySet<>();
+        totalResults = 0;
+        this.location = searchParams.getLocation();
+        this.searchParamId = searchParams.getId();
         int index = 0;
 
         urlBuilder = new StringBuilder(URL_SEARCH_JOBS_START);
@@ -92,10 +90,13 @@ public class JobServiceImpl implements JobService {
                     .append("),");
         }
 
-        if (searchParams.getSearchFilters().size() != 0) {
+        if (!searchParams.getSearchFilters().isEmpty()) {
             StringBuilder filterQuery = new StringBuilder("selectedFilters:(");
             searchParams.getSearchFilters().forEach((key, value) ->
                     filterQuery.append(key).append(":List(").append(value).append("),"));
+            if (timePostedRange != null) {
+                filterQuery.append("timePostedRange:List(r").append(timePostedRange).append("),");
+            }
             filterQuery.replace(filterQuery.length() - 1, filterQuery.length(), "),");
             urlBuilder.append(filterQuery);
         }
@@ -197,7 +198,7 @@ public class JobServiceImpl implements JobService {
         return content.toString();
     }
 
-    private void deleteSavedJobs(List<String> jobs, Long id){
+    private void deleteSavedJobs(List<String> jobs, Long id) {
         List<String> saved = savedJobService.getJobsByUserId(id)
                 .stream().map((a) -> a.getJobId().toString())
                 .toList();
@@ -226,9 +227,18 @@ public class JobServiceImpl implements JobService {
                 System.out.println(id);
                 Optional<Job> optionalJob = jobsRepository.findById(Long.parseLong(id));
                 Set<String> locations = new HashSet<>();
-                if(optionalJob.isPresent()){
-                    locations = optionalJob.get().getSearchLocations();
+                Set<Long> searchParamsId = new HashSet<>();
+                if (optionalJob.isPresent()) {
+                    if (optionalJob.get().getSearchLocations() != null) {
+                        locations = optionalJob.get().getSearchLocations();
+                    }
+                    if (optionalJob.get().getSearchParamsId() != null) {
+                        searchParamsId = optionalJob.get().getSearchParamsId();
+                    }
+                } else {
+                    newJobs.add(id);
                 }
+                searchParamsId.add(searchParamId);
                 locations.add(location);
                 Job job = mapper.readValue(reply, Job.class);
                 job.setSearchLocations(locations);
@@ -245,13 +255,11 @@ public class JobServiceImpl implements JobService {
     class SearchRequestTask implements Runnable {
 
         private final int index;
-        private final ObjectMapper mapper;
 
         private final CountDownLatch latch;
 
         public SearchRequestTask(int index, CountDownLatch latch) {
             this.index = index;
-            this.mapper = new ObjectMapper();
             this.latch = latch;
         }
 

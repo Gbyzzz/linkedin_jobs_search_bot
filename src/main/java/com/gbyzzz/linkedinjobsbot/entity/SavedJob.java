@@ -33,6 +33,7 @@ public class SavedJob {
     public enum ReplyState {
         APPLIED,
         INTERVIEWING_IN_PROGRESS,
-        REJECTED
+        REJECTED,
+        DELETED
     }
 }

@@ -29,11 +29,12 @@ public class MakeFirstSearchCommand implements Command {
         SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.getFilterParams().setSearchParams(searchParams);
         searchParamsService.save(searchParams);
-        jobService.makeScan(searchParams);
+        jobService.makeScan(searchParams, null);
         List<String> jobs = jobService.filterResults(searchParams);
         redisService.saveToTempRepository(jobs, id);
         SendMessage sendMessage = new SendMessage(id.toString(),
-                "https://www.linkedin.com/jobs/view/" + jobs.get(0));
+//                "Making scan, please wait...");
+                "https://www.linkedin.com/jobs/view/" + jobs.get(0) + "\n1 of " + jobs.size());
         sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size()));
         return sendMessage;
     }
