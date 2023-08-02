@@ -34,8 +34,6 @@ services:
       - "bar_mongodb"
     ports:
       - "8080:8080"
-    volumes:
-      - ./:/app
     working_dir: /app
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://bot_postgres:5432/linkedin_jobs_bot

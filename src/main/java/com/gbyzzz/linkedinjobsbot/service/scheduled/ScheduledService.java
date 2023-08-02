@@ -29,7 +29,7 @@ public class ScheduledService {
     private final WatchListOfJobsCommand watchListOfJobsCommand;
     private final LinkedInJobsBot linkedInJobsBot;
 
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void makeScan() throws IOException {
         System.out.println("Scheduled");
         List<SearchParams> searchParams = searchParamsService.findAll();
