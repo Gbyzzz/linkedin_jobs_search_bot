@@ -1,8 +1,10 @@
 package com.gbyzzz.linkedinjobsbot.service.impl;
 
 import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.repository.SavedJobRepository;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
+import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class SavedJobServiceImpl implements SavedJobService {
 
     private final SavedJobRepository savedJobRepository;
+    private final UserProfileService userProfileService;
 
     @Override
     public List<SavedJob> getJobsByUserId(Long id) {
@@ -22,5 +25,42 @@ public class SavedJobServiceImpl implements SavedJobService {
     @Override
     public void saveJob(SavedJob savedJob) {
         savedJobRepository.save(savedJob);
+    }
+
+    @Override
+    public List<SavedJob> getAppliedAndDeletedJobsByUserId(Long id) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndAppliedEqualsOrDeletedEquals(id,
+                true, true);
+    }
+
+    @Override
+    public List<SavedJob> getAppliedJobsByUserId(Long id) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndAppliedEqualsOrDeletedEquals(id,
+                true, false);
+    }
+
+    @Override
+    public List<SavedJob> getNewJobsByUserId(Long id) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndAppliedEqualsOrDeletedEquals(id,
+                false, true);
+    }
+
+    @Override
+    public void saveAll(List<SavedJob> jobs) {
+        savedJobRepository.saveAll(jobs);
+    }
+
+    @Override
+    public void saveAllNewJobs(List<String> jobs, Long id) {
+        UserProfile userProfile = userProfileService.getUserProfileById(id).get();
+        saveAll(jobs.stream().map(
+                (jobId) -> new SavedJob(Long.parseLong(jobId), userProfile, false, false,
+                        SavedJob.ReplyState.NEW_JOB, null)
+                ).toList());
+    }
+
+    @Override
+    public SavedJob getJobById(Long jobId) {
+        return savedJobRepository.findById(jobId).orElseThrow();
     }
 }

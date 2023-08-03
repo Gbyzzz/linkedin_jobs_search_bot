@@ -28,14 +28,4 @@ public class RedisServiceImpl implements RedisService {
     public SearchParams getFromTempRepository(Long chatId) {
         return redisTemplateSearchParams.opsForValue().get(chatId.toString());
     }
-
-    @Override
-    public void saveToTempRepository(List<String> jobs, Long chatId) {
-        redisTemplateList.opsForValue().set(chatId.toString(), jobs);
-    }
-
-    @Override
-    public List<String> getListFromTempRepository(Long chatId) {
-        return redisTemplateList.opsForValue().get(chatId.toString());
-    }
 }

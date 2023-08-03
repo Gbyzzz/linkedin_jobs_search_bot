@@ -1,12 +1,12 @@
 package com.gbyzzz.linkedinjobsbot.controller;
 
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
+import com.gbyzzz.linkedinjobsbot.entity.converter.SendToEditMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -17,10 +17,13 @@ import java.io.IOException;
 public class LinkedInJobsBot extends TelegramLongPollingBot {
 
     private final CommandProvider provider;
+    private final SendToEditMessageConverter converter;
 
-    public LinkedInJobsBot(@Value("${bot.token}") String botToken, CommandProvider provider) {
+    public LinkedInJobsBot(@Value("${bot.token}") String botToken,
+                           CommandProvider provider, SendToEditMessageConverter converter) {
         super(botToken);
         this.provider = provider;
+        this.converter = converter;
     }
 
     @Override
@@ -36,10 +39,7 @@ public class LinkedInJobsBot extends TelegramLongPollingBot {
             if(!update.hasCallbackQuery() || update.getCallbackQuery().getData().equals("next")) {
                 sendMessage(message);
             } else {
-                sendMessage(new EditMessageText(message.getChatId(), update.getCallbackQuery()
-                        .getMessage().getMessageId(), update.getCallbackQuery().getInlineMessageId(),
-                        message.getText(), message.getParseMode(), message.getDisableWebPagePreview(),
-                        (InlineKeyboardMarkup) message.getReplyMarkup(), message.getEntities()));
+                sendMessage(converter.convert(message, update));
             }
         }
 

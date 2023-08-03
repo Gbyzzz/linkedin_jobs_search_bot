@@ -25,7 +25,8 @@ public class AddFilterIncludeCommand implements Command {
         FilterParams filterParams = new FilterParams();
         String [] keywords = update.getMessage().getText().split(" ");
         filterParams.setInclude(keywords);
-        UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage().getChatId()).get();
+        UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
+                .getChatId()).get();
 //        searchParamsService.save(searchParams);
         SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
         searchParams.setFilterParams(filterParams);

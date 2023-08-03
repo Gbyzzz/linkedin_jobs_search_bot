@@ -12,13 +12,13 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Component("WATCH_LIST_OF_JOBS")
 @AllArgsConstructor
 public class WatchListOfJobsCommand implements Command {
 
-    private final RedisService redisService;
     private final SavedJobService savedJobService;
     private final UserProfileService userProfileService;
     private final PaginationKeyboard paginationKeyboard;
@@ -28,7 +28,7 @@ public class WatchListOfJobsCommand implements Command {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String[] command = update.getCallbackQuery().getData().split("_");
         SendMessage sendMessage = null;
-        List<String> jobs = redisService.getListFromTempRepository(id);
+        List<String> jobs = getNewJobs(id);
 
         switch (command[0]) {
             case "next", "previous" -> {sendMessage = new SendMessage(id.toString(),
@@ -40,13 +40,14 @@ public class WatchListOfJobsCommand implements Command {
                     Integer.parseInt(command[1]), jobs.size()));
             }
             case "apply" -> {
-                SavedJob savedJob = new SavedJob(
-                        Long.parseLong(jobs.get(Integer.parseInt(command[1]))),
-                        userProfileService.getUserProfileById(id).get(),
-                        true, SavedJob.ReplyState.APPLIED);
+                SavedJob savedJob = savedJobService.getJobById(Long.valueOf(jobs.get(
+                        Integer.parseInt(command[1]))));
                 savedJobService.saveJob(savedJob);
-                jobs.remove(Integer.parseInt(command[1]));
-                redisService.saveToTempRepository(jobs, id);
+                savedJob.setApplied(true);
+                savedJob.setReplyState(SavedJob.ReplyState.APPLIED);
+                savedJob.setDateApplied(new Date(System.currentTimeMillis()));
+                savedJobService.saveJob(savedJob);
+                jobs = getNewJobs(id);
                 if (!jobs.isEmpty()) {
                     sendMessage = new SendMessage(id.toString(),
                             "https://www.linkedin.com/jobs/view/" +
@@ -61,13 +62,13 @@ public class WatchListOfJobsCommand implements Command {
                 }
             }
             case "delete" -> {
-                SavedJob savedJob = new SavedJob(
-                        Long.parseLong(jobs.get(Integer.parseInt(command[1]))),
-                        userProfileService.getUserProfileById(id).get(),
-                        false, SavedJob.ReplyState.DELETED);
+                SavedJob savedJob = savedJobService.getJobById(Long.valueOf(jobs.get(
+                        Integer.parseInt(command[1]))));
                 savedJobService.saveJob(savedJob);
-                jobs.remove(Integer.parseInt(command[1]));
-                redisService.saveToTempRepository(jobs, id);
+                savedJob.setDeleted(true);
+                savedJob.setReplyState(SavedJob.ReplyState.DELETED);
+                savedJobService.saveJob(savedJob);
+                jobs = getNewJobs(id);
                 if (!jobs.isEmpty()) {
                 sendMessage = new SendMessage(id.toString(),
                         "https://www.linkedin.com/jobs/view/" +
@@ -90,5 +91,11 @@ public class WatchListOfJobsCommand implements Command {
 
         }
         return sendMessage;
+    }
+
+    private List<String> getNewJobs(Long id){
+        return savedJobService.getNewJobsByUserId(id).stream().map(
+                (savedJob -> savedJob.getJobId().toString())
+        ).toList();
     }
 }

@@ -2,14 +2,15 @@ package com.gbyzzz.linkedinjobsbot.service.scheduled;
 
 import com.gbyzzz.linkedinjobsbot.controller.LinkedInJobsBot;
 import com.gbyzzz.linkedinjobsbot.controller.command.impl.WatchListOfJobsCommand;
+import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
-import com.gbyzzz.linkedinjobsbot.service.JobService;
-import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
+import com.gbyzzz.linkedinjobsbot.entity.converter.SendToEditMessageConverter;
+import com.gbyzzz.linkedinjobsbot.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -24,10 +25,12 @@ import java.util.stream.Collectors;
 public class ScheduledService {
 
     private final JobService jobService;
+
     private final SearchParamsService searchParamsService;
-    private final RedisService redisService;
     private final WatchListOfJobsCommand watchListOfJobsCommand;
+    private final SavedJobService savedJobService;
     private final LinkedInJobsBot linkedInJobsBot;
+    private final SendToEditMessageConverter converter;
 
     @Scheduled(cron = "0 0/30 * * * ?")
     public void makeScan() throws IOException {
@@ -37,36 +40,58 @@ public class ScheduledService {
             for (SearchParams searchParam : searchParams) {
                 Long id = searchParam.getUserProfile().getChatId();
                 if (searchParam.getUserProfile().getBotState().equals(UserProfile.BotState.SUBSCRIBED)) {
+                    int initialSize = savedJobService.getNewJobsByUserId(id).size();
                     jobService.makeScan(searchParam, 86400L);
-                    List<String> newJobs = jobService.filterResults(searchParam);
-                    if (newJobs.size() > 0) {
-                        List<String> list = null;
-                        try {
-                            list = redisService.getListFromTempRepository(id);
-                        } catch (Exception e) {
+//                    if (!newJobs.isEmpty()) {
+//                        List<String> list = null;
+//                        try {
+//                            list = savedJobService.getNewJobsByUserId(id).stream().map(
+//                                    (job) -> job.getJobId().toString()
+//                            ).toList();
+//                        } catch (Exception e) {
+//
+//                        }
+//                        if (list != null && !list.isEmpty()) {
+//                            List<String> finalList = list;
+//                            List<String> differences = newJobs.stream()
+//                                    .filter(element -> !finalList.contains(element))
+//                                    .collect(Collectors.toList());
+//                            list.addAll(differences);
+//                            savedJobService.saveAll(list.stream().map(
+//                                    (newJobId) -> new SavedJob(Long.parseLong(newJobId),
+//                                            searchParam.getUserProfile(),
+//                                            false, false,
+//                                            SavedJob.ReplyState.APPLIED, null))
+//                                    .toList());
+//                        } else {
+//                            savedJobService.saveAll(list.stream().map(
+//                                            (newJobId) -> new SavedJob(Long.parseLong(newJobId),
+//                                                    searchParam.getUserProfile(),
+//                                                    false, false,
+//                                                    SavedJob.ReplyState.APPLIED, null))
+//                                    .toList());
+                    if (initialSize == 0) {
+                        Update update = getUpdate(id);
+                        linkedInJobsBot.sendMessage(watchListOfJobsCommand.execute(update));
 
-                        }
-                        if (list != null && !list.isEmpty()) {
-                            List<String> finalList = list;
-                            List<String> differences = newJobs.stream()
-                                    .filter(element -> !finalList.contains(element))
-                                    .collect(Collectors.toList());
-                            list.addAll(differences);
-                            redisService.saveToTempRepository(list, id);
-                        } else {
-                            redisService.saveToTempRepository(newJobs, id);
-                            Update update = new Update();
-                            update.setCallbackQuery(new CallbackQuery());
-                            update.getCallbackQuery().setData("notify");
-                            update.getCallbackQuery().setMessage(new Message());
-                            update.getCallbackQuery().getMessage().setChat(new Chat());
-                            update.getCallbackQuery().getMessage().getChat().setId(id);
-                            linkedInJobsBot.sendMessage(watchListOfJobsCommand.execute(update));
-
-                        }
+                    } else if (initialSize < savedJobService.getNewJobsByUserId(id).size()) {
+                        Update update = getUpdate(id);
+                        linkedInJobsBot.sendMessage(converter.convert(
+                                watchListOfJobsCommand.execute(update), update));
                     }
+//                    }
                 }
             }
         }
+    }
+
+    private Update getUpdate(Long id){
+        Update update = new Update();
+        update.setCallbackQuery(new CallbackQuery());
+        update.getCallbackQuery().setData("notify");
+        update.getCallbackQuery().setMessage(new Message());
+        update.getCallbackQuery().getMessage().setChat(new Chat());
+        update.getCallbackQuery().getMessage().getChat().setId(id);
+        return update;
     }
 }
