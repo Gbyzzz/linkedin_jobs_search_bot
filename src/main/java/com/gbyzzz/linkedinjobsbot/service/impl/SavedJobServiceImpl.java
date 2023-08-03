@@ -29,20 +29,20 @@ public class SavedJobServiceImpl implements SavedJobService {
 
     @Override
     public List<SavedJob> getAppliedAndDeletedJobsByUserId(Long id) {
-        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndAppliedEqualsOrDeletedEquals(id,
-                true, true);
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id,
+                SavedJob.ReplyState.DELETED);
     }
 
     @Override
     public List<SavedJob> getAppliedJobsByUserId(Long id) {
-        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndAppliedEqualsOrDeletedEquals(id,
-                true, false);
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id,
+                SavedJob.ReplyState.APPLIED);
     }
 
     @Override
     public List<SavedJob> getNewJobsByUserId(Long id) {
-        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndAppliedEqualsOrDeletedEquals(id,
-                false, true);
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id,
+                SavedJob.ReplyState.NEW_JOB);
     }
 
     @Override
