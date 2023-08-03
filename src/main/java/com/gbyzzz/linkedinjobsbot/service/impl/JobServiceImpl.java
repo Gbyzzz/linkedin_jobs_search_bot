@@ -199,6 +199,7 @@ public class JobServiceImpl implements JobService {
     }
 
     private void deleteSavedJobs(List<String> jobs, Long id) {
+
         List<String> saved = savedJobService.getJobsByUserId(id)
                 .stream().map((a) -> a.getJobId().toString())
                 .toList();

@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -25,12 +27,18 @@ public class SavedJob {
     private UserProfile userProfile;
     @Column(name = "applied")
     private boolean applied;
+    @Column(name = "deleted")
+    private boolean deleted;
     @Column(name = "reply_state")
     @Type(PGSavedJobReplyState.class)
     @Enumerated(EnumType.STRING)
     private ReplyState replyState;
+    @Column(name = "date_applied")
+    private Date dateApplied;
+
 
     public enum ReplyState {
+        NEW_JOB,
         APPLIED,
         INTERVIEWING_IN_PROGRESS,
         REJECTED,

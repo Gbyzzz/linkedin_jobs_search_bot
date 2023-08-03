@@ -2,10 +2,10 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
+import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.service.JobService;
-import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
+import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,6 +22,8 @@ public class MakeFirstSearchCommand implements Command {
     private final JobService jobService;
     private final PaginationKeyboard paginationKeyboard;
     private final RedisService redisService;
+    private final SavedJobService savedJobService;
+    private final UserProfileService userProfileService;
 
     @Override
     public SendMessage execute(Update update) throws IOException {
@@ -31,7 +33,8 @@ public class MakeFirstSearchCommand implements Command {
         searchParamsService.save(searchParams);
         jobService.makeScan(searchParams, null);
         List<String> jobs = jobService.filterResults(searchParams);
-        redisService.saveToTempRepository(jobs, id);
+        savedJobService.saveAllNewJobs(jobs, id);
+//                redisService.saveToTempRepository(jobs, id);
         SendMessage sendMessage = new SendMessage(id.toString(),
 //                "Making scan, please wait...");
                 "https://www.linkedin.com/jobs/view/" + jobs.get(0) + "\n1 of " + jobs.size());
