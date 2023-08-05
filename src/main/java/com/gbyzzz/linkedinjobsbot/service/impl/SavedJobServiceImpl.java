@@ -54,7 +54,7 @@ public class SavedJobServiceImpl implements SavedJobService {
     public void saveAllNewJobs(List<String> jobs, Long id) {
         UserProfile userProfile = userProfileService.getUserProfileById(id).get();
         saveAll(jobs.stream().map(
-                (jobId) -> new SavedJob(Long.parseLong(jobId), userProfile, false, false,
+                (jobId) -> new SavedJob(Long.parseLong(jobId), userProfile,
                         SavedJob.ReplyState.NEW_JOB, null)
                 ).toList());
     }

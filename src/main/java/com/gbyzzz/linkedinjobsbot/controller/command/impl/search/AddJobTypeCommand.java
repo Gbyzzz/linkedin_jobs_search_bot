@@ -4,6 +4,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
+import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
@@ -31,26 +32,32 @@ public class AddJobTypeCommand implements Command {
     private static final String REPLY_NEXT = "Now add workplace type:";
 
     @Override
-    public SendMessage execute(Update update) {
+    public Reply execute(Update update) {
         SendMessage sendMessage;
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String data = update.getCallbackQuery().getData();
+        Reply reply;
         if (data.equals("next")) {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_WORKPLACE);
             userProfileService.save(userProfile);
             sendMessage = new SendMessage(id.toString(), REPLY_NEXT);
-            SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
-            searchParams.getSearchFilters().put("jobType", getJobTypeValue());
-            redisService.saveToTempRepository(searchParams, id);
+            String jobType = getJobTypeValue();
+            if(!jobType.isEmpty()) {
+                SearchParams searchParams = redisService.getFromTempRepository(id);
+                searchParams.getSearchFilters().put("jobType", jobType);
+                redisService.saveToTempRepository(searchParams, id);
+            }
             setWorkplaceKeyboardFalse();
             sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
+            reply = new Reply(sendMessage, false);
         } else {
             getJobTypeCallbackAction(data);
             sendMessage = new SendMessage(id.toString(), REPLY);
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
+            reply = new Reply(sendMessage, true);
         }
-        return sendMessage;
+        return reply;
     }
 
 

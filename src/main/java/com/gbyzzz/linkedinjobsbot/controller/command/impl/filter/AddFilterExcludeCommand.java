@@ -2,6 +2,7 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl.filter;
 
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.impl.MakeFirstSearchCommand;
+import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
@@ -24,7 +25,7 @@ public class AddFilterExcludeCommand implements Command {
     private final MakeFirstSearchCommand makeFirstSearchCommand;
 
     @Override
-    public SendMessage execute(Update update) throws IOException {
+    public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
         String [] keywords = update.getMessage().getText().split(" ");
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
@@ -32,9 +33,10 @@ public class AddFilterExcludeCommand implements Command {
         SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.getFilterParams().setExclude(keywords);
         redisService.saveToTempRepository(searchParams, id);
-        userProfile.setBotState(UserProfile.BotState.SUBSCRIBED);
+        userProfile.setBotState(UserProfile.BotState.LIST_NEW_JOBS);
         userProfileService.save(userProfile);
 
-        return new SendMessage(id.toString(), "To start first scan please input /make_first_search");
+        return new Reply(new SendMessage(id.toString(),
+                "To start first scan please input /make_first_search"), false);
     }
 }

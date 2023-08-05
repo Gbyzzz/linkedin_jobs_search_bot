@@ -2,6 +2,7 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.MainMenuKeyboard;
+import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,15 @@ public class StartCommand implements Command {
     private final UserProfileService userProfileService;
     private final MainMenuKeyboard mainMenuKeyboard;
 
+    private static final String REPLY = "\uD83D\uDE80 Starting \uD83D\uDE80 \n " +
+            "Input /add_search to add search to you account";
+
+    private static final String REPLY_ALREADY_STARTED = "\uD83D\uDE80 Starting \uD83D\uDE80 \n " +
+            "Input /add_search to add search to you account";
+
     @Override
-    public SendMessage execute(Update update) {
+    public Reply execute(Update update) {
+        SendMessage sendMessage;
         if (!userProfileService.userProfileExistsByChatId(update.getMessage().getChatId())) {
             String username = update.getMessage().getFrom().getUserName() != null ?
             update.getMessage().getFrom().getUserName() :
@@ -28,15 +36,12 @@ public class StartCommand implements Command {
             userProfileService.save(new UserProfile(update.getMessage().getChatId(),
                     username,
                     UserProfile.BotState.NA, new Date(System.currentTimeMillis())));
-            String reply = "\uD83D\uDE80 Starting \uD83D\uDE80 \n Input /add_search to add search to you account";
-            SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(), reply);
+            sendMessage = new SendMessage(update.getMessage().getChatId().toString(), REPLY);
             sendMessage.setReplyMarkup(mainMenuKeyboard.getReplyButtons());
-            return sendMessage;
         } else {
-            String reply = "You have already started the bot";
-            SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(), reply);
+            sendMessage = new SendMessage(update.getMessage().getChatId().toString(), REPLY_ALREADY_STARTED);
             sendMessage.setReplyMarkup(mainMenuKeyboard.getReplyButtons());
-            return sendMessage;
         }
+        return new Reply(sendMessage, false);
     }
 }
