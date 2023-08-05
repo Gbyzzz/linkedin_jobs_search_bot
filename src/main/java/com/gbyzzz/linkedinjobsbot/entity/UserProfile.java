@@ -41,7 +41,8 @@ public class UserProfile {
         ADD_FILTER_EXCLUDE,
         ADD_FILTER_JOB_TYPE,
         ADD_FILTER_WORKPLACE,
-        SUBSCRIBED
+        LIST_NEW_JOBS,
+        LIST_APPLIED_JOBS
     }
 
     @Override

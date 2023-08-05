@@ -1,6 +1,7 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.filter;
 
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
+import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.FilterParams;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
@@ -20,7 +21,7 @@ public class AddFilterIncludeCommand implements Command {
     private final RedisService redisService;
 
     @Override
-    public SendMessage execute(Update update) {
+    public Reply execute(Update update) {
         Long id = update.getMessage().getChatId();
         FilterParams filterParams = new FilterParams();
         String [] keywords = update.getMessage().getText().split(" ");
@@ -28,7 +29,7 @@ public class AddFilterIncludeCommand implements Command {
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
 //        searchParamsService.save(searchParams);
-        SearchParams searchParams = (SearchParams) redisService.getFromTempRepository(id);
+        SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.setFilterParams(filterParams);
         redisService.saveToTempRepository(searchParams, id);
         userProfile.setBotState(UserProfile.BotState.ADD_FILTER_EXCLUDE);
@@ -40,6 +41,7 @@ public class AddFilterIncludeCommand implements Command {
         }
         reply.append("\nPlease enter keywords, that shouldn't be in the results(separate them by space):");
 
-        return new SendMessage(update.getMessage().getChatId().toString(), reply.toString());
+        return new Reply(new SendMessage(update.getMessage().getChatId().toString(),
+                reply.toString()), false);
     }
 }

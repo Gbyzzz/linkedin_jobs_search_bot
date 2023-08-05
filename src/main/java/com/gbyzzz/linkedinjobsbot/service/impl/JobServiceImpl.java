@@ -4,13 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gbyzzz.linkedinjobsbot.entity.Job;
+import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.repository.JobsRepository;
 import com.gbyzzz.linkedinjobsbot.service.JobService;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.swing.event.ListDataEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -68,7 +71,6 @@ public class JobServiceImpl implements JobService {
         totalResults = 0;
         this.location = searchParams.getLocation();
         this.searchParamId = searchParams.getId();
-        int index = 0;
 
         urlBuilder = new StringBuilder(URL_SEARCH_JOBS_START);
 
@@ -133,10 +135,11 @@ public class JobServiceImpl implements JobService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        filterResults(searchParams);
+
     }
 
-    @Override
-    public List<String> filterResults(SearchParams searchParams) {
+    public void filterResults(SearchParams searchParams) {
 
         String include = "\\b(?:" +
                 String.join("|", searchParams.getFilterParams().getInclude())
@@ -146,14 +149,14 @@ public class JobServiceImpl implements JobService {
                 String.join("|", searchParams.getFilterParams().getExclude())
                 + ").*";
         List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude)
-                .stream().map((a) -> a.getId().toString())
-                .collect(Collectors.toList());
+                .stream().map(job -> job.getId().toString()).collect(Collectors.toList());
         System.out.println(jobs.size());
-
         deleteSavedJobs(jobs, searchParams.getUserProfile().getChatId());
-
+        List<SavedJob> jobsToSave = new ArrayList<>(jobs.stream().map(job ->
+                new SavedJob(Long.parseLong(job), searchParams.getUserProfile(),
+                        SavedJob.ReplyState.NEW_JOB, null)).toList());
+        savedJobService.saveAll(jobsToSave);
         System.out.println(jobs.size());
-        return jobs;
     }
 
     private void getTotalResults() throws IOException {
@@ -200,10 +203,12 @@ public class JobServiceImpl implements JobService {
 
     private void deleteSavedJobs(List<String> jobs, Long id) {
 
-        List<String> saved = savedJobService.getJobsByUserId(id)
+        List<String> saved = new ArrayList<>(savedJobService.getJobsByUserId(id)
                 .stream().map((a) -> a.getJobId().toString())
-                .toList();
-        jobs.removeAll(saved);
+                .toList());
+        if(!saved.isEmpty()) {
+            jobs.removeAll(saved);
+        }
     }
 
     class JobRequestTask implements Runnable {
