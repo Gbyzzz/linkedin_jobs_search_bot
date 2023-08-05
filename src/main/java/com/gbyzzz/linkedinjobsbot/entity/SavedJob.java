@@ -25,10 +25,6 @@ public class SavedJob {
     @ManyToOne
     @JoinColumn(name = "user_chat_id")
     private UserProfile userProfile;
-    @Column(name = "applied")
-    private boolean applied;
-    @Column(name = "deleted")
-    private boolean deleted;
     @Column(name = "reply_state")
     @Type(PGSavedJobReplyState.class)
     @Enumerated(EnumType.STRING)

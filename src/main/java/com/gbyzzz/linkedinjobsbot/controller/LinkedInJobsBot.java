@@ -1,6 +1,7 @@
 package com.gbyzzz.linkedinjobsbot.controller;
 
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
+import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.converter.SendToEditMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,16 +31,16 @@ public class LinkedInJobsBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasCallbackQuery() || update.hasMessage()) {
             Command command = provider.getCommand(update);
-            SendMessage message = null;
+            Reply reply;
             try {
-                message = command.execute(update);
+                reply = command.execute(update);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if(!update.hasCallbackQuery() || update.getCallbackQuery().getData().equals("next")) {
-                sendMessage(message);
+            if(!reply.isUpdate()) {
+                sendMessage(reply.getSendMessage());
             } else {
-                sendMessage(converter.convert(message, update));
+                sendMessage(converter.convert(reply.getSendMessage(), update));
             }
         }
 
