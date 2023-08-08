@@ -3,7 +3,9 @@ package com.gbyzzz.linkedinjobsbot.service.impl;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.repository.UserProfileRepository;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 
 import java.util.Optional;
 
@@ -29,5 +31,11 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     public boolean userProfileExistsByChatId(Long chatId) {
         return userProfileRepository.existsById(chatId);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        userProfileRepository.delete(userProfileRepository.getReferenceById(id));
     }
 }

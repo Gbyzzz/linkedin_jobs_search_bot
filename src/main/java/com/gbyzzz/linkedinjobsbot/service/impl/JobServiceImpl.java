@@ -11,6 +11,7 @@ import com.gbyzzz.linkedinjobsbot.repository.JobsRepository;
 import com.gbyzzz.linkedinjobsbot.service.JobService;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.swing.event.ListDataEvent;
@@ -37,8 +38,10 @@ public class JobServiceImpl implements JobService {
     private static final String GET_JOB_END = "?decorationId=com.linkedin.voyager.deco.jobs.web" +
             ".shared.WebFullJobPosting-65&topNRequestedFlavors=List(TOP_APPLICANT,IN_NETWORK," +
             "COMPANY_RECRUIT,SCHOOL_RECRUIT,HIDDEN_GEM,ACTIVELY_HIRING_COMPANY)";
-    private static final String COOKIE = "li_sugr=9f1aebdd-3734-49bf-beea-fb9b3cfa8342; AMCVS_14215E3D5995C57C0A495C55%40AdobeOrg=1; JSESSIONID=\"ajax:5674202658019567459\"; timezone=Asia/Jerusalem; _guid=d9c71cde-8030-411c-a172-c716c42051dd; li_theme=dark; li_theme_set=user; liap=true; at_check=true; s_fid=42F67EBCFDDE71B7-0FDD3AA870A7A217; s_cc=true; s_sq=%5B%5BB%5D%5D; s_plt=0.85; s_pltp=developer.linkedin.com%2Fproduct-catalog; gpv_pn=developer.linkedin.com%2F; s_tslv=1689420142370; s_ips=1689; s_tp=2515; s_ppv=developer.linkedin.com%2F%2C67%2C67%2C1689%2C1%2C1; PLAY_LANG=en; _gcl_au=1.1.164304760.1689420575; fid=AQG_0EHRO7ozVwAAAYloEJIo6whASRmKbTjHqpFfinD0wVrefPDDFzdUF0F8I7cz7tdwl2UhUCQkoA; lang=v=2&lang=en-us; bcookie=\"v=2&ddb1ce22-a5f8-48b4-8c83-6b9fc3acd2b3\"; bscookie=\"v=1&20230720071542ccc24876-5a0c-4296-863e-2c3e1543ea83AQHaiRryBBQMlQqsdfC8JsutwjGIzftG\"; li_at=AQEDAQwe1q4C1M9rAAABiXInmuAAAAGJljQe4E0AzNletlIXmsyzVSOi_uoZGb1mySjUl57chdj-IHOzRKn5DgxVQNODgjsY0CIbbn1l09iYB-mNN_-g9WNo8DzpG6sQAkvirhysxHR0Gev5PjCf_azo; PLAY_SESSION=eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InNlc3Npb25faWQiOiIyZmZjNzM3OC1mZjljLTRmZmYtOTA3MS1iZmU2ODhjMDE2NmN8MTY4OTQzNTg4OCIsImFsbG93bGlzdCI6Int9IiwicmVjZW50bHktc2VhcmNoZWQiOiIiLCJyZWZlcnJhbC11cmwiOiIiLCJhaWQiOiIiLCJyZWNlbnRseS12aWV3ZWQiOiI1NDgzNjB8NTQzODUyfDEzNDc0NTgiLCJDUFQtaWQiOiLCglx1MDAwM1x1MDAwM1x1MDAwMSx2QidJe1x1MDAwM8OdPsOMd8KmIiwiZmxvd1RyYWNraW5nSWQiOiJKMmI3ZVF2VFJydUphOFdJaGd2R1l3PT0iLCJleHBlcmllbmNlIjoiZW50aXR5IiwidHJrIjoiIn0sIm5iZiI6MTY4OTgzODA2MiwiaWF0IjoxNjg5ODM4MDYyfQ.ySd8aPk-kyVLKcGBRf5rWBaaG8rV7lc-5FbHssdfAEs; lidc=\"b=VB30:s=V:r=V:a=V:p=V:g=4357:u=464:x=1:i=1689838066:t=1689879817:v=2:sig=AQFoAuw5oUV9p7izHb2hBXwHKwCqACyH\"; li_mc=MTsyMTsxNjg5ODQ0MTI3OzE7MDIxSOcoqVJ9NwNef+rwvMH/ho9xof0CtZYey7N/XTBuEQY=; AMCV_14215E3D5995C57C0A495C55%40AdobeOrg=-637568504%7CMCIDTS%7C19558%7CMCMID%7C60930982390492816921810187840853810855%7CMCOPTOUT-1689851333s%7CNONE%7CvVersion%7C5.1.1; UserMatchHistory=AQIJZxuxWQ5bBgAAAYlykAIiruTNFd_DeXiFosw9KjJ8JpKV2_yUKOcBVEbSu167jFLwtk0d-22lldsg2FHBTcbEiXtjyFdexkHyPFjIGWQuWOiTFVmKrYIV8mNvbdJ-RBDnIcC-HObo9ZjTUwVY8f0cx7JJ2Wxqr6VeKcqzexkNkD8Afi6iG47cPIMqVTSMFscqIYvn0BcwCMAX8jVBZFDCbvbFlfdIh01LWqLNN1qzrjysuAvwd3H3-wxF4MnfXXJuRFwb1kzDqS7yhCTIyo7nyvi4OLh1gx1M4AbF9OHfy2IVSXDacEzPsRM7_Av_y8uBL5VYxMQq9YbjZPBjPIFVLPyg4pM; sdsc=22%3A1%2C1689844340526%7EJAPP%2C0nA%2B%2BKW3hJsM7AOTNGwX4%2F1ODjcY%3D";
-    private static final String CSRF_TOKEN = "ajax:5674202658019567459";
+    @Value("${bot.cookie}")
+    private String COOKIE;
+    @Value("${bot.csrf.token}")
+    private String CSRF_TOKEN;
     private int totalResults = 0;
     private final JobsRepository jobsRepository;
     private final Executor getJobsTaskExecutor;
@@ -78,7 +81,7 @@ public class JobServiceImpl implements JobService {
             StringBuilder keywordsBuilder = new StringBuilder("keywords:");
             keywordsBuilder.append(searchParams.getKeywords()[0]);
             if (searchParams.getKeywords().length > 1) {
-                for (int i = 1; i <= searchParams.getKeywords().length; i++) {
+                for (int i = 1; i < searchParams.getKeywords().length; i++) {
                     keywordsBuilder.append("%20");
                     keywordsBuilder.append(searchParams.getKeywords()[i]);
                 }

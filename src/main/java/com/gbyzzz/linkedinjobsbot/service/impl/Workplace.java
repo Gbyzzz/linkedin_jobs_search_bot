@@ -3,13 +3,15 @@ package com.gbyzzz.linkedinjobsbot.service.impl;
 import java.util.Objects;
 
 public enum Workplace {
-    ON_SITE("urn:li:fs_workplaceType:1"),
-    REMOTE("urn:li:fs_workplaceType:2"),
-    HYBRID("urn:li:fs_workplaceType:3");
+    ON_SITE(1, "urn:li:fs_workplaceType:1"),
+    REMOTE(2, "urn:li:fs_workplaceType:2"),
+    HYBRID(3, "urn:li:fs_workplaceType:3");
 
+    private int id;
     private String workplaceType;
 
-    Workplace(String workplaceType) {
+    Workplace(int id, String workplaceType) {
+        this.id = id;
         this.workplaceType = workplaceType;
     }
 
@@ -21,5 +23,12 @@ public enum Workplace {
         }
         return null;
     }
-
+    public static String getName(int id){
+        for (Workplace e: Workplace.values()) {
+            if (e.id  == id) {
+                return e.name().toLowerCase();
+            }
+        }
+        return null;
+    }
 }

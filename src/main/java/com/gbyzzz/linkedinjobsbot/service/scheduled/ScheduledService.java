@@ -38,14 +38,7 @@ public class ScheduledService {
                 Long id = searchParam.getUserProfile().getChatId();
                 int initialSize = savedJobService.getNewJobsByUserId(id).size();
                 jobService.makeScan(searchParam, 86400L);
-
-//                if (initialSize == 0) {
-//                    Update update = getUpdate(id);
-//                    linkedInJobsBot.sendMessage(watchListOfJobsCommand.execute(update)
-//                            .getSendMessage());
-//
-//                } else
-                    if (initialSize < savedJobService.getNewJobsByUserId(id).size()) {
+                if (initialSize < savedJobService.getNewJobsByUserId(id).size()) {
                     Update update = getUpdate(id);
                     linkedInJobsBot.sendMessage(watchListOfJobsCommand
                             .execute(update).getSendMessage());
@@ -57,7 +50,7 @@ public class ScheduledService {
     private Update getUpdate(Long id) {
         Update update = new Update();
         update.setCallbackQuery(new CallbackQuery());
-        update.getCallbackQuery().setData("notify");
+        update.getCallbackQuery().setData("notify_SCHEDULED");
         update.getCallbackQuery().setMessage(new Message());
         update.getCallbackQuery().getMessage().setChat(new Chat());
         update.getCallbackQuery().getMessage().getChat().setId(id);
