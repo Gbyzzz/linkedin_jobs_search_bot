@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.util.List;
 
 public interface SearchParamsService {
-    void save(SearchParams searchParams) throws IOException;
+    SearchParams save(SearchParams searchParams) throws IOException;
 
     List<SearchParams> findAll();
-
-
     SearchParams findById(Long id);
+    Boolean existSearchParam(SearchParams searchParams);
 
+    List<SearchParams> findAllByUserId(Long id);
+
+    void delete(SearchParams searchParams);
 }

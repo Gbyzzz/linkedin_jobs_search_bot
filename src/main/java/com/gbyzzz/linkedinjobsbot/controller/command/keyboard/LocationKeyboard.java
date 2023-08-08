@@ -17,7 +17,7 @@ public class LocationKeyboard {
 
         InlineKeyboardButton telAvivButton = new InlineKeyboardButton();
         telAvivButton.setText("Tel-Aviv");
-        telAvivButton.setCallbackData("Tel-Aviv");
+        telAvivButton.setCallbackData("Tel_Aviv");
 
         InlineKeyboardButton haifaButton = new InlineKeyboardButton();
         haifaButton.setText("Haifa");
@@ -27,6 +27,10 @@ public class LocationKeyboard {
         jerusalemButton.setText("Jerusalem");
         jerusalemButton.setCallbackData("Jerusalem");
 
+        InlineKeyboardButton usaButton = new InlineKeyboardButton();
+        usaButton.setText("USA");
+        usaButton.setCallbackData("USA");
+
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(israelButton);
         row1.add(telAvivButton);
@@ -35,9 +39,13 @@ public class LocationKeyboard {
         row2.add(haifaButton);
         row2.add(jerusalemButton);
 
+//        List<InlineKeyboardButton> row3 = new ArrayList<>();
+//        row3.add(usaButton);
+
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         rows.add(row1);
         rows.add(row2);
+//        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
     }

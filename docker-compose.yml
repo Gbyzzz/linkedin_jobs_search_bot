@@ -39,5 +39,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://bot_postgres:5432/linkedin_jobs_bot
       - SPRING_DATA_MONGODB_URI=mongodb://bar_mongodb:27017/jobs_db
       - SPRING_DATA_REDIS_HOST=bot_redis
+      - BOT_NAME=
+      - BOT_TOKEN=
+      - BOT_COOKIE=
+      - BOT_CSRF_TOKEN=
 volumes:
   postgres-data:
