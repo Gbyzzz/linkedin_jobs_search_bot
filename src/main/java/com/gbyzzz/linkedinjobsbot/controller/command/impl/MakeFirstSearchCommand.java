@@ -30,29 +30,29 @@ public class MakeFirstSearchCommand implements Command {
     public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
         SearchParams searchParams = redisService.getFromTempRepository(id);
-        redisService.deleteFromTempRepository(id);
         searchParams.getFilterParams().setSearchParams(searchParams);
-        jobService.makeScan(searchParams, null);
-//        List<String> jobs = jobService.filterResults(searchParams);
-//        savedJobService.saveAllNewJobs(jobs, id);
-        UserProfile userProfile = userProfileService.getUserProfileById(id).get();
-        userProfile.setBotState(UserProfile.BotState.LIST_NEW_JOBS);
-        userProfileService.save(userProfile);
         SendMessage sendMessage;
-        List<SavedJob> jobs = savedJobService.getNewJobsByUserId(id);
-        if (!jobs.isEmpty()) {
-//                redisService.saveToTempRepository(jobs, id);
-            sendMessage = new SendMessage(id.toString(),
-//                "Making scan, please wait...");
-                    "New jobs:\nhttps://www.linkedin.com/jobs/view/" + jobs.get(0).getJobId() + "\n1 of "
-                            + jobs.size());
-            sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                    UserProfile.BotState.LIST_NEW_JOBS));
+        if(!searchParamsService.existSearchParam(searchParams)) {
+            jobService.makeScan(searchParams, null);
+            UserProfile userProfile = userProfileService.getUserProfileById(id).get();
+            userProfile.setBotState(UserProfile.BotState.NEW);
+            userProfileService.save(userProfile);
+            List<SavedJob> jobs = savedJobService.getNewJobsByUserId(id);
+            if (!jobs.isEmpty()) {
+                sendMessage = new SendMessage(id.toString(),
+                        "New jobs:\nhttps://www.linkedin.com/jobs/view/"
+                                + jobs.get(0).getJobId() + "\n1 of " + jobs.size());
+                sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
+                        UserProfile.BotState.NEW.name()));
+            } else {
+                sendMessage = new SendMessage(id.toString(), "Nothing was found. Please check" +
+                        " your search params or wait, maybe something will come up");
+            }
         } else {
-            sendMessage = new SendMessage(id.toString(), "Nothing was found. Please check your" +
-                    "search params or wait, maybe something will come up");
+            sendMessage = new SendMessage(id.toString(), "You already have these search params");
         }
         searchParamsService.save(searchParams);
+        redisService.deleteFromTempRepository(id);
         return new Reply(sendMessage, false);
     }
 }

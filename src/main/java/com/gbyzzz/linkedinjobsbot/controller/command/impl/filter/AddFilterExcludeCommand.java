@@ -33,7 +33,7 @@ public class AddFilterExcludeCommand implements Command {
         SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.getFilterParams().setExclude(keywords);
         redisService.saveToTempRepository(searchParams, id);
-        userProfile.setBotState(UserProfile.BotState.LIST_NEW_JOBS);
+        userProfile.setBotState(UserProfile.BotState.NEW);
         userProfileService.save(userProfile);
 
         return new Reply(new SendMessage(id.toString(),

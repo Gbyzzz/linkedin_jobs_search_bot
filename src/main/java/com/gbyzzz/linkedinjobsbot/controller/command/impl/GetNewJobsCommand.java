@@ -32,14 +32,14 @@ public class GetNewJobsCommand implements Command {
         List<String> jobs = savedJobService.getNewJobsByUserId(id).stream().map(
                 (savedJob -> savedJob.getJobId().toString())).toList();
         UserProfile userProfile = userProfileService.getUserProfileById(id).get();
-        userProfile.setBotState(UserProfile.BotState.LIST_NEW_JOBS);
+        userProfile.setBotState(UserProfile.BotState.NEW);
         userProfileService.save(userProfile);
         if (!jobs.isEmpty()) {
             sendMessage = new SendMessage(id.toString(),
                     "New jobs:\nhttps://www.linkedin.com/jobs/view/" + jobs.get(0)
                             + "\n1 of " + jobs.size());
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                    UserProfile.BotState.LIST_NEW_JOBS));
+                    UserProfile.BotState.NEW.name()));
         } else {
             sendMessage = new SendMessage(id.toString(), REPLY);
         }
