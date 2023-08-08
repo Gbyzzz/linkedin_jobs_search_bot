@@ -66,8 +66,8 @@ public class ExperienceKeyboard {
     }
 
     public static void setExperienceKeyboardFalse() {
-        for (boolean s : state) {
-            s = false;
+        for (int i = 0; i<state.length; i++) {
+            state[i] = false;
         }
     }
 
