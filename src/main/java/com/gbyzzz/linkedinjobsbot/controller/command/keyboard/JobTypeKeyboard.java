@@ -60,8 +60,8 @@ public class JobTypeKeyboard {
     }
 
     public static void setJobTypeKeyboardFalse() {
-        for (boolean s : state) {
-            s = false;
+        for (int i = 0; i<state.length; i++) {
+            state[i] = false;
         }
     }
 
