@@ -21,6 +21,16 @@ public enum Experience {
         this.buttonName = buttonName;
         this.stateName = stateName;
     }
+
+    public static String getName(String value) {
+        for (Experience e: Experience.values()) {
+            if (Objects.equals(e.value  , value)) {
+                return e.buttonName;
+            }
+        }
+        return null;
+    }
+
     String getValue(){
         return value;
     }

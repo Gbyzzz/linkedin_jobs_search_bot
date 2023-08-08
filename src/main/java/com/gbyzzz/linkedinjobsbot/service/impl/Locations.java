@@ -3,7 +3,9 @@ package com.gbyzzz.linkedinjobsbot.service.impl;
 public enum Locations {
     ISRAEL("101620260"),
     HAIFA("118503349"),
-    USA("10364427");
+    TEL_AVIV("104243116"),
+    JERUSALEM("106832012"),
+    USA("103644278");
 
     private final String id;
 

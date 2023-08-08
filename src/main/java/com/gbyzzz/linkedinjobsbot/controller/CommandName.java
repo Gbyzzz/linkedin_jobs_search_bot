@@ -2,42 +2,45 @@ package com.gbyzzz.linkedinjobsbot.controller;
 
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public enum CommandName {
 
-    START ("/start", null),
-    EXIT ("/exit", null),
-    ADD_SEARCH("/add_search", null),
-    MAIN_MENU("/main_menu", null),
-    MAKE_SEARCH("/make_search", null),
-    ADD_KEYWORDS(UserProfile.BotState.ADD_KEYWORDS.name(), null),
-    ADD_LOCATION(UserProfile.BotState.ADD_LOCATION.name(), null),
-    ADD_EXPERIENCE(UserProfile.BotState.ADD_EXPERIENCE.name(), null),
-    ADD_JOB_TYPE(UserProfile.BotState.ADD_JOB_TYPE.name(), null),
-    ADD_WORKPLACE(UserProfile.BotState.ADD_WORKPLACE.name(), null),
-    ADD_FILTER_EXCLUDE(UserProfile.BotState.ADD_FILTER_EXCLUDE.name(), null),
-    ADD_FILTER_INCLUDE(UserProfile.BotState.ADD_FILTER_INCLUDE.name(), null),
-    ADD_FILTER_JOB_TYPE(UserProfile.BotState.ADD_FILTER_JOB_TYPE.name(), null),
-    ADD_FILTERS(UserProfile.BotState.ADD_FILTERS.name(), null),
-    ADD_FILTER_WORKPLACE(UserProfile.BotState.ADD_FILTER_WORKPLACE.name(), null),
-    WATCH_LIST_OF_JOBS(UserProfile.BotState.LIST_NEW_JOBS.name(),
-            UserProfile.BotState.LIST_APPLIED_JOBS.name()),
-    MAKE_FIRST_SEARCH("/make_first_search", null),
-    GET_APPLIED_JOBS("/get_applied_jobs", null),
-    GET_NEW_JOBS("/get_new_jobs", null);
+    START (new ArrayList<>(){{add("/start");}}),
+    EXIT (new ArrayList<>(){{add("/exit");}}),
+    ADD_SEARCH(new ArrayList<>(){{add("/add_search");}}),
+    MAIN_MENU(new ArrayList<>(){{add("/main_menu");}}),
+    MAKE_SEARCH(new ArrayList<>(){{add("/make_search");}}),
+    ADD_KEYWORDS(new ArrayList<>(){{add(UserProfile.BotState.ADD_KEYWORDS.name());}}),
+    ADD_LOCATION(new ArrayList<>(){{add(UserProfile.BotState.ADD_LOCATION.name());}}),
+    ADD_EXPERIENCE(new ArrayList<>(){{add(UserProfile.BotState.ADD_EXPERIENCE.name());}}),
+    ADD_JOB_TYPE(new ArrayList<>(){{add(UserProfile.BotState.ADD_JOB_TYPE.name());}}),
+    ADD_WORKPLACE(new ArrayList<>(){{add(UserProfile.BotState.ADD_WORKPLACE.name());}}),
+    ADD_FILTER_EXCLUDE(new ArrayList<>(){{add(UserProfile.BotState.ADD_FILTER_EXCLUDE.name());}}),
+    ADD_FILTER_INCLUDE(new ArrayList<>(){{add(UserProfile.BotState.ADD_FILTER_INCLUDE.name());}}),
+    ADD_FILTER_JOB_TYPE(new ArrayList<>(){{add(UserProfile.BotState.ADD_FILTER_JOB_TYPE.name());}}),
+    ADD_FILTERS(new ArrayList<>(){{add(UserProfile.BotState.ADD_FILTERS.name());}}),
+    ADD_FILTER_WORKPLACE(new ArrayList<>(){{add(UserProfile.BotState.ADD_FILTER_WORKPLACE.name());}}),
+    WATCH_LIST_OF_JOBS(new ArrayList<>(){{add(UserProfile.BotState.NEW.name());
+        add(UserProfile.BotState.APPLIED.name());
+        add(UserProfile.BotState.SEARCHES.name());}}),
+    MAKE_FIRST_SEARCH(new ArrayList<>(){{add("/make_first_search");}}),
+    GET_ALL_SEARCHES(new ArrayList<>(){{add("/get_all_searches");}}),
+    GET_APPLIED_JOBS(new ArrayList<>(){{add("/get_applied_jobs");}}),
+    GET_NEW_JOBS(new ArrayList<>(){{add("/get_new_jobs");}});
 
-    private final String firstValue;
-    private final String secondValue;
+    private final List<String> values;
 
-    CommandName(final String firstValue, final String secondValue) {
-        this.firstValue = firstValue;
-        this.secondValue = secondValue;
+
+    CommandName(final List<String> values) {
+        this.values = values;
     }
 
     static CommandName getValue(final String val) {
         for (CommandName e: CommandName.values()) {
-            if (Objects.equals(e.firstValue, val) || Objects.equals(e.secondValue, val)) {
+            if (e.values.contains(val)) {
                 return e;
             }
         }

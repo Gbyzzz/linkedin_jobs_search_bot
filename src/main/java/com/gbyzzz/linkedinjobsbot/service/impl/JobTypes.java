@@ -27,4 +27,12 @@ public enum JobTypes {
         }
         return null;
     }
+    public static String getName(final String id) {
+        for (JobTypes e: JobTypes.values()) {
+            if (Objects.equals(e.id, id)) {
+                return e.name().toLowerCase();
+            }
+        }
+        return null;
+    }
 }
