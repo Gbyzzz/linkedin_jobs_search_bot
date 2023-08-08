@@ -39,13 +39,13 @@ public class LocationKeyboard {
         row2.add(haifaButton);
         row2.add(jerusalemButton);
 
-//        List<InlineKeyboardButton> row3 = new ArrayList<>();
-//        row3.add(usaButton);
+        List<InlineKeyboardButton> row3 = new ArrayList<>();
+        row3.add(usaButton);
 
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         rows.add(row1);
         rows.add(row2);
-//        rows.add(row3);
+        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
     }

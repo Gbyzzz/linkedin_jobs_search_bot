@@ -48,8 +48,8 @@ public class WorkplaceKeyboard {
     }
 
     public static void setWorkplaceKeyboardFalse() {
-        for (boolean s : state) {
-            s = false;
+        for (int i = 0; i<state.length; i++) {
+            state[i] = false;
         }
     }
 
