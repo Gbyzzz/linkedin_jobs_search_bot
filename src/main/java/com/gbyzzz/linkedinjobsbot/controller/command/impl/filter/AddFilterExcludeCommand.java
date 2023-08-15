@@ -6,7 +6,6 @@ import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,7 +30,7 @@ public class AddFilterExcludeCommand implements Command {
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
         SearchParams searchParams = redisService.getFromTempRepository(id);
-        searchParams.getFilterParams().setExclude(keywords);
+        searchParams.getFilterParams().setExcludeWordsFromTitle(keywords);
         redisService.saveToTempRepository(searchParams, id);
         userProfile.setBotState(UserProfile.BotState.NEW);
         userProfileService.save(userProfile);

@@ -44,7 +44,7 @@ public class GetAppliedJobs implements Command {
                             .format(jobs.get(0).getDateApplied())
                             + "\n1 of " + jobs.size());
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                    UserProfile.BotState.APPLIED.name()));
+                    UserProfile.BotState.APPLIED.name(), "ALL"));
         } else {
             sendMessage = new SendMessage(id.toString(), REPLY);
         }
