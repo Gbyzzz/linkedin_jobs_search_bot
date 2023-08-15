@@ -11,34 +11,29 @@ import java.util.Arrays;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "filter_params")
 public class FilterParams {
 
     @Id
+    @ToString.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "filter_params_id")
     private Long id;
 
-    @EqualsAndHashCode.Include
-    @Column(name = "include")
+    @ToString.Include
+    @Column(name = "include_words_desc")
     @Convert(converter = KeywordConverter.class)
-    private String[] include;
+    private String[] includeWordsInDescription;
 
     @OneToOne
-    @JoinColumn(name = "search_id")
+    @JoinColumn(name = "search_params_id")
     private SearchParams searchParams;
 
-    @EqualsAndHashCode.Include
-    @Column(name = "exclude")
+    @ToString.Include
+    @Column(name = "exclude_words_title")
     @Convert(converter = KeywordConverter.class)
-    private String[] exclude;
+    private String[] excludeWordsFromTitle;
 
-    @Override
-    public String toString() {
-        return "FilterParams{" +
-                "id=" + id +
-                ", include=" + Arrays.toString(include) +
-                ", exclude=" + Arrays.toString(exclude) +
-                '}';
-    }
 }

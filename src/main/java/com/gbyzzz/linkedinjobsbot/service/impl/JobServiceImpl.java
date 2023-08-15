@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.swing.event.ListDataEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -109,20 +108,21 @@ public class JobServiceImpl implements JobService {
         urlBuilder.replace(urlBuilder.length() - 1, urlBuilder.length(), URL_SEARCH_JOBS_END);
         getTotalResults();
 
-        CountDownLatch searchLatch = new CountDownLatch((int) Math.ceil((double) Math.min(totalResults, 900) / 100));
 
+        CountDownLatch searchLatch = new CountDownLatch((int) Math.ceil((double) Math.min(totalResults, 900) / 100));
 
         for (int i = 0; i < Math.min(totalResults, 900); i = i + 100) {
             Runnable task = new SearchRequestTask(i, searchLatch);
             searchTaskExecutor.execute(task);
         }
 
+
         try {
             searchLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        List<String> foundIds = new ArrayList<>(results);
         System.out.println(results);
         System.out.println(totalResults);
 
@@ -138,28 +138,27 @@ public class JobServiceImpl implements JobService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        filterResults(searchParams);
+        filterResults(searchParams, foundIds);
 
     }
 
-    public void filterResults(SearchParams searchParams) {
-
+    public void filterResults(SearchParams searchParams, List<String> foundIds) {
+        System.out.println("Search id: " + searchParams.getId());
         String include = "\\b(?:" +
-                String.join("|", searchParams.getFilterParams().getInclude())
+                String.join("|", searchParams.getFilterParams().getIncludeWordsInDescription())
                 + ")\\b";
 
         String exclude = "^(?!" +
-                String.join("|", searchParams.getFilterParams().getExclude())
+                String.join("|", searchParams.getFilterParams().getExcludeWordsFromTitle())
                 + ").*";
         List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude)
                 .stream().map(job -> job.getId().toString()).collect(Collectors.toList());
         System.out.println(jobs.size());
-        deleteSavedJobs(jobs, searchParams.getUserProfile().getChatId());
-        List<SavedJob> jobsToSave = new ArrayList<>(jobs.stream().map(job ->
-                new SavedJob(Long.parseLong(job), searchParams.getUserProfile(),
-                        SavedJob.ReplyState.NEW_JOB, null)).toList());
+        jobs.retainAll(foundIds);
+
+        List<SavedJob> jobsToSave = getNewJobsToSave(jobs, searchParams);
         savedJobService.saveAll(jobsToSave);
-        System.out.println(jobs.size());
+        System.out.println(jobsToSave.size());
     }
 
     private void getTotalResults() throws IOException {
@@ -204,14 +203,27 @@ public class JobServiceImpl implements JobService {
         return content.toString();
     }
 
-    private void deleteSavedJobs(List<String> jobs, Long id) {
-
-        List<String> saved = new ArrayList<>(savedJobService.getJobsByUserId(id)
-                .stream().map((a) -> a.getJobId().toString())
-                .toList());
-        if(!saved.isEmpty()) {
-            jobs.removeAll(saved);
+    private List<SavedJob> getNewJobsToSave(List<String> jobs, SearchParams searchParams) {
+        List<SavedJob> newJobs = new ArrayList<>();
+        for (String newJob : jobs) {
+            Optional<SavedJob> optionalSavedJob = savedJobService.getJobById(Long.parseLong(newJob));
+            if (optionalSavedJob.isPresent()) {
+                SavedJob savedJob = optionalSavedJob.get();
+                savedJob.getSearchParams().add(searchParams);
+                savedJob.getUserProfile().add(searchParams.getUserProfile());
+                searchParams.getSavedJobs().add(savedJob);
+                newJobs.add(savedJob);
+            } else {
+                newJobs.add(new SavedJob(Long.parseLong(newJob), SavedJob.ReplyState.NEW_JOB, null,
+                        new HashSet<>() {{
+                            add(searchParams.getUserProfile());
+                        }},
+                        new HashSet<>() {{
+                            add(searchParams);
+                        }}));
+            }
         }
+        return newJobs;
     }
 
     class JobRequestTask implements Runnable {

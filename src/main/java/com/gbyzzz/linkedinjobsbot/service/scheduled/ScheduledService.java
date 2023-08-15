@@ -1,9 +1,8 @@
 package com.gbyzzz.linkedinjobsbot.service.scheduled;
 
 import com.gbyzzz.linkedinjobsbot.controller.LinkedInJobsBot;
-import com.gbyzzz.linkedinjobsbot.controller.command.impl.WatchListOfJobsCommand;
+import com.gbyzzz.linkedinjobsbot.controller.command.impl.ListOfJobsCommand;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.entity.converter.SendToEditMessageConverter;
 import com.gbyzzz.linkedinjobsbot.service.*;
 import lombok.AllArgsConstructor;
@@ -24,24 +23,26 @@ public class ScheduledService {
     private final JobService jobService;
 
     private final SearchParamsService searchParamsService;
-    private final WatchListOfJobsCommand watchListOfJobsCommand;
+    private final ListOfJobsCommand listOfJobsCommand;
     private final SavedJobService savedJobService;
     private final LinkedInJobsBot linkedInJobsBot;
     private final SendToEditMessageConverter converter;
 
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void makeScan() throws IOException {
         System.out.println("Scheduled");
         List<SearchParams> searchParams = searchParamsService.findAll();
         if (!searchParams.isEmpty()) {
             for (SearchParams searchParam : searchParams) {
-                Long id = searchParam.getUserProfile().getChatId();
-                int initialSize = savedJobService.getNewJobsByUserId(id).size();
-                jobService.makeScan(searchParam, 86400L);
-                if (initialSize < savedJobService.getNewJobsByUserId(id).size()) {
-                    Update update = getUpdate(id);
-                    linkedInJobsBot.sendMessage(watchListOfJobsCommand
-                            .execute(update).getSendMessage());
+                if (searchParam.getSearchState().equals(SearchParams.SearchState.SUBSCRIBED)) {
+                    Long id = searchParam.getUserProfile().getChatId();
+                    int initialSize = savedJobService.getNewJobsByUserId(id).size();
+                    jobService.makeScan(searchParam, 7200L);
+                    if (initialSize < savedJobService.getNewJobsByUserId(id).size()) {
+                        Update update = getUpdate(id);
+                        linkedInJobsBot.sendMessage(listOfJobsCommand
+                                .execute(update).getSendMessage());
+                    }
                 }
             }
         }
