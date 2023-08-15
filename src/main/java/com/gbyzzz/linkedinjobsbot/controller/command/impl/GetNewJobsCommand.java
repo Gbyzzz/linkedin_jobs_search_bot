@@ -39,7 +39,7 @@ public class GetNewJobsCommand implements Command {
                     "New jobs:\nhttps://www.linkedin.com/jobs/view/" + jobs.get(0)
                             + "\n1 of " + jobs.size());
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                    UserProfile.BotState.NEW.name()));
+                    UserProfile.BotState.NEW.name(), "ALL"));
         } else {
             sendMessage = new SendMessage(id.toString(), REPLY);
         }

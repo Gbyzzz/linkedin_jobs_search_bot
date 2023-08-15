@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 @Component("MAKE_FIRST_SEARCH")
@@ -33,6 +34,9 @@ public class MakeFirstSearchCommand implements Command {
         searchParams.getFilterParams().setSearchParams(searchParams);
         SendMessage sendMessage;
         if(!searchParamsService.existSearchParam(searchParams)) {
+            searchParams.setSavedJobs(new HashSet<>());
+            searchParams.setSearchState(SearchParams.SearchState.NEW);
+            searchParams = searchParamsService.save(searchParams);
             jobService.makeScan(searchParams, null);
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.NEW);
@@ -43,15 +47,17 @@ public class MakeFirstSearchCommand implements Command {
                         "New jobs:\nhttps://www.linkedin.com/jobs/view/"
                                 + jobs.get(0).getJobId() + "\n1 of " + jobs.size());
                 sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                        UserProfile.BotState.NEW.name()));
+                        UserProfile.BotState.NEW.name(), "ALL"));
             } else {
                 sendMessage = new SendMessage(id.toString(), "Nothing was found. Please check" +
                         " your search params or wait, maybe something will come up");
             }
+            searchParams.setSearchState(SearchParams.SearchState.SUBSCRIBED);
+            searchParams = searchParamsService.save(searchParams);
         } else {
             sendMessage = new SendMessage(id.toString(), "You already have these search params");
         }
-        searchParamsService.save(searchParams);
+
         redisService.deleteFromTempRepository(id);
         return new Reply(sendMessage, false);
     }

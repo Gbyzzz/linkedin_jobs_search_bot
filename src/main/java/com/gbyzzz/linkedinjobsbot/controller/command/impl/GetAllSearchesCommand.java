@@ -16,7 +16,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -83,20 +82,20 @@ public class GetAllSearchesCommand implements Command {
 
             stringBuilder.append("  Include in description:\n");
 
-            for (String include : params.getFilterParams().getInclude()) {
+            for (String include : params.getFilterParams().getIncludeWordsInDescription()) {
                 stringBuilder.append("    ").append(include).append("\n");
             }
             stringBuilder.append("\n");
             stringBuilder.append("  Exclude in description:\n");
 
-            for (String exclude : params.getFilterParams().getExclude()) {
+            for (String exclude : params.getFilterParams().getExcludeWordsFromTitle()) {
                 stringBuilder.append("    ").append(exclude).append("\n");
             }
             stringBuilder.append("\n");
             sendMessage = new SendMessage(id.toString(),
                     stringBuilder.toString());
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, searchParams.size(),
-                    UserProfile.BotState.SEARCHES.name()));
+                    UserProfile.BotState.SEARCHES.name(), "ALL"));
         } else {
             sendMessage = new SendMessage(id.toString(), REPLY);
         }
