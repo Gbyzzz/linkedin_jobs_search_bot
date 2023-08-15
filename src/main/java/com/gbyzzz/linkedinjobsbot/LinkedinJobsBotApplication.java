@@ -1,8 +1,10 @@
 package com.gbyzzz.linkedinjobsbot;
 
+import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.repository.JobsRepository;
 import com.gbyzzz.linkedinjobsbot.service.JobService;
+import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.impl.JobServiceImpl;
 import com.gbyzzz.linkedinjobsbot.service.impl.SearchParamsServiceImpl;
@@ -23,14 +25,23 @@ public class LinkedinJobsBotApplication {
 
     private static JobService jobService;
     private static SearchParamsService searchParamsService;
+    private static SavedJobService savedJobService;
 
-    public LinkedinJobsBotApplication(JobService jobService, SearchParamsService searchParamsService) {
+    public LinkedinJobsBotApplication(JobService jobService,
+                                      SearchParamsService searchParamsService,
+                                      SavedJobService savedJobService) {
         this.jobService = jobService;
         this.searchParamsService = searchParamsService;
+        this.savedJobService = savedJobService;
     }
 
     public static void main(String[] args) throws IOException {
         SpringApplication.run(LinkedinJobsBotApplication.class, args);
+        System.out.println(savedJobService.getJobById(3480776663L));
+        System.out.println(searchParamsService.findById(1L));
+
+//        System.out.println(savedJobService.getJobById(3480776663L));
+
 //
 //        SearchParams searchParams = searchParamsService.findById(1L);
 //        searchParams.setKeywords(null);

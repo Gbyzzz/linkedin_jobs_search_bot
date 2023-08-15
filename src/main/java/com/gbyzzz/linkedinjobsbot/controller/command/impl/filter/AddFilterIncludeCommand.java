@@ -6,7 +6,6 @@ import com.gbyzzz.linkedinjobsbot.entity.FilterParams;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ public class AddFilterIncludeCommand implements Command {
         Long id = update.getMessage().getChatId();
         FilterParams filterParams = new FilterParams();
         String [] keywords = update.getMessage().getText().split(" ");
-        filterParams.setInclude(keywords);
+        filterParams.setIncludeWordsInDescription(keywords);
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
 //        searchParamsService.save(searchParams);

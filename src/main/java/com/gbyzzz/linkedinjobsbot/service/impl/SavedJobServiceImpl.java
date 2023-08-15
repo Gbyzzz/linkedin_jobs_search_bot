@@ -1,6 +1,7 @@
 package com.gbyzzz.linkedinjobsbot.service.impl;
 
 import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.repository.SavedJobRepository;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
@@ -9,7 +10,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class SavedJobServiceImpl implements SavedJobService {
@@ -46,6 +50,12 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
+    public List<SavedJob> getNewJobsByUserIdAndSearchParams(Long id, SearchParams searchParams) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyStateAndSearchParamsContains(id,
+                SavedJob.ReplyState.NEW_JOB, searchParams);
+    }
+
+    @Override
     public void saveAll(List<SavedJob> jobs) {
         savedJobRepository.saveAll(jobs);
     }
@@ -54,13 +64,13 @@ public class SavedJobServiceImpl implements SavedJobService {
     public void saveAllNewJobs(List<String> jobs, Long id) {
         UserProfile userProfile = userProfileService.getUserProfileById(id).get();
         saveAll(jobs.stream().map(
-                (jobId) -> new SavedJob(Long.parseLong(jobId), userProfile,
-                        SavedJob.ReplyState.NEW_JOB, null)
+                (jobId) -> new SavedJob(Long.parseLong(jobId),
+                        SavedJob.ReplyState.NEW_JOB, null, new HashSet<>(){{ add(userProfile);}}, null)
                 ).toList());
     }
 
     @Override
-    public SavedJob getJobById(Long jobId) {
-        return savedJobRepository.findById(jobId).orElseThrow();
+    public Optional<SavedJob> getJobById(Long jobId) {
+        return savedJobRepository.findById(jobId);
     }
 }

@@ -1,8 +1,10 @@
 package com.gbyzzz.linkedinjobsbot.service;
 
 import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SavedJobService {
 
@@ -12,10 +14,11 @@ public interface SavedJobService {
     List<SavedJob> getAppliedAndDeletedJobsByUserId(Long id);
     List<SavedJob> getAppliedJobsByUserId(Long id);
     List<SavedJob> getNewJobsByUserId(Long id);
+    List<SavedJob> getNewJobsByUserIdAndSearchParams(Long id, SearchParams searchParams);
 
     void saveAll(List<SavedJob> jobs);
 
     void saveAllNewJobs(List<String> jobs, Long id);
 
-    SavedJob getJobById(Long jobId);
+    Optional<SavedJob> getJobById(Long jobId);
 }
