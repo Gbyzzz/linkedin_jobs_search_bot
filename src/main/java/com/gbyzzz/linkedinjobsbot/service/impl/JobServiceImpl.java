@@ -148,9 +148,9 @@ public class JobServiceImpl implements JobService {
                 String.join("|", searchParams.getFilterParams().getIncludeWordsInDescription())
                 + ")\\b";
 
-        String exclude = "^(?!" +
+        String exclude = "^(?:(?!" +
                 String.join("|", searchParams.getFilterParams().getExcludeWordsFromTitle())
-                + ").*";
+                + ").)*$\\r?\\n?";
         List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude)
                 .stream().map(job -> job.getId().toString()).collect(Collectors.toList());
         System.out.println(jobs.size());
