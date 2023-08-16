@@ -55,6 +55,7 @@ public class MakeFirstSearchCommand implements Command {
             searchParams = searchParamsService.findById(searchParams.getId());
             searchParams.setSearchState(SearchParams.SearchState.SUBSCRIBED);
             searchParamsService.save(searchParams);
+
         } else {
             sendMessage = new SendMessage(id.toString(), "You already have these search params");
         }
