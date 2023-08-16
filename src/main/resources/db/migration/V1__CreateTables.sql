@@ -7,10 +7,10 @@ CREATE TYPE search_state AS ENUM ('NEW', 'SUBSCRIBED');
 
 CREATE TABLE user_profiles
 (
-    chat_id       bigint                 NOT NULL PRIMARY KEY,
-    username      varchar(255)           NOT NULL,
-    bot_state     bot_state NOT NULL DEFAULT 'NA',
-    registered_at timestamp              NOT NULL
+    chat_id       bigint       NOT NULL PRIMARY KEY,
+    username      varchar(255) NOT NULL,
+    bot_state     bot_state    NOT NULL DEFAULT 'NA',
+    registered_at timestamp    NOT NULL
 );
 
 CREATE TABLE search_params
@@ -22,14 +22,12 @@ CREATE TABLE search_params
     search_state     search_state                                                NOT NULL DEFAULT 'NEW'
 );
 
-
 CREATE TABLE search_filters
 (
     search_params_id bigint REFERENCES search_params (search_params_id) ON DELETE CASCADE NOT NULL,
     filter_name      varchar(255)                                                         NOT NULL,
     value            varchar(255)                                                         NOT NULL
 );
-
 
 CREATE TABLE filter_params
 (
@@ -42,11 +40,10 @@ CREATE TABLE filter_params
 
 CREATE TABLE saved_jobs
 (
-    job_id       bigint                       NOT NULL UNIQUE,
-    reply_state  reply_state NOT NULL DEFAULT 'NEW_JOB',
+    job_id       bigint PRIMARY KEY NOT NULL,
+    reply_state  reply_state        NOT NULL DEFAULT 'NEW_JOB',
     date_applied timestamp
 );
-
 
 CREATE TABLE users_jobs
 (
@@ -55,12 +52,9 @@ CREATE TABLE users_jobs
     UNIQUE (job_id, user_chat_id)
 );
 
-
 CREATE TABLE searches_jobs
 (
     job_id           bigint REFERENCES saved_jobs (job_id) ON DELETE CASCADE              NOT NULL,
     search_params_id bigint REFERENCES search_params (search_params_id) ON DELETE CASCADE NOT NULL,
     UNIQUE (job_id, search_params_id)
 );
-
-

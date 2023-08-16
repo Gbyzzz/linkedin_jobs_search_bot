@@ -22,40 +22,8 @@ import java.util.List;
 @Component
 @EnableScheduling
 public class LinkedinJobsBotApplication {
-
-    private static JobService jobService;
-    private static SearchParamsService searchParamsService;
-    private static SavedJobService savedJobService;
-
-    public LinkedinJobsBotApplication(JobService jobService,
-                                      SearchParamsService searchParamsService,
-                                      SavedJobService savedJobService) {
-        this.jobService = jobService;
-        this.searchParamsService = searchParamsService;
-        this.savedJobService = savedJobService;
-    }
-
     public static void main(String[] args) throws IOException {
         SpringApplication.run(LinkedinJobsBotApplication.class, args);
-        System.out.println(savedJobService.getJobById(3480776663L));
-        System.out.println(searchParamsService.findById(1L));
-
-//        System.out.println(savedJobService.getJobById(3480776663L));
-
-//
-//        SearchParams searchParams = searchParamsService.findById(1L);
-//        searchParams.setKeywords(null);
-//        List<SearchParams> searchParams1 = searchParamsService.findByUserId(346235582L);
-//        for(SearchParams searchParams2 : searchParams1){
-//            System.out.println(searchParams2.equals(searchParams));
-//        }
-//        System.out.println(searchParams1);
-////        List<String> strings = jobService.filterResults(searchParams);
-//        System.out.println(strings);
-//        jobService.makeInitialScan(new String[]{"java"}, "Israel", new HashMap<>(){{
-//            put("experience","1,2");
-//            put("timePostedRange","");
-//        }},"","");
     }
 
 }
