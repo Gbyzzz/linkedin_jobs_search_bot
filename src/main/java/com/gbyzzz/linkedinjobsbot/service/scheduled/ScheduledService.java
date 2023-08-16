@@ -28,7 +28,7 @@ public class ScheduledService {
     private final LinkedInJobsBot linkedInJobsBot;
     private final SendToEditMessageConverter converter;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void makeScan() throws IOException {
         System.out.println("Scheduled");
         List<SearchParams> searchParams = searchParamsService.findAll();
