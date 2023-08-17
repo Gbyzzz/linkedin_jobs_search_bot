@@ -1,6 +1,5 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -24,7 +23,7 @@ public class PaginationKeyboard {
 
         InlineKeyboardButton resultsButton = new InlineKeyboardButton();
         resultsButton.setText("\uD83D\uDCCA Results(new)");
-        resultsButton.setCallbackData("results_" + state + "_" + searchParamsId + "_" + index);
+        resultsButton.setCallbackData("results_" + state + "_" + index + "_" + index);
 
         InlineKeyboardButton appliedButton = new InlineKeyboardButton();
         appliedButton.setText("✅ Applied");
