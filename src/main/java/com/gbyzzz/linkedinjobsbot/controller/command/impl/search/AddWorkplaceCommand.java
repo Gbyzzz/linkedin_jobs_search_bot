@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.search;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.AfterAddingSearchKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard;
@@ -27,29 +28,29 @@ public class AddWorkplaceCommand implements Command {
     private final WorkplaceKeyboard workplaceKeyboard;
     private final RedisService redisService;
 
-    private static final String REPLY = "Enter keywords that should be included(separate them by space)";
-    private static final String REPLY_NEXT = "Enter keywords that should be included(separate them by space)";
-
     @Override
     public Reply execute(Update update) {
         SendMessage sendMessage;
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String data = update.getCallbackQuery().getData();
         Reply reply;
-        if (data.equals("next")) {
+        if (data.equals(MessageText.NEXT.getValue())) {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_FILTER_INCLUDE);
             userProfileService.save(userProfile);
             String workplaceType = getWorkplaceValue();
             if(!workplaceType.isEmpty()) {
                 SearchParams searchParams = redisService.getFromTempRepository(id);
-                searchParams.getSearchFilters().put("workplaceType", workplaceType);
+                searchParams.getSearchFilters().put(MessageText.WORKPLACE_TYPE.getValue(),
+                        workplaceType);
                 redisService.saveToTempRepository(searchParams, id);
             }
-            reply = new Reply(new SendMessage(id.toString(), REPLY), false);
+            reply = new Reply(new SendMessage(id.toString(),
+                    MessageText.ADD_WORKPLACE_REPLY.getValue()), false);
         } else {
             getWorkplaceCallbackAction(data);
-            sendMessage = new SendMessage(id.toString(), REPLY_NEXT);
+            sendMessage = new SendMessage(id.toString(),
+                    MessageText.ADD_WORKPLACE_REPLY.getValue());
             sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, true);
         }

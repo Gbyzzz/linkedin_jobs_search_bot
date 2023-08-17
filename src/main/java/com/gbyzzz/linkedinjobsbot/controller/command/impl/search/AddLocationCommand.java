@@ -1,12 +1,12 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.search;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,14 +23,12 @@ public class AddLocationCommand extends BotCommand implements Command {
     private final UserProfileService userProfileService;
     private final ExperienceKeyboard experienceKeyboard;
     private final RedisService redisService;
-    private static final String REPLY_TEXT = "Search parameters added\n" +
-            "Now you can add additional search parameters, experience :";
 
     @Override
     public Reply execute(Update update) {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         SendMessage sendMessage;
-        sendMessage = new SendMessage(id.toString(), REPLY_TEXT);
+        sendMessage = new SendMessage(id.toString(), MessageText.ADD_LOCATION_REPLY.getValue());
         SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.setLocation(update.getCallbackQuery().getData());
         redisService.saveToTempRepository(searchParams, id);
