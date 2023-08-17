@@ -80,10 +80,12 @@ public class ListOfJobsCommand implements Command {
                 savedJob.setReplyState(SavedJob.ReplyState.APPLIED);
                 savedJob.setDateApplied(new Date(System.currentTimeMillis()));
                 savedJobService.saveJob(savedJob);
-                jobs = savedJobService.getNewJobsByUserId(id);
+                updateJobs(id, command[2]);
                 int index = (jobs.size() - 1) > Integer.parseInt(command[3]) ?
                         Integer.parseInt(command[3]) :
-                        Integer.parseInt(command[3]) - 1;
+                        (Integer.parseInt(command[3]) > 0 ?
+                                Integer.parseInt(command[3]) - 1 :
+                                Integer.parseInt(command[3]));
                 sendMessage = makeReply(index, command[1], id, command[2]);
             }
             case "delete" -> {
@@ -92,10 +94,12 @@ public class ListOfJobsCommand implements Command {
                         SavedJob savedJob = savedJobService.getJobById(targetId).get();
                         savedJob.setReplyState(SavedJob.ReplyState.DELETED);
                         savedJobService.saveJob(savedJob);
-                        jobs = savedJobService.getNewJobsByUserId(id);
+                        updateJobs(id, command[2]);
                         int index = (jobs.size() - 1) > Integer.parseInt(command[3]) ?
                                 Integer.parseInt(command[3]) :
-                                Integer.parseInt(command[3]) - 1;
+                                (Integer.parseInt(command[3]) > 0 ?
+                                        Integer.parseInt(command[3]) - 1 :
+                                        Integer.parseInt(command[3]));
                         sendMessage = makeReply(index, command[1], id, command[2]);
                     }
                     case "SEARCHES" -> {
@@ -146,7 +150,8 @@ public class ListOfJobsCommand implements Command {
     private SendMessage makeReply(int index, String state,
                                   Long id, String searchParamsId) {
         SendMessage sendMessage = null;
-        if (!jobs.isEmpty() || !searchParams.isEmpty()) {
+        if ((jobs != null && !jobs.isEmpty()) ||
+                (searchParams != null &&!searchParams.isEmpty())) {
             StringBuilder stringBuilder = new StringBuilder();
             switch (state) {
                 case "NEW" -> {
