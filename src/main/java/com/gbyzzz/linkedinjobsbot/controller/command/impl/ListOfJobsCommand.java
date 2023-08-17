@@ -69,6 +69,7 @@ public class ListOfJobsCommand implements Command {
                     sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
                             index, jobs.size(), command[1], command[2]));
                 } else {
+
                     sendMessage = makeReply(index, command[1], id, command[2]);
                     sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
                             index, searchParams.size(), command[1], command[2]));
@@ -131,7 +132,7 @@ public class ListOfJobsCommand implements Command {
                 jobs = savedJobService.getNewJobsByUserIdAndSearchParams(id, searchParams
                         .get(Integer.parseInt(command[3])));
                 searchParams = null;
-                sendMessage = makeReply(0, "NEW", id, command[2]);
+                sendMessage = makeReply(0, "NEW", id, command[3]);
             }
         }
         return new Reply(sendMessage, true);
@@ -142,8 +143,10 @@ public class ListOfJobsCommand implements Command {
         if (!StringUtils.isNumeric(searchParamId)) {
             jobs = savedJobService.getNewJobsByUserId(id);
         } else {
+            searchParams = searchParamsService.findAllByUserId(id);
             jobs = savedJobService.getNewJobsByUserIdAndSearchParams(id,
-                    searchParamsService.findById(Long.parseLong(searchParamId)+1));
+                    searchParams.get(Integer.parseInt(searchParamId)));
+            searchParams = null;
         }
     }
 
@@ -182,9 +185,11 @@ public class ListOfJobsCommand implements Command {
                         stringBuilder.append(keyword).append(" ");
                     }
                     stringBuilder.append("\n");
-                    stringBuilder.append("Location: ").append(searchParams.get(index).getLocation()).append("\n\n");
+                    stringBuilder.append("Location: ").append(searchParams.get(index).getLocation())
+                            .append("\n\n");
                     stringBuilder.append("Search filters: \n");
-                    for (Map.Entry<String, String> entry : searchParams.get(index).getSearchFilters().entrySet()) {
+                    for (Map.Entry<String, String> entry : searchParams.get(index)
+                            .getSearchFilters().entrySet()) {
                         stringBuilder.append("  ");
                         stringBuilder.append(entry.getKey()).append(":\n");
 
@@ -217,13 +222,15 @@ public class ListOfJobsCommand implements Command {
 
                     stringBuilder.append("  Include in description:\n");
 
-                    for (String include : searchParams.get(index).getFilterParams().getIncludeWordsInDescription()) {
+                    for (String include : searchParams.get(index).getFilterParams()
+                            .getIncludeWordsInDescription()) {
                         stringBuilder.append("    ").append(include).append("\n");
                     }
                     stringBuilder.append("\n");
                     stringBuilder.append("  Exclude in description:\n");
 
-                    for (String exclude : searchParams.get(index).getFilterParams().getExcludeWordsFromTitle()) {
+                    for (String exclude : searchParams.get(index).getFilterParams()
+                            .getExcludeWordsFromTitle()) {
                         stringBuilder.append("    ").append(exclude).append("\n");
                     }
                     stringBuilder.append("\n");
