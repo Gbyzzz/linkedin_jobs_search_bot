@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
@@ -16,7 +17,7 @@ public class ExitCommand implements Command {
     @Override
     public Reply execute(Update update) {
         userProfileService.delete(update.getMessage().getChat().getId());
-        return new Reply(new SendMessage(update.getMessage().getChatId().toString(), "Exit"),
-                false);
+        return new Reply(new SendMessage(update.getMessage().getChatId().toString(),
+                MessageText.EXIT.getValue()),false);
     }
 }

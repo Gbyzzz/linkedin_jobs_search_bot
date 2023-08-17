@@ -28,22 +28,22 @@ public class ScheduledService {
     private final LinkedInJobsBot linkedInJobsBot;
     private final SendToEditMessageConverter converter;
 
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void makeScan() throws IOException {
         System.out.println("Scheduled");
         List<SearchParams> searchParams = searchParamsService.findAll();
         if (!searchParams.isEmpty()) {
+            Long id = searchParams.get(0).getUserProfile().getChatId();
+            int initialSize = savedJobService.getNewJobsByUserId(id).size();
             for (SearchParams searchParam : searchParams) {
                 if (searchParam.getSearchState().equals(SearchParams.SearchState.SUBSCRIBED)) {
-                    Long id = searchParam.getUserProfile().getChatId();
-                    int initialSize = savedJobService.getNewJobsByUserId(id).size();
-                    jobService.makeScan(searchParam, 7200L);
-                    if (initialSize < savedJobService.getNewJobsByUserId(id).size()) {
-                        Update update = getUpdate(id);
-                        linkedInJobsBot.sendMessage(listOfJobsCommand
-                                .execute(update).getSendMessage());
-                    }
+                    jobService.makeScan(searchParam, 86200L);
                 }
+            }
+            if (initialSize < savedJobService.getNewJobsByUserId(id).size()) {
+                Update update = getUpdate(id);
+                linkedInJobsBot.sendMessage(listOfJobsCommand
+                        .execute(update).getSendMessage());
             }
         }
     }
