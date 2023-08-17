@@ -23,7 +23,7 @@ public class PaginationKeyboard {
 
         InlineKeyboardButton resultsButton = new InlineKeyboardButton();
         resultsButton.setText("\uD83D\uDCCA Results(new)");
-        resultsButton.setCallbackData("results_" + state + "_" + index + "_" + index);
+        resultsButton.setCallbackData("results_" + state + "_" + searchParamsId + "_" + index);
 
         InlineKeyboardButton appliedButton = new InlineKeyboardButton();
         appliedButton.setText("✅ Applied");
