@@ -42,8 +42,6 @@ public class ListOfJobsCommand implements Command {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String[] command = update.getCallbackQuery().getData().split("_");
         SendMessage sendMessage = null;
-//        UserProfile.BotState botState = userProfileService.getUserProfileById(id)
-//                .get().getBotState();
         Long targetId = null;
 
         switch (command[1]) {
@@ -141,7 +139,7 @@ public class ListOfJobsCommand implements Command {
             jobs = savedJobService.getNewJobsByUserId(id);
         } else {
             jobs = savedJobService.getNewJobsByUserIdAndSearchParams(id,
-                    searchParamsService.findById(Long.parseLong(searchParamId)));
+                    searchParamsService.findById(Long.parseLong(searchParamId)+1));
         }
     }
 
@@ -226,8 +224,6 @@ public class ListOfJobsCommand implements Command {
                     stringBuilder.append("\n");
                     sendMessage = new SendMessage(id.toString(),
                             stringBuilder.toString());
-                    sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, searchParams.size(),
-                            UserProfile.BotState.SEARCHES.name(), searchParamsId));
                 }
             }
 
