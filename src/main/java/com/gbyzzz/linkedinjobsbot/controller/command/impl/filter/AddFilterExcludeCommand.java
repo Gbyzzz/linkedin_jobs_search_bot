@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.filter;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.impl.MakeFirstSearchCommand;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
@@ -15,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 
 
-@Component("ADD_FILTER_EXCLUDE")
+@Component(MessageText.ADD_FILTER_EXCLUDE)
 @AllArgsConstructor
 public class AddFilterExcludeCommand implements Command {
 
@@ -36,6 +37,6 @@ public class AddFilterExcludeCommand implements Command {
         userProfileService.save(userProfile);
 
         return new Reply(new SendMessage(id.toString(),
-                "To start first scan please input /make_first_search"), false);
+                MessageText.ADD_FILTER_EXCLUDE_REPLY), false);
     }
 }
