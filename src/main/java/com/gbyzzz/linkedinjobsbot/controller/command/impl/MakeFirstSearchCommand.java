@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
-@Component("MAKE_FIRST_SEARCH")
+@Component(MessageText.MAKE_FIRST_SEARCH)
 @AllArgsConstructor
 public class MakeFirstSearchCommand implements Command {
 
@@ -44,19 +45,21 @@ public class MakeFirstSearchCommand implements Command {
             List<SavedJob> jobs = savedJobService.getNewJobsByUserId(id);
             if (!jobs.isEmpty()) {
                 sendMessage = new SendMessage(id.toString(),
-                        "New jobs:\nhttps://www.linkedin.com/jobs/view/"
-                                + jobs.get(0).getJobId() + "\n1 of " + jobs.size());
+                        MessageText.makeNewJobsReply(0, jobs));
+//                        "New jobs:\nhttps://www.linkedin.com/jobs/view/"
+//                                + jobs.get(0).getJobId() + "\n1 of " + jobs.size());
                 sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                        UserProfile.BotState.NEW.name(), "ALL"));
+                        UserProfile.BotState.NEW.name(), MessageText.ALL));
             } else {
-                sendMessage = new SendMessage(id.toString(), "Nothing was found. Please check" +
-                        " your search params or wait, maybe something will come up");
+                sendMessage = new SendMessage(id.toString(),
+                        MessageText.MAKE_FIRST_SEARCH_NO_RESULTS);
             }
             searchParams = searchParamsService.findById(searchParams.getId());
             searchParams.setSearchState(SearchParams.SearchState.SUBSCRIBED);
             searchParamsService.save(searchParams);
         } else {
-            sendMessage = new SendMessage(id.toString(), "You already have these search params");
+            sendMessage = new SendMessage(id.toString(),
+                    MessageText.MAKE_FIRST_SEARCH_PARAMS_ALREADY_EXISTS);
         }
 
         redisService.deleteFromTempRepository(id);

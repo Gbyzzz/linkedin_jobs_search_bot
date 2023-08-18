@@ -14,11 +14,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-@Component("GET_APPLIED_JOBS")
+@Component(MessageText.GET_APPLIED_JOBS)
 @AllArgsConstructor
 public class GetAppliedJobs implements Command {
 
@@ -37,22 +35,13 @@ public class GetAppliedJobs implements Command {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.APPLIED);
             userProfileService.save(userProfile);
-            String date = new SimpleDateFormat(MessageText.DATE_FORMAT.getValue())
-                    .format(jobs.get(0).getDateApplied());
-            StringBuilder reply = new StringBuilder(MessageText.NEW_JOBS.getValue());
-
-            reply.append(MessageText.NEW_LINE.getValue()).append(MessageText.JOB_URL.getValue())
-                    .append(jobs.get(0).getJobId()).append(MessageText.NEW_LINE.getValue())
-                    .append(MessageText.APPLIED_ON.getValue()).append(date)
-                    .append(MessageText.NEW_LINE.getValue()).append(MessageText.ONE.getValue())
-                    .append(MessageText.OF.getValue()).append(jobs.size());
-
-            sendMessage = new SendMessage(id.toString(), reply.toString());
+            sendMessage = new SendMessage(id.toString(), MessageText.makeAppliedJobsReply(0,
+                    jobs));
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                    UserProfile.BotState.APPLIED.name(), MessageText.ALL.getValue()));
+                    UserProfile.BotState.APPLIED.name(), MessageText.ALL));
         } else {
             sendMessage = new SendMessage(id.toString(),
-                    MessageText.GET_APPLIED_JOBS_REPLY.getValue());
+                    MessageText.GET_APPLIED_JOBS_REPLY);
         }
         return new Reply(sendMessage, false);
     }

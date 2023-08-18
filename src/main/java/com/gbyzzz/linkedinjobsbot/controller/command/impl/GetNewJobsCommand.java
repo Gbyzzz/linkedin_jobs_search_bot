@@ -1,8 +1,10 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
+import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
@@ -14,12 +16,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 import java.util.List;
 
-@Component("GET_NEW_JOBS")
+@Component(MessageText.GET_NEW_JOBS)
 @AllArgsConstructor
 public class GetNewJobsCommand implements Command {
-
-    private static final String REPLY = "No new jobs at the moment, if something comes up we will" +
-            "notice you";
 
     private final SavedJobService savedJobService;
     private final PaginationKeyboard paginationKeyboard;
@@ -29,19 +28,16 @@ public class GetNewJobsCommand implements Command {
     public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
         SendMessage sendMessage;
-        List<String> jobs = savedJobService.getNewJobsByUserId(id).stream().map(
-                (savedJob -> savedJob.getJobId().toString())).toList();
+        List<SavedJob> jobs = savedJobService.getNewJobsByUserId(id);
         UserProfile userProfile = userProfileService.getUserProfileById(id).get();
         userProfile.setBotState(UserProfile.BotState.NEW);
         userProfileService.save(userProfile);
         if (!jobs.isEmpty()) {
-            sendMessage = new SendMessage(id.toString(),
-                    "New jobs:\nhttps://www.linkedin.com/jobs/view/" + jobs.get(0)
-                            + "\n1 of " + jobs.size());
+            sendMessage = new SendMessage(id.toString(),MessageText.makeNewJobsReply(0, jobs));
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                    UserProfile.BotState.NEW.name(), "ALL"));
+                    UserProfile.BotState.NEW.name(), MessageText.ALL));
         } else {
-            sendMessage = new SendMessage(id.toString(), REPLY);
+            sendMessage = new SendMessage(id.toString(), MessageText.GET_NEW_JOBS_REPLY);
         }
         return new Reply(sendMessage, false);
     }
