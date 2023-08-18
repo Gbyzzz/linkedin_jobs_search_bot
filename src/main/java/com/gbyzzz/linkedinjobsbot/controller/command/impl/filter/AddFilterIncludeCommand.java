@@ -24,11 +24,10 @@ public class AddFilterIncludeCommand implements Command {
     public Reply execute(Update update) {
         Long id = update.getMessage().getChatId();
         FilterParams filterParams = new FilterParams();
-        String [] keywords = update.getMessage().getText().split(" ");
+        String [] keywords = update.getMessage().getText().split(MessageText.SPACE);
         filterParams.setIncludeWordsInDescription(keywords);
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
-//        searchParamsService.save(searchParams);
         SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.setFilterParams(filterParams);
         redisService.saveToTempRepository(searchParams, id);
