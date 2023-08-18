@@ -27,7 +27,7 @@ public class AddFilterExcludeCommand implements Command {
     @Override
     public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
-        String [] keywords = update.getMessage().getText().split(" ");
+        String [] keywords = update.getMessage().getText().split(MessageText.SPACE);
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
         SearchParams searchParams = redisService.getFromTempRepository(id);
