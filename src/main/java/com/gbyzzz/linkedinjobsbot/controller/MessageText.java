@@ -50,6 +50,8 @@ public abstract class MessageText {
     public static final String ADD_LOCATION = "ADD_LOCATION";
     public static final String ADD_SEARCH = "ADD_SEARCH";
     public static final String ADD_WORKPLACE = "ADD_WORKPLACE";
+    public static final String ADD_FILTER_INCLUDE = "ADD_FILTER_INCLUDE";
+    public static final String ADD_FILTER_EXCLUDE = "ADD_FILTER_EXCLUDE";
     public static final String GET_ALL_SEARCHES = "GET_ALL_SEARCHES";
     public static final String GET_APPLIED_JOBS = "GET_APPLIED_JOBS";
     public static final String GET_NEW_JOBS = "GET_NEW_JOBS";
@@ -98,6 +100,12 @@ public abstract class MessageText {
             "your search params or wait, maybe something will come up";
     public static final String MAKE_FIRST_SEARCH_PARAMS_ALREADY_EXISTS = "You already have these" +
             " search params";
+    public static final String ADD_FILTER_EXCLUDE_REPLY = "To start first scan please input" +
+            " /make_first_search";
+    public static final String ADD_FILTER_INCLUDE_REPLY_START = "Your keywords, that should" +
+            " be included are:\n";
+    public static final String ADD_FILTER_INCLUDE_REPLY_END = "\nPlease enter keywords, that" +
+            " shouldn't be in the results(separate them by space):";
 
 
 
