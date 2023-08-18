@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.MainMenuKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
@@ -11,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-@Component("MAIN_MENU")
+@Component(MessageText.MAIN_MENU)
 @AllArgsConstructor
 public class ToMainMenuCommand implements Command {
 
@@ -23,8 +24,8 @@ public class ToMainMenuCommand implements Command {
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage().getChatId()).get();
         userProfile.setBotState(UserProfile.BotState.ADD_KEYWORDS);
         userProfileService.save(userProfile);
-        String reply = "Input /add_search to add search to you account";
-        SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(), reply);
+        SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(),
+                MessageText.MAIN_MENU_REPLY);
         sendMessage.setReplyMarkup(mainMenuKeyboard.getReplyButtons());
         return new Reply(sendMessage, false);
 

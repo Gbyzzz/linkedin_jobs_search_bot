@@ -8,19 +8,16 @@ import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.HashMap;
-
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard.*;
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard.*;
 
-@Component("ADD_EXPERIENCE")
+@Component(MessageText.ADD_EXPERIENCE)
 @AllArgsConstructor
 public class AddExperienceCommand implements Command {
 
@@ -36,7 +33,7 @@ public class AddExperienceCommand implements Command {
         Reply reply;
 
         String data = update.getCallbackQuery().getData();
-        if (data.equals(MessageText.NEXT.getValue())) {
+        if (data.equals(MessageText.NEXT)) {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_JOB_TYPE);
             userProfileService.save(userProfile);
@@ -44,18 +41,16 @@ public class AddExperienceCommand implements Command {
             String experience = getExperienceValue();
             if(!experience.isEmpty()) {
                 SearchParams searchParams = redisService.getFromTempRepository(id);
-                searchParams.getSearchFilters().put(MessageText.EXPERIENCE.getValue(), experience);
+                searchParams.getSearchFilters().put(MessageText.EXPERIENCE, experience);
                 redisService.saveToTempRepository(searchParams, id);
             }
-            sendMessage = new SendMessage(id.toString(), MessageText.ADD_EXPERIENCE_REPLY_NEXT
-                    .getValue());
+            sendMessage = new SendMessage(id.toString(), MessageText.ADD_EXPERIENCE_REPLY_NEXT);
             setJobTypeKeyboardFalse();
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, false);
         } else {
             getExperienceCallbackAction(data);
-            sendMessage = new SendMessage(id.toString(), MessageText.ADD_EXPERIENCE_REPLY
-                    .getValue());
+            sendMessage = new SendMessage(id.toString(), MessageText.ADD_EXPERIENCE_REPLY);
             sendMessage.setReplyMarkup(experienceKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, true);
         }
