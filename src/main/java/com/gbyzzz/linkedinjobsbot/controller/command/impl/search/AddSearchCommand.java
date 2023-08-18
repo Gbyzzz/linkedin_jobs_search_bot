@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-@Component("ADD_SEARCH")
+@Component(MessageText.ADD_SEARCH)
 @AllArgsConstructor
 public class AddSearchCommand implements Command {
 
@@ -23,6 +23,6 @@ public class AddSearchCommand implements Command {
         userProfile.setBotState(UserProfile.BotState.ADD_KEYWORDS);
         userProfileService.save(userProfile);
         return new Reply(new SendMessage(update.getMessage().getChatId().toString(),
-                MessageText.ADD_SEARCH_REPLY.getValue()),false);
+                MessageText.ADD_SEARCH_REPLY),false);
     }
 }

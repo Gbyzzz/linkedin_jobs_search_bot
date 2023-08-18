@@ -18,6 +18,6 @@ public class ExitCommand implements Command {
     public Reply execute(Update update) {
         userProfileService.delete(update.getMessage().getChat().getId());
         return new Reply(new SendMessage(update.getMessage().getChatId().toString(),
-                MessageText.EXIT.getValue()),false);
+                MessageText.EXIT),false);
     }
 }

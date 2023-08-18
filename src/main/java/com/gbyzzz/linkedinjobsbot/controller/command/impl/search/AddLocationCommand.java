@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard.*;
 
-@Component("ADD_LOCATION")
+@Component(MessageText.ADD_LOCATION)
 @AllArgsConstructor
 public class AddLocationCommand extends BotCommand implements Command {
 
@@ -28,7 +28,7 @@ public class AddLocationCommand extends BotCommand implements Command {
     public Reply execute(Update update) {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         SendMessage sendMessage;
-        sendMessage = new SendMessage(id.toString(), MessageText.ADD_LOCATION_REPLY.getValue());
+        sendMessage = new SendMessage(id.toString(), MessageText.ADD_LOCATION_REPLY);
         SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.setLocation(update.getCallbackQuery().getData());
         redisService.saveToTempRepository(searchParams, id);

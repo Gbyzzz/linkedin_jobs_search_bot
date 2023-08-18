@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
 
-@Component("ADD_KEYWORDS")
+@Component(MessageText.ADD_KEYWORDS)
 @AllArgsConstructor
 public class AddKeywordsCommand implements Command {
 
@@ -28,7 +28,7 @@ public class AddKeywordsCommand implements Command {
     public Reply execute(Update update) {
         SearchParams searchParams = new SearchParams();
         searchParams.setSearchFilters(new HashMap<>());
-        String[] keywords = update.getMessage().getText().split(MessageText.SPACE.getValue());
+        String[] keywords = update.getMessage().getText().split(MessageText.SPACE);
         searchParams.setKeywords(keywords);
         UserProfile userProfile = userProfileService.getUserProfileById(
                 update.getMessage().getChatId()).orElse(null);
@@ -38,13 +38,13 @@ public class AddKeywordsCommand implements Command {
         userProfile.setBotState(UserProfile.BotState.ADD_LOCATION);
         userProfileService.save(userProfile);
 
-        StringBuilder reply = new StringBuilder(MessageText.INPUTTED_KEYWORDS.getValue());
-        reply.append(MessageText.NEW_LINE.getValue());
+        StringBuilder reply = new StringBuilder(MessageText.INPUTTED_KEYWORDS);
+        reply.append(MessageText.NEW_LINE);
         for (String word : keywords) {
-            reply.append(word).append(MessageText.NEW_LINE.getValue());
+            reply.append(word).append(MessageText.NEW_LINE);
         }
-        reply.append(MessageText.NEW_LINE.getValue());
-        reply.append(MessageText.ENTER_LOCATION.getValue());
+        reply.append(MessageText.NEW_LINE);
+        reply.append(MessageText.ENTER_LOCATION);
         SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(),
                 reply.toString());
         sendMessage.setReplyMarkup(locationKeyboard.getReplyButtons());
