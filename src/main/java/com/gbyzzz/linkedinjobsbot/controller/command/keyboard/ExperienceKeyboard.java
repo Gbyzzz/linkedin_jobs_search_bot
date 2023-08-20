@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.service.impl.Experience;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -15,32 +17,44 @@ public class ExperienceKeyboard {
 
     public InlineKeyboardMarkup getReplyButtons() {
         InlineKeyboardButton internshipButton = new InlineKeyboardButton();
-        internshipButton.setText(state[0] ? "✅ Internship" : "❌ Internship");
-        internshipButton.setCallbackData("toggle_internship");
+        internshipButton.setText(state[0] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_INTERNSHIP : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_INTERNSHIP);
+        internshipButton.setCallbackData(MessageText.BUTTON_INTERNSHIP_VALUE);
 
         InlineKeyboardButton entryButton = new InlineKeyboardButton();
-        entryButton.setText(state[1] ? "✅ Entry Level" : "❌ Entry Level");
-        entryButton.setCallbackData("toggle_entry");
+        entryButton.setText(state[1] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_ENTRY_LEVEL : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_ENTRY_LEVEL);
+        entryButton.setCallbackData(MessageText.BUTTON_ENTRY_LEVEL_VALUE);
 
         InlineKeyboardButton associateButton = new InlineKeyboardButton();
-        associateButton.setText(state[2] ? "✅ Associate" : "❌ Associate");
-        associateButton.setCallbackData("toggle_associate");
+        associateButton.setText(state[2] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_ASSOCIATE : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_ASSOCIATE);
+        associateButton.setCallbackData(MessageText.BUTTON_ASSOCIATE_VALUE);
 
         InlineKeyboardButton midSeniorButton = new InlineKeyboardButton();
-        midSeniorButton.setText(state[3] ? "✅ Mid-Senior Level" : "❌ Mid-Senior Level");
-        midSeniorButton.setCallbackData("toggle_mid_senior");
+        midSeniorButton.setText(state[3] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_MID_SENIOR_LEVEL : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_MID_SENIOR_LEVEL);
+        midSeniorButton.setCallbackData(MessageText.BUTTON_MID_SENIOR_LEVEL_VALUE);
 
         InlineKeyboardButton directorButton = new InlineKeyboardButton();
-        directorButton.setText(state[4] ? "✅ Director" : "❌ Director");
-        directorButton.setCallbackData("toggle_director");
+        directorButton.setText(state[4] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_DIRECTOR : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_DIRECTOR);
+        directorButton.setCallbackData(MessageText.BUTTON_DIRECTOR_VALUE);
 
         InlineKeyboardButton executiveButton = new InlineKeyboardButton();
-        executiveButton.setText(state[5] ? "✅ Executive" : "❌ Executive");
-        executiveButton.setCallbackData("toggle_executive");
+        executiveButton.setText(state[5] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_EXECUTIVE : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_EXECUTIVE);
+        executiveButton.setCallbackData(MessageText.BUTTON_EXECUTIVE_VALUE);
 
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("Next");
-        nextButton.setCallbackData("next");
+        nextButton.setText(MessageText.BUTTON_NEXT);
+        nextButton.setCallbackData(MessageText.NEXT);
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(internshipButton);
@@ -66,9 +80,7 @@ public class ExperienceKeyboard {
     }
 
     public static void setExperienceKeyboardFalse() {
-        for (int i = 0; i<state.length; i++) {
-            state[i] = false;
-        }
+        Arrays.fill(state, false);
     }
 
     public static String getExperienceValue() {
@@ -76,11 +88,11 @@ public class ExperienceKeyboard {
         for (int i = 0; i < state.length; i++) {
             if (state[i]){
                 value.append(i+1);
-                value.append(",");
+                value.append(MessageText.COMMA);
             }
         }
-        if (value.length() > 0) {
-            value.replace(value.length() - 1, value.length(), "");
+        if (!value.isEmpty()) {
+            value.replace(value.length() - 1, value.length(), MessageText.EMPTY);
         }
         return value.toString();
     }
@@ -88,12 +100,12 @@ public class ExperienceKeyboard {
     public static void getExperienceCallbackAction(String data) {
 
         switch (data) {
-            case "toggle_internship" -> state[0] = !state[0];
-            case "toggle_entry" -> state[1] = !state[1];
-            case "toggle_associate" -> state[2] = !state[2];
-            case "toggle_mid_senior" -> state[3] = !state[3];
-            case "toggle_director" -> state[4] = !state[4];
-            case "toggle_executive" -> state[5] = !state[5];
+            case MessageText.BUTTON_INTERNSHIP_VALUE -> state[0] = !state[0];
+            case MessageText.BUTTON_ENTRY_LEVEL_VALUE -> state[1] = !state[1];
+            case MessageText.BUTTON_ASSOCIATE_VALUE -> state[2] = !state[2];
+            case MessageText.BUTTON_MID_SENIOR_LEVEL_VALUE -> state[3] = !state[3];
+            case MessageText.BUTTON_DIRECTOR_VALUE -> state[4] = !state[4];
+            case MessageText.BUTTON_EXECUTIVE_VALUE -> state[5] = !state[5];
         }
     }
 }

@@ -34,14 +34,14 @@ public class ListOfJobsCommand implements Command {
     @Override
     public Reply execute(Update update) throws IOException {
         Long id = update.getCallbackQuery().getMessage().getChatId();
-        String[] command = update.getCallbackQuery().getData().split("_");
+        String[] command = update.getCallbackQuery().getData()
+                .split(MessageText.BUTTON_VALUE_SEPARATOR);
         SendMessage sendMessage = null;
         Long targetId = null;
 
         switch (command[1]) {
             case MessageText.NEW -> {
                 updateJobs(id, command[2]);
-
                 targetId = jobs.get(Integer.parseInt(command[3])).getJobId();
             }
             case MessageText.APPLIED -> {
@@ -97,9 +97,12 @@ public class ListOfJobsCommand implements Command {
                     case MessageText.SEARCHES -> {
                         int index = (searchParams.size() - 1) > Integer.parseInt(command[3]) ?
                                 Integer.parseInt(command[3]) :
-                                Integer.parseInt(command[3]) - 1;
+                                (Integer.parseInt(command[3]) > 0 ?
+                                        Integer.parseInt(command[3]) - 1 :
+                                        Integer.parseInt(command[3]));
                         searchParamsService.delete(searchParams.get(Integer.parseInt(command[3])));
                         searchParams = searchParamsService.findAllByUserId(id);
+                        jobs = null;
                         sendMessage = makeReply(index, command[1], id, command[2]);
                     }
                 }
@@ -113,7 +116,9 @@ public class ListOfJobsCommand implements Command {
                 jobs = savedJobService.getAppliedJobsByUserId(id);
                 int index = (jobs.size() - 1) > Integer.parseInt(command[3]) ?
                         Integer.parseInt(command[3]) :
-                        Integer.parseInt(command[3]) - 1;
+                        (Integer.parseInt(command[3]) > 0 ?
+                                Integer.parseInt(command[3]) - 1 :
+                                Integer.parseInt(command[3]));
                 sendMessage = makeReply(index, command[1], id, command[2]);
             }
             case MessageText.NOTIFY -> sendMessage = makeReply(0,
