@@ -1,7 +1,7 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.filter;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
-import com.gbyzzz.linkedinjobsbot.controller.command.impl.MakeFirstSearchCommand;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
@@ -15,18 +15,17 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 
 
-@Component("ADD_FILTER_EXCLUDE")
+@Component(MessageText.ADD_FILTER_EXCLUDE)
 @AllArgsConstructor
 public class AddFilterExcludeCommand implements Command {
 
     private final UserProfileService userProfileService;
     private final RedisService redisService;
-    private final MakeFirstSearchCommand makeFirstSearchCommand;
 
     @Override
     public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
-        String [] keywords = update.getMessage().getText().split(" ");
+        String [] keywords = update.getMessage().getText().split(MessageText.SPACE);
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
         SearchParams searchParams = redisService.getFromTempRepository(id);
@@ -36,6 +35,6 @@ public class AddFilterExcludeCommand implements Command {
         userProfileService.save(userProfile);
 
         return new Reply(new SendMessage(id.toString(),
-                "To start first scan please input /make_first_search"), false);
+                MessageText.ADD_FILTER_EXCLUDE_REPLY), false);
     }
 }

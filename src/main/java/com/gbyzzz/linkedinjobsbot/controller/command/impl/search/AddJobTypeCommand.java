@@ -1,14 +1,13 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.search;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
-import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyb
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard.getJobTypeValue;
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard.setWorkplaceKeyboardFalse;
 
-@Component("ADD_JOB_TYPE")
+@Component(MessageText.ADD_JOB_TYPE)
 @AllArgsConstructor
 public class AddJobTypeCommand implements Command {
 
@@ -28,24 +27,22 @@ public class AddJobTypeCommand implements Command {
     private final WorkplaceKeyboard workplaceKeyboard;
     private final RedisService redisService;
 
-    private static final String REPLY = "Now add job type:";
-    private static final String REPLY_NEXT = "Now add workplace type:";
-
     @Override
     public Reply execute(Update update) {
         SendMessage sendMessage;
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String data = update.getCallbackQuery().getData();
         Reply reply;
-        if (data.equals("next")) {
+        if (data.equals(MessageText.NEXT)) {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_WORKPLACE);
             userProfileService.save(userProfile);
-            sendMessage = new SendMessage(id.toString(), REPLY_NEXT);
+            sendMessage = new SendMessage(id.toString(),
+                    MessageText.ADD_JOB_TYPE_REPLY_NEXT);
             String jobType = getJobTypeValue();
             if(!jobType.isEmpty()) {
                 SearchParams searchParams = redisService.getFromTempRepository(id);
-                searchParams.getSearchFilters().put("jobType", jobType);
+                searchParams.getSearchFilters().put(MessageText.JOB_TYPE, jobType);
                 redisService.saveToTempRepository(searchParams, id);
             }
             setWorkplaceKeyboardFalse();
@@ -53,12 +50,10 @@ public class AddJobTypeCommand implements Command {
             reply = new Reply(sendMessage, false);
         } else {
             getJobTypeCallbackAction(data);
-            sendMessage = new SendMessage(id.toString(), REPLY);
+            sendMessage = new SendMessage(id.toString(), MessageText.ADD_JOB_TYPE_REPLY);
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, true);
         }
         return reply;
     }
-
-
 }

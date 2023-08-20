@@ -32,8 +32,6 @@ public class RedisConfig {
     public RedisTemplate<String, List<String>> redisTemplate1() {
         RedisTemplate<String, List<String>> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
-
-        // Use a custom key serializer appropriate for your custom key type
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
 
@@ -44,8 +42,6 @@ public class RedisConfig {
     public RedisTemplate<String, SearchParams> redisTemplate2() {
         RedisTemplate<String, SearchParams> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
-
-        // Use a custom key serializer appropriate for your custom key type
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchParams.class));
 

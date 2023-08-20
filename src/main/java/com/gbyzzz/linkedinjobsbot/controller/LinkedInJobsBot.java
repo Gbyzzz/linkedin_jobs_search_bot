@@ -9,7 +9,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -29,6 +28,7 @@ public class LinkedInJobsBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        long start = System.currentTimeMillis();
         if (update.hasCallbackQuery() || update.hasMessage()) {
             Command command = provider.getCommand(update);
             Reply reply;
@@ -37,6 +37,8 @@ public class LinkedInJobsBot extends TelegramLongPollingBot {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            long end = System.currentTimeMillis();
+            System.out.println(end-start);
             if(!reply.isUpdate()) {
                 sendMessage(reply.getSendMessage());
             } else {
@@ -55,14 +57,14 @@ public class LinkedInJobsBot extends TelegramLongPollingBot {
         try {
             execute(editMessageText);
         } catch (TelegramApiException e) {
-            System.out.println("Ошибка отправки сообщения: " + e);
+            System.out.println(MessageText.ERROR + e);
         }
     }
     public void sendMessage(SendMessage message) {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            System.out.println("Ошибка отправки сообщения: " + e);
+            System.out.println(MessageText.ERROR + e);
         }
     }
 }

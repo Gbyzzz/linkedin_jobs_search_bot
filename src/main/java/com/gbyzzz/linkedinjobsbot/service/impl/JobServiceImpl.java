@@ -3,10 +3,10 @@ package com.gbyzzz.linkedinjobsbot.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.entity.Job;
 import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.repository.JobsRepository;
 import com.gbyzzz.linkedinjobsbot.service.JobService;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
@@ -26,17 +26,6 @@ import java.util.stream.Collectors;
 @Service
 public class JobServiceImpl implements JobService {
 
-
-    private static final String URL_SEARCH_JOBS_START = "https://www.linkedin.com/voyager/api/" +
-            "voyagerJobsDashJobCards?decorationId=com.linkedin.voyager.dash.deco.jobs.search." +
-            "JobSearchCardsCollection-169&count=100&q=jobSearch&query=(origin:" +
-            "JOB_SEARCH_PAGE_JOB_FILTER,spellCorrectionEnabled:true,";
-
-    private static final String URL_SEARCH_JOBS_END = ")&start=";
-    private static final String GET_JOB_START = "https://www.linkedin.com/voyager/api/jobs/jobPostings/";
-    private static final String GET_JOB_END = "?decorationId=com.linkedin.voyager.deco.jobs.web" +
-            ".shared.WebFullJobPosting-65&topNRequestedFlavors=List(TOP_APPLICANT,IN_NETWORK," +
-            "COMPANY_RECRUIT,SCHOOL_RECRUIT,HIDDEN_GEM,ACTIVELY_HIRING_COMPANY)";
     @Value("${bot.cookie}")
     private String COOKIE;
     @Value("${bot.csrf.token}")
@@ -57,8 +46,8 @@ public class JobServiceImpl implements JobService {
 
 
     public JobServiceImpl(JobsRepository jobsRepository,
-                          @Qualifier("getJobsTaskExecutor") Executor getJobsTaskExecutor,
-                          @Qualifier("searchTaskExecutor") Executor searchTaskExecutor,
+                          @Qualifier(MessageText.JOBS_TASK_EXECUTOR) Executor getJobsTaskExecutor,
+                          @Qualifier(MessageText.SEARCH_TASK_EXECUTOR) Executor searchTaskExecutor,
                           SavedJobService savedJobService) {
         this.jobsRepository = jobsRepository;
         this.getJobsTaskExecutor = getJobsTaskExecutor;
@@ -74,42 +63,48 @@ public class JobServiceImpl implements JobService {
         this.location = searchParams.getLocation();
         this.searchParamId = searchParams.getId();
 
-        urlBuilder = new StringBuilder(URL_SEARCH_JOBS_START);
+        urlBuilder = new StringBuilder(MessageText.URL_SEARCH_JOBS_START);
 
         if (searchParams.getKeywords().length > 0) {
-            StringBuilder keywordsBuilder = new StringBuilder("keywords:");
+            StringBuilder keywordsBuilder = new StringBuilder(MessageText.
+                    JOB_SEARCH_QUERY_KEYWORDS);
             keywordsBuilder.append(searchParams.getKeywords()[0]);
             if (searchParams.getKeywords().length > 1) {
                 for (int i = 1; i < searchParams.getKeywords().length; i++) {
-                    keywordsBuilder.append("%20");
+                    keywordsBuilder.append(MessageText.JOB_SEARCH_QUERY_KEYWORDS_SEPARATOR);
                     keywordsBuilder.append(searchParams.getKeywords()[i]);
                 }
             }
-            urlBuilder.append(keywordsBuilder).append(",");
+            urlBuilder.append(keywordsBuilder).append(MessageText.COMMA);
         }
 
         if (location != null) {
-            urlBuilder.append("locationUnion:(geoId:")
+            urlBuilder.append(MessageText.JOB_SEARCH_QUERY_LOCATION_START)
                     .append(Locations.valueOf(location.toUpperCase()).getId())
-                    .append("),");
+                    .append(MessageText.JOB_SEARCH_QUERY_END);
         }
 
         if (!searchParams.getSearchFilters().isEmpty()) {
-            StringBuilder filterQuery = new StringBuilder("selectedFilters:(");
+            StringBuilder filterQuery = new StringBuilder(MessageText.JOB_SEARCH_QUERY_FILTERS);
             searchParams.getSearchFilters().forEach((key, value) ->
-                    filterQuery.append(key).append(":List(").append(value).append("),"));
+                    filterQuery.append(key).append(MessageText.JOB_SEARCH_QUERY_LIST).append(value)
+                            .append(MessageText.JOB_SEARCH_QUERY_END));
             if (timePostedRange != null) {
-                filterQuery.append("timePostedRange:List(r").append(timePostedRange).append("),");
+                filterQuery.append(MessageText.JOB_SEARCH_QUERY_TIME_RANGE).append(timePostedRange)
+                        .append(MessageText.JOB_SEARCH_QUERY_END);
             }
-            filterQuery.replace(filterQuery.length() - 1, filterQuery.length(), "),");
+            filterQuery.replace(filterQuery.length() - 1, filterQuery.length(),
+                    MessageText.JOB_SEARCH_QUERY_END);
             urlBuilder.append(filterQuery);
         }
 
-        urlBuilder.replace(urlBuilder.length() - 1, urlBuilder.length(), URL_SEARCH_JOBS_END);
+        urlBuilder.replace(urlBuilder.length() - 1, urlBuilder.length(),
+                MessageText.URL_SEARCH_JOBS_END);
         getTotalResults();
 
 
-        CountDownLatch searchLatch = new CountDownLatch((int) Math.ceil((double) Math.min(totalResults, 900) / 100));
+        CountDownLatch searchLatch = new CountDownLatch((int) Math.ceil((double)
+                Math.min(totalResults, 900) / 100));
 
         for (int i = 0; i < Math.min(totalResults, 900); i = i + 100) {
             Runnable task = new SearchRequestTask(i, searchLatch);
@@ -144,13 +139,17 @@ public class JobServiceImpl implements JobService {
 
     public void filterResults(SearchParams searchParams, List<String> foundIds) {
         System.out.println("Search id: " + searchParams.getId());
-        String include = "\\b(?:" +
-                String.join("|", searchParams.getFilterParams().getIncludeWordsInDescription())
-                + ")\\b";
 
-        String exclude = "^(?:(?!" +
-                String.join("|", searchParams.getFilterParams().getExcludeWordsFromTitle())
-                + ").)*$\\r?\\n?";
+        String include = MessageText.INCLUDE_REGEX_START +
+                String.join(MessageText.REGEX_SEPARATOR,
+                        searchParams.getFilterParams().getIncludeWordsInDescription())
+                + MessageText.INCLUDE_REGEX_END;
+
+        String exclude = MessageText.EXCLUDE_REGEX_START +
+                String.join(MessageText.REGEX_SEPARATOR,
+                        searchParams.getFilterParams().getExcludeWordsFromTitle())
+                + MessageText.EXCLUDE_REGEX_END;
+
         List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude)
                 .stream().map(job -> job.getId().toString()).collect(Collectors.toList());
         System.out.println(jobs.size());
@@ -163,9 +162,9 @@ public class JobServiceImpl implements JobService {
 
     private void getTotalResults() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = mapper.readTree(makeRequest(new URL((urlBuilder + "0")
-                .replaceAll("count=100", "count=0"))));
-        totalResults = jsonNode.get("paging").get("total").asInt();
+        JsonNode jsonNode = mapper.readTree(makeRequest(new URL((urlBuilder + MessageText.ZERO)
+                .replaceAll(MessageText.COUNT_100, MessageText.COUNT_0))));
+        totalResults = jsonNode.get(MessageText.PAGING).get(MessageText.TOTAL).asInt();
 
     }
 
@@ -173,12 +172,12 @@ public class JobServiceImpl implements JobService {
 
         JsonNode jsonNode = mapper.readTree(in);
 
-        if (jsonNode.get("metadata").has("jobCardPrefetchQueries")) {
-            List<JsonNode> nodes = jsonNode.findValues("jobCardPrefetchQueries");
-            String node = jsonNode.findPath("jobCardPrefetchQueries").get(0).get("prefetchJobPostingCardUrns").asText();
-            String[] node1 = mapper.convertValue(jsonNode.findPath("prefetchJobPostingCardUrns"), String[].class);
-            results.addAll(Arrays.stream(node1).map(
-                            (el) -> el.replaceAll("[^0-9]", ""))
+        if (jsonNode.get(MessageText.JSON_NODE_METADATA)
+                .has(MessageText.JSON_NODE_JOB_CARD_PREFETCH_QUERIES)) {
+            String[] node = mapper.convertValue(jsonNode
+                    .findPath(MessageText.JSON_NODE_PREFETCH_JOB_POSTING_CARD_URNS), String[].class);
+            results.addAll(Arrays.stream(node).map(
+                            (el) -> el.replaceAll(MessageText.NON_NUMERIC, MessageText.EMPTY))
                     .toList());
         }
     }
@@ -187,10 +186,10 @@ public class JobServiceImpl implements JobService {
         BufferedReader in;
         StringBuilder content = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("Cookie", COOKIE);
-        con.setRequestProperty("Csrf-Token", CSRF_TOKEN);
-        con.setRequestMethod("GET");
-        while (content.length() < 1) {
+        con.setRequestProperty(MessageText.COOKIE, COOKIE);
+        con.setRequestProperty(MessageText.CSRF_TOKEN, CSRF_TOKEN);
+        con.setRequestMethod(MessageText.GET);
+        while (content.isEmpty()) {
             in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
             String inputLine;
@@ -243,7 +242,7 @@ public class JobServiceImpl implements JobService {
         @Override
         public void run() {
             try {
-                URL url = new URL(GET_JOB_START + id + GET_JOB_END);
+                URL url = new URL(MessageText.GET_JOB_START + id + MessageText.GET_JOB_END);
                 String reply = makeRequest(url);
                 System.out.println(id);
                 Optional<Job> optionalJob = jobsRepository.findById(Long.parseLong(id));
@@ -265,7 +264,7 @@ public class JobServiceImpl implements JobService {
                 job.setSearchLocations(locations);
                 jobsRepository.save(job);
             } catch (IOException e) {
-                throw new RuntimeException(e + "id=" + id);
+                throw new RuntimeException(e + MessageText.ID + id);
             } finally {
                 latch.countDown();
                 System.out.println(latch.getCount());

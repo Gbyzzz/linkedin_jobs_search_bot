@@ -6,8 +6,6 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 @Repository
 public interface JobsRepository extends MongoRepository<Job, Long> {

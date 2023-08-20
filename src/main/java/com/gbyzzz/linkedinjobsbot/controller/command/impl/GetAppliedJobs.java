@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
@@ -13,15 +14,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
-@Component("GET_APPLIED_JOBS")
+@Component(MessageText.GET_APPLIED_JOBS)
 @AllArgsConstructor
 public class GetAppliedJobs implements Command {
-
-    private static final String REPLY = "No new jobs at the moment, if something comes up we will" +
-            " notice you";
 
     private final SavedJobService savedJobService;
     private final PaginationKeyboard paginationKeyboard;
@@ -38,15 +35,13 @@ public class GetAppliedJobs implements Command {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.APPLIED);
             userProfileService.save(userProfile);
-            sendMessage = new SendMessage(id.toString(),
-                    "New jobs:\nhttps://www.linkedin.com/jobs/view/" + jobs.get(0).getJobId()
-                            + "\nApplied on - " + new SimpleDateFormat("dd-MMM-yyyy")
-                            .format(jobs.get(0).getDateApplied())
-                            + "\n1 of " + jobs.size());
+            sendMessage = new SendMessage(id.toString(), MessageText.makeAppliedJobsReply(0,
+                    jobs));
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-                    UserProfile.BotState.APPLIED.name(), "ALL"));
+                    UserProfile.BotState.APPLIED.name(), MessageText.ALL));
         } else {
-            sendMessage = new SendMessage(id.toString(), REPLY);
+            sendMessage = new SendMessage(id.toString(),
+                    MessageText.GET_APPLIED_JOBS_REPLY);
         }
         return new Reply(sendMessage, false);
     }

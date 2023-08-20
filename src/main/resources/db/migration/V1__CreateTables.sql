@@ -37,7 +37,6 @@ CREATE TABLE filter_params
     exclude_words_title text
 );
 
-
 CREATE TABLE saved_jobs
 (
     job_id       bigint PRIMARY KEY NOT NULL,

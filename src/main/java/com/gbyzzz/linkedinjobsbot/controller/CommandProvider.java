@@ -16,7 +16,6 @@ final class CommandProvider {
     private final Map<String, Command> repository;
     private final UserProfileService userProfileService;
 
-
     Command getCommand(Update update) {
         Long id;
         CommandName commandName = null;
@@ -34,6 +33,6 @@ final class CommandProvider {
                 commandName = CommandName.getValue(botState.name());
             }
         }
-        return repository.getOrDefault(commandName.name(), repository.get("WRONG"));
+        return repository.getOrDefault(commandName.name(), repository.get(MessageText.WRONG));
     }
 }
