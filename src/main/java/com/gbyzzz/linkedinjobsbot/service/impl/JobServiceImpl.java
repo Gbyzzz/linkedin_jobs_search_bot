@@ -139,6 +139,7 @@ public class JobServiceImpl implements JobService {
 
     public void filterResults(SearchParams searchParams, List<String> foundIds) {
         System.out.println("Search id: " + searchParams.getId());
+
         String include = MessageText.INCLUDE_REGEX_START +
                 String.join(MessageText.REGEX_SEPARATOR,
                         searchParams.getFilterParams().getIncludeWordsInDescription())
@@ -148,6 +149,7 @@ public class JobServiceImpl implements JobService {
                 String.join(MessageText.REGEX_SEPARATOR,
                         searchParams.getFilterParams().getExcludeWordsFromTitle())
                 + MessageText.EXCLUDE_REGEX_END;
+
         List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude)
                 .stream().map(job -> job.getId().toString()).collect(Collectors.toList());
         System.out.println(jobs.size());
@@ -172,9 +174,6 @@ public class JobServiceImpl implements JobService {
 
         if (jsonNode.get(MessageText.JSON_NODE_METADATA)
                 .has(MessageText.JSON_NODE_JOB_CARD_PREFETCH_QUERIES)) {
-//            List<JsonNode> nodes = jsonNode.findValues("jobCardPrefetchQueries");
-//            String node = jsonNode.findPath("jobCardPrefetchQueries").get(0)
-//                    .get("prefetchJobPostingCardUrns").asText();
             String[] node = mapper.convertValue(jsonNode
                     .findPath(MessageText.JSON_NODE_PREFETCH_JOB_POSTING_CARD_URNS), String[].class);
             results.addAll(Arrays.stream(node).map(

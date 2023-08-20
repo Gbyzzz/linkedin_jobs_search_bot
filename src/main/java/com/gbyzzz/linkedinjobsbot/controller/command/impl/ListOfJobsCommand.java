@@ -63,6 +63,7 @@ public class ListOfJobsCommand implements Command {
                     sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
                             index, jobs.size(), command[1], command[2]));
                 } else {
+
                     sendMessage = makeReply(index, command[1], id, command[2]);
                 }
             }
@@ -128,7 +129,9 @@ public class ListOfJobsCommand implements Command {
                 jobs = savedJobService.getNewJobsByUserIdAndSearchParams(id, searchParams
                         .get(Integer.parseInt(command[3])));
                 searchParams = null;
+
                 sendMessage = makeReply(0, MessageText.NEW, id, command[3]);
+
             }
         }
         return new Reply(sendMessage, true);
@@ -150,7 +153,9 @@ public class ListOfJobsCommand implements Command {
                                   Long id, String searchParamsId) {
         SendMessage sendMessage = null;
         if ((jobs != null && !jobs.isEmpty()) ||
+
                 (searchParams != null && !searchParams.isEmpty())) {
+
             switch (state) {
                 case MessageText.NEW -> {
                     sendMessage = new SendMessage(id.toString(),
@@ -164,11 +169,13 @@ public class ListOfJobsCommand implements Command {
                     sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
                             index, jobs.size(), state, searchParamsId));
                 }
+
                 case MessageText.SEARCHES -> {
                     sendMessage = new SendMessage(id.toString(),
                             MessageText.makeSearchReply(index, searchParams));
                     sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
                             index, searchParams.size(), state, searchParamsId));
+
                 }
 
             }

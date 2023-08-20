@@ -36,6 +36,7 @@ public class GetAllSearchesCommand implements Command {
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0,
                     searchParams.size(), UserProfile.BotState.SEARCHES.name(),
                     MessageText.ZERO));
+
         } else {
             sendMessage = new SendMessage(id.toString(),
                     MessageText.GET_ALL_SEARCHES_REPLY);
