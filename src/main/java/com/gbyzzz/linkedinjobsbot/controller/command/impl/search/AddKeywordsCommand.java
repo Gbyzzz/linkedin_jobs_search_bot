@@ -23,7 +23,6 @@ public class AddKeywordsCommand implements Command {
     private final RedisService redisService;
     private final LocationKeyboard locationKeyboard;
 
-
     @Override
     public Reply execute(Update update) {
         SearchParams searchParams = new SearchParams();

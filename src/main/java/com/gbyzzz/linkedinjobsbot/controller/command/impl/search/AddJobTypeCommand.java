@@ -56,6 +56,4 @@ public class AddJobTypeCommand implements Command {
         }
         return reply;
     }
-
-
 }

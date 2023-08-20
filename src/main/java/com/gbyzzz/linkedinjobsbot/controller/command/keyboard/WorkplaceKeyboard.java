@@ -1,6 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
-import com.gbyzzz.linkedinjobsbot.service.impl.JobTypes;
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -14,20 +14,26 @@ public class WorkplaceKeyboard {
 
     public InlineKeyboardMarkup getReplyButtons() {
         InlineKeyboardButton onSiteButton = new InlineKeyboardButton();
-        onSiteButton.setText(state[0] ? "✅ On-site" : "❌ On-site");
-        onSiteButton.setCallbackData("toggle_on_site");
+        onSiteButton.setText(state[0] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_ON_SITE : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_ON_SITE);
+        onSiteButton.setCallbackData(MessageText.BUTTON_ON_SITE_VALUE);
 
         InlineKeyboardButton remoteButton = new InlineKeyboardButton();
-        remoteButton.setText(state[1] ? "✅ Remote" : "❌ Remote");
-        remoteButton.setCallbackData("toggle_remote");
+        remoteButton.setText(state[1] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_REMOTE : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_REMOTE);
+        remoteButton.setCallbackData(MessageText.BUTTON_REMOTE_VALUE);
 
         InlineKeyboardButton hybridButton = new InlineKeyboardButton();
-        hybridButton.setText(state[2] ? "✅ Hybrid" : "❌ Hybrid");
-        hybridButton.setCallbackData("toggle_hybrid");
+        hybridButton.setText(state[2] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_HYBRID : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_HYBRID);
+        hybridButton.setCallbackData(MessageText.BUTTON_HYBRID_VALUE);
 
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("Next");
-        nextButton.setCallbackData("next");
+        nextButton.setText(MessageText.BUTTON_NEXT);
+        nextButton.setCallbackData(MessageText.NEXT);
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(onSiteButton);
@@ -58,11 +64,11 @@ public class WorkplaceKeyboard {
         for (int i = 0; i < state.length; i++) {
             if (state[i]) {
                 value.append(i + 1);
-                value.append(",");
+                value.append(MessageText.COMMA);
             }
         }
-        if (value.length() > 0) {
-            value.replace(value.length() - 1, value.length(), "");
+        if (!value.isEmpty()) {
+            value.replace(value.length() - 1, value.length(), MessageText.EMPTY);
         }
         return value.toString();
     }
@@ -70,9 +76,9 @@ public class WorkplaceKeyboard {
     public static void getWorkplaceCallbackAction(String data) {
 
         switch (data) {
-            case "toggle_on_site" -> state[0] = !state[0];
-            case "toggle_remote" -> state[1] = !state[1];
-            case "toggle_hybrid" -> state[2] = !state[2];
+            case MessageText.BUTTON_ON_SITE_VALUE -> state[0] = !state[0];
+            case MessageText.BUTTON_REMOTE_VALUE -> state[1] = !state[1];
+            case MessageText.BUTTON_HYBRID_VALUE -> state[2] = !state[2];
         }
     }
 }

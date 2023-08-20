@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.service.impl.JobTypes;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,28 +15,38 @@ public class JobTypeKeyboard {
 
     public InlineKeyboardMarkup getReplyButtons() {
         InlineKeyboardButton fullTimeButton = new InlineKeyboardButton();
-        fullTimeButton.setText(state[0] ? "✅ Full-time" : "❌ Full-time");
-        fullTimeButton.setCallbackData("toggle_full_time");
+        fullTimeButton.setText(state[0] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_FULL_TIME : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_FULL_TIME);
+        fullTimeButton.setCallbackData(MessageText.BUTTON_FULL_TIME_VALUE);
 
         InlineKeyboardButton partTimeButton = new InlineKeyboardButton();
-        partTimeButton.setText(state[1] ? "✅ Part-time" : "❌ Part-time");
-        partTimeButton.setCallbackData("toggle_part_time");
+        partTimeButton.setText(state[1] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_PART_TIME : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_PART_TIME);
+        partTimeButton.setCallbackData(MessageText.BUTTON_PART_TIME_VALUE);
 
         InlineKeyboardButton contractButton = new InlineKeyboardButton();
-        contractButton.setText(state[2] ? "✅ Contract" : "❌ Contract");
-        contractButton.setCallbackData("toggle_contract");
+        contractButton.setText(state[2] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_CONTRACT : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_CONTRACT);
+        contractButton.setCallbackData(MessageText.BUTTON_CONTRACT_VALUE);
 
         InlineKeyboardButton temporaryButton = new InlineKeyboardButton();
-        temporaryButton.setText(state[3] ? "✅ Temporary" : "❌ Temporary");
-        temporaryButton.setCallbackData("toggle_temporary");
+        temporaryButton.setText(state[3] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_TEMPORARY : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_TEMPORARY);
+        temporaryButton.setCallbackData(MessageText.BUTTON_TEMPORARY_VALUE);
 
         InlineKeyboardButton internshipButton = new InlineKeyboardButton();
-        internshipButton.setText(state[4] ? "✅ Internship" : "❌ Internship");
-        internshipButton.setCallbackData("toggle_internship");
+        internshipButton.setText(state[4] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_INTERNSHIP : MessageText.BUTTON_NO_CHECK_BOX +
+                MessageText.SPACE + MessageText.BUTTON_FULL_TIME);
+        internshipButton.setCallbackData(MessageText.BUTTON_INTERNSHIP_VALUE);
 
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("Next");
-        nextButton.setCallbackData("next");
+        nextButton.setText(MessageText.BUTTON_NEXT);
+        nextButton.setCallbackData(MessageText.NEXT);
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(fullTimeButton);
@@ -70,11 +81,11 @@ public class JobTypeKeyboard {
         for (int i = 0; i < state.length; i++) {
             if (state[i]) {
                 value.append(JobTypes.getValue(i));
-                value.append(",");
+                value.append(MessageText.COMMA);
             }
         }
-        if (value.length() > 0) {
-            value.replace(value.length() - 1, value.length(), "");
+        if (!value.isEmpty()) {
+            value.replace(value.length() - 1, value.length(), MessageText.EMPTY);
         }
         return value.toString();
     }
@@ -83,11 +94,11 @@ public class JobTypeKeyboard {
     public static void getJobTypeCallbackAction(String data) {
 
         switch (data) {
-            case "toggle_full_time" -> state[0] = !state[0];
-            case "toggle_part_time" -> state[1] = !state[1];
-            case "toggle_contract" -> state[2] = !state[2];
-            case "toggle_temporary" -> state[3] = !state[3];
-            case "toggle_internship" -> state[4] = !state[4];
+            case MessageText.BUTTON_FULL_TIME_VALUE -> state[0] = !state[0];
+            case MessageText.BUTTON_PART_TIME_VALUE -> state[1] = !state[1];
+            case MessageText.BUTTON_CONTRACT_VALUE -> state[2] = !state[2];
+            case MessageText.BUTTON_TEMPORARY_VALUE -> state[3] = !state[3];
+                case MessageText.BUTTON_INTERNSHIP_VALUE -> state[4] = !state[4];
         }
     }
 
