@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -12,24 +13,24 @@ public class LocationKeyboard {
 
     public InlineKeyboardMarkup getReplyButtons() {
         InlineKeyboardButton israelButton = new InlineKeyboardButton();
-        israelButton.setText("Israel");
-        israelButton.setCallbackData("Israel");
+        israelButton.setText(MessageText.BUTTON_ISRAEL);
+        israelButton.setCallbackData(MessageText.BUTTON_ISRAEL);
 
         InlineKeyboardButton telAvivButton = new InlineKeyboardButton();
-        telAvivButton.setText("Tel-Aviv");
-        telAvivButton.setCallbackData("Tel_Aviv");
+        telAvivButton.setText(MessageText.BUTTON_TEL_AVIV);
+        telAvivButton.setCallbackData(MessageText.BUTTON_TEL_AVIV_VALUE);
 
         InlineKeyboardButton haifaButton = new InlineKeyboardButton();
-        haifaButton.setText("Haifa");
-        haifaButton.setCallbackData("Haifa");
+        haifaButton.setText(MessageText.BUTTON_HAIFA);
+        haifaButton.setCallbackData(MessageText.BUTTON_HAIFA);
 
         InlineKeyboardButton jerusalemButton = new InlineKeyboardButton();
-        jerusalemButton.setText("Jerusalem");
-        jerusalemButton.setCallbackData("Jerusalem");
+        jerusalemButton.setText(MessageText.BUTTON_JERUSALEM);
+        jerusalemButton.setCallbackData(MessageText.BUTTON_JERUSALEM);
 
         InlineKeyboardButton usaButton = new InlineKeyboardButton();
-        usaButton.setText("USA");
-        usaButton.setCallbackData("USA");
+        usaButton.setText(MessageText.BUTTON_USA);
+        usaButton.setCallbackData(MessageText.BUTTON_USA);
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(israelButton);

@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -14,50 +15,68 @@ public class PaginationKeyboard {
                                                 String searchParamsId) {
 
         InlineKeyboardButton deleteButton = new InlineKeyboardButton();
-        deleteButton.setText("❌ Delete");
-        deleteButton.setCallbackData("delete_" + state + "_" + searchParamsId + "_" + index);
+        deleteButton.setText(MessageText.BUTTON_NO_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_DELETE);
+        deleteButton.setCallbackData(MessageText.DELETE + MessageText.BUTTON_VALUE_SEPARATOR +
+                state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                MessageText.BUTTON_VALUE_SEPARATOR + index);
 
         InlineKeyboardButton rejectButton = new InlineKeyboardButton();
-        rejectButton.setText("❌ Rejected");
-        rejectButton.setCallbackData("rejected_" + state + "_" + searchParamsId + "_" + index);
+        rejectButton.setText(MessageText.BUTTON_NO_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_REJECTED);
+        rejectButton.setCallbackData(MessageText.REJECTED + MessageText.BUTTON_VALUE_SEPARATOR +
+                state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                MessageText.BUTTON_VALUE_SEPARATOR + index);
 
         InlineKeyboardButton resultsButton = new InlineKeyboardButton();
-        resultsButton.setText("\uD83D\uDCCA Results(new)");
-        resultsButton.setCallbackData("results_" + state + "_" + searchParamsId + "_" + index);
+        resultsButton.setText(MessageText.BUTTON_RESULTS_EMOJI + MessageText.SPACE +
+                MessageText.BUTTON_RESULTS);
+        resultsButton.setCallbackData(MessageText.RESULTS + MessageText.BUTTON_VALUE_SEPARATOR +
+                state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                MessageText.BUTTON_VALUE_SEPARATOR + index);
 
         InlineKeyboardButton appliedButton = new InlineKeyboardButton();
-        appliedButton.setText("✅ Applied");
-        appliedButton.setCallbackData("apply_" + state + "_" + searchParamsId + "_" + index);
+        appliedButton.setText(MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
+                MessageText.BUTTON_APPLIED);
+        appliedButton.setCallbackData(MessageText.APPLY + MessageText.BUTTON_VALUE_SEPARATOR +
+                state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                MessageText.BUTTON_VALUE_SEPARATOR + index);
 
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
 
         if (index > 0) {
             InlineKeyboardButton previousButton = new InlineKeyboardButton();
-            previousButton.setText("⬅\uFE0F Previous");
-            previousButton.setCallbackData("previous_" + state + "_" + searchParamsId +
-                    "_" + (index - 1));
+            previousButton.setText(MessageText.BUTTON_PREVIOUS_ARROW + MessageText.SPACE +
+                    MessageText.BUTTON_PREVIOUS);
+            previousButton.setCallbackData(MessageText.PREVIOUS +
+                    MessageText.BUTTON_VALUE_SEPARATOR + state +
+                    MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                    MessageText.BUTTON_VALUE_SEPARATOR + (index - 1));
             row1.add(previousButton);
         }
 
 
 
         switch (state){
-            case "NEW" -> {
+            case MessageText.NEW -> {
                 row1.add(deleteButton);
                 row1.add(appliedButton);
             }
-            case "SEARCHES" -> {
+            case MessageText.SEARCHES -> {
                 row1.add(deleteButton);
                 row1.add(resultsButton);
             }
-            case "APPLIED" -> row1.add(rejectButton);
+            case MessageText.APPLIED -> row1.add(rejectButton);
         }
 
         if (index + 1 < size) {
             InlineKeyboardButton nextButton = new InlineKeyboardButton();
-            nextButton.setText("➡\uFE0F Next");
-            nextButton.setCallbackData("next_" + state + "_" + searchParamsId + "_" + (index + 1));
+            nextButton.setText(MessageText.BUTTON_NEXT_ARROW + MessageText.SPACE +
+                    MessageText.BUTTON_NEXT);
+            nextButton.setCallbackData(MessageText.NEXT + MessageText.BUTTON_VALUE_SEPARATOR +
+                    state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                    MessageText.BUTTON_VALUE_SEPARATOR + (index + 1));
             row1.add(nextButton);
         }
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();

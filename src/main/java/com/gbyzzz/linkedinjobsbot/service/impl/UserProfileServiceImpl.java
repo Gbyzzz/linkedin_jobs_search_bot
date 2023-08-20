@@ -5,8 +5,8 @@ import com.gbyzzz.linkedinjobsbot.repository.UserProfileRepository;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,5 +37,10 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Transactional
     public void delete(Long id) {
         userProfileRepository.delete(userProfileRepository.getReferenceById(id));
+    }
+
+    @Override
+    public List<UserProfile> getAll() {
+        return userProfileRepository.findAll();
     }
 }

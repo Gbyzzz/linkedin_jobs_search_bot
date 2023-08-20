@@ -46,8 +46,6 @@ public class MakeFirstSearchCommand implements Command {
             if (!jobs.isEmpty()) {
                 sendMessage = new SendMessage(id.toString(),
                         MessageText.makeNewJobsReply(0, jobs));
-//                        "New jobs:\nhttps://www.linkedin.com/jobs/view/"
-//                                + jobs.get(0).getJobId() + "\n1 of " + jobs.size());
                 sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
                         UserProfile.BotState.NEW.name(), MessageText.ALL));
             } else {
@@ -61,7 +59,6 @@ public class MakeFirstSearchCommand implements Command {
             sendMessage = new SendMessage(id.toString(),
                     MessageText.MAKE_FIRST_SEARCH_PARAMS_ALREADY_EXISTS);
         }
-
         redisService.deleteFromTempRepository(id);
         return new Reply(sendMessage, false);
     }

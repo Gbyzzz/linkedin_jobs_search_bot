@@ -2,7 +2,6 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl.filter;
 
 import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
-import com.gbyzzz.linkedinjobsbot.controller.command.impl.MakeFirstSearchCommand;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
@@ -22,7 +21,6 @@ public class AddFilterExcludeCommand implements Command {
 
     private final UserProfileService userProfileService;
     private final RedisService redisService;
-    private final MakeFirstSearchCommand makeFirstSearchCommand;
 
     @Override
     public Reply execute(Update update) throws IOException {

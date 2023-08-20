@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
+import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -11,10 +12,10 @@ import java.util.List;
 @Component
 public class MainMenuKeyboard {
     public ReplyKeyboardMarkup getReplyButtons() {
-        KeyboardButton addSearch = new KeyboardButton("/add_search");
-        KeyboardButton getAllSearches = new KeyboardButton("/get_all_searches");
-        KeyboardButton getMyJobs = new KeyboardButton("/get_applied_jobs");
-        KeyboardButton getNewJobs = new KeyboardButton("/get_new_jobs");
+        KeyboardButton addSearch = new KeyboardButton(MessageText.BUTTON_ADD_SEARCH);
+        KeyboardButton getAllSearches = new KeyboardButton(MessageText.BUTTON_GET_ALL_SEARCHES);
+        KeyboardButton getMyJobs = new KeyboardButton(MessageText.BUTTON_GET_APPLIED_JOBS);
+        KeyboardButton getNewJobs = new KeyboardButton(MessageText.BUTTON_GET_NEW_JOBS);
 
 
         KeyboardRow row1 = new KeyboardRow();

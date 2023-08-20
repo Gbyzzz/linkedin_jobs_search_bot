@@ -1,7 +1,5 @@
 package com.gbyzzz.linkedinjobsbot.service.impl;
 
-import com.gbyzzz.linkedinjobsbot.controller.CommandName;
-
 import java.util.Objects;
 
 public enum Experience {
