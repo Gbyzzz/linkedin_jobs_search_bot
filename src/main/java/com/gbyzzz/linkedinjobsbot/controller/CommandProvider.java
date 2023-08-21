@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -17,20 +18,25 @@ final class CommandProvider {
     private final UserProfileService userProfileService;
 
     Command getCommand(Update update) {
-        Long id;
+        Long id = update.hasCallbackQuery() ?
+                update.getCallbackQuery().getMessage().getChatId() :
+                update.getMessage().getChatId();
         CommandName commandName = null;
-        if (update.hasCallbackQuery()) {
-            id = update.getCallbackQuery().getMessage().getChatId();
-            commandName = CommandName.getValue(userProfileService.getUserProfileById(id)
-                    .map(UserProfile::getBotState).orElse(UserProfile.BotState.NA).name());
+        Optional<UserProfile> userProfile = userProfileService.getUserProfileById(id);
+        if (userProfile.isEmpty() && !update.getMessage().getText()
+                .equals(MessageText.BUTTON_START)) {
+            commandName = CommandName.getValue(MessageText.NO_ACCOUNT);
         } else {
-            id = update.getMessage().getChatId();
-            UserProfile.BotState botState = userProfileService.getUserProfileById(id)
-                    .map(UserProfile::getBotState).orElse(UserProfile.BotState.NA);
-            if (update.getMessage().getText().charAt(0) == '/') {
-                commandName = CommandName.getValue(update.getMessage().getText());
+            if (update.hasCallbackQuery()) {
+                commandName = CommandName.getValue(userProfile.get().getBotState().name());
             } else {
-                commandName = CommandName.getValue(botState.name());
+                UserProfile.BotState botState = userProfile.map(UserProfile::getBotState)
+                        .orElse(UserProfile.BotState.NA);
+                if (update.getMessage().getText().charAt(0) == MessageText.SLASH.charAt(0)) {
+                    commandName = CommandName.getValue(update.getMessage().getText());
+                } else {
+                    commandName = CommandName.getValue(botState.name());
+                }
             }
         }
         return repository.getOrDefault(commandName.name(), repository.get(MessageText.WRONG));
