@@ -44,7 +44,7 @@ public class ScheduledService {
                 if (!searchParams.isEmpty()) {
                     for (SearchParams searchParam : searchParams) {
                         if (searchParam.getSearchState().equals(SearchParams.SearchState.SUBSCRIBED)) {
-                            jobService.makeScan(searchParam, 1440000L);
+                            jobService.makeScan(searchParam, 14400L);
                         }
                     }
                     if (initialSize < savedJobService.getNewJobsByUserId(user.getChatId()).size()) {
