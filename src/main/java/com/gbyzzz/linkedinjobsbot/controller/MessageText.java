@@ -27,9 +27,12 @@ public abstract class MessageText {
     public static final String ZERO = "0";
     public static final String ONE = "1";
     public static final String OF = " of ";
-    public static final String EXIT = "Exit";
+    public static final String EXIT = "Your account have been deleted";
     public static final String ALL = "ALL";
     public static final String DATE_FORMAT = "dd-MMM-yyyy";
+    public static final String SLASH = "/";
+    public static final String OPPOSITE_SLASH = "\\";
+    public static final String ALL_WORD_REGEX = ".*";
     public static final String SPACE = " ";
     public static final String TWO_SPACES = "  ";
     public static final String FOUR_SPACES = "    ";
@@ -44,6 +47,7 @@ public abstract class MessageText {
     public static final String COLON = ":";
     public static final String COMMA = ",";
 
+    public static final String NO_ACCOUNT = "NO_ACCOUNT";
     public static final String ADD_EXPERIENCE = "ADD_EXPERIENCE";
     public static final String ADD_JOB_TYPE = "ADD_JOB_TYPE";
     public static final String ADD_KEYWORDS = "ADD_KEYWORDS";
@@ -65,6 +69,7 @@ public abstract class MessageText {
     public static final String BUTTON_NEXT_ARROW = "➡\uFE0F";
     public static final String BUTTON_PREVIOUS = "Previous";
     public static final String BUTTON_PREVIOUS_ARROW = "⬅\uFE0F";
+    public static final String BUTTON_START = "/start";
     public static final String BUTTON_ADD_SEARCH = "/add_search";
     public static final String BUTTON_GET_ALL_SEARCHES = "/get_all_searches";
     public static final String BUTTON_GET_APPLIED_JOBS = "/get_applied_jobs";
@@ -110,6 +115,8 @@ public abstract class MessageText {
     public static final String BUTTON_APPLIED = "Applied";
     public static final String BUTTON_VALUE_SEPARATOR = "_";
 
+    public static final String NO_ACCOUNT_REPLY = "You don't have an account, please input /start" +
+            " to add";
     public static final String ADD_EXPERIENCE_REPLY  = "Search parameters added\nNow you can add " +
             "additional search parameters, experience:";
     public static final String ADD_EXPERIENCE_REPLY_NEXT = "Now add job type:";
@@ -142,7 +149,15 @@ public abstract class MessageText {
     public static final String WRONG_REPLY = "Wrong select";
     public static final String MAIN_MENU_REPLY = "Input /add_search to add search to you account";
     public static final String START_REPLY = "\uD83D\uDE80 Starting \uD83D\uDE80 \n " +
-            "Input /add_search to add search to you account";
+            "Commands:\n\n" +
+            "\uD83D\uDD38 /add_search - to add search to you account\n" +
+            "\uD83D\uDD38 /get_all_searches - to show all your search parameters\n" +
+            "\uD83D\uDD38 /get_applied_jobs - to show jobs which you have applied\n" +
+            "\uD83D\uDD38 /get_new_jobs - to show all new jobs according to all your search" +
+            " parameters.\n" +
+            "\uD83D\uDD39 To get new jobs of the particular search parameters go to " +
+            "/get_all_searches navigate to desired search parameters and press \"Results(new)\"" +
+            " button.\n\uD83D\uDD38 /exit - to delete your account from bot with all data";
     public static final String START_REPLY_ALREADY_STARTED = "\uD83D\uDE80 Starting \uD83D\uDE80" +
             " \n Input /add_search to add search to you account";
     public static final String MAKE_FIRST_SEARCH_NO_RESULTS = "Nothing was found. Please check " +

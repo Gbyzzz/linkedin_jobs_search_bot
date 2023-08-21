@@ -8,6 +8,7 @@ import java.util.List;
 public enum CommandName {
 
     START (new ArrayList<>(){{add("/start");}}),
+    NO_ACCOUNT(new ArrayList<>(){{add(MessageText.NO_ACCOUNT);}}),
     EXIT (new ArrayList<>(){{add("/exit");}}),
     ADD_SEARCH(new ArrayList<>(){{add("/add_search");}}),
     MAIN_MENU(new ArrayList<>(){{add("/main_menu");}}),

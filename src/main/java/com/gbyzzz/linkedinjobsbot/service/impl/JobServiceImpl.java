@@ -21,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -142,7 +144,8 @@ public class JobServiceImpl implements JobService {
 
         String include = MessageText.INCLUDE_REGEX_START +
                 String.join(MessageText.REGEX_SEPARATOR,
-                        searchParams.getFilterParams().getIncludeWordsInDescription())
+                        processKeywords(searchParams.getFilterParams()
+                                .getIncludeWordsInDescription()))
                 + MessageText.INCLUDE_REGEX_END;
 
         String exclude = MessageText.EXCLUDE_REGEX_START +
@@ -165,7 +168,29 @@ public class JobServiceImpl implements JobService {
         JsonNode jsonNode = mapper.readTree(makeRequest(new URL((urlBuilder + MessageText.ZERO)
                 .replaceAll(MessageText.COUNT_100, MessageText.COUNT_0))));
         totalResults = jsonNode.get(MessageText.PAGING).get(MessageText.TOTAL).asInt();
+    }
 
+    private String[] processKeywords(String[] keywords) {
+        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+
+
+        for (int i=0; i<keywords.length; i++) {
+            Matcher m = p.matcher(keywords[i]);
+            if (m.find()) {
+                char[] characters = keywords[i].toCharArray();
+                StringBuilder stringBuilder = new StringBuilder(MessageText.ALL_WORD_REGEX);
+                for (char character : characters) {
+                    if (p.matcher(String.valueOf(character)).find()) {
+                        stringBuilder.append(MessageText.OPPOSITE_SLASH).append(character);
+                    } else {
+                        stringBuilder.append(character);
+                    }
+                }
+                stringBuilder.append(MessageText.ALL_WORD_REGEX);
+                keywords[i]=stringBuilder.toString();
+            }
+        }
+        return keywords;
     }
 
     private void getJobIds(String in) throws JsonProcessingException {

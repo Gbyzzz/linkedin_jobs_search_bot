@@ -31,10 +31,10 @@ public class ScheduledService {
     private final SendToEditMessageConverter converter;
     private final UserProfileService userProfileService;
 
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/60 * * * ?")
+
     public void makeScan() throws IOException {
         System.out.println("Scheduled");
-//        List<SearchParams> searchParams = searchParamsService.findAll();
         List<UserProfile> userProfiles = userProfileService.getAll();
         if (!userProfiles.isEmpty()) {
             for(UserProfile user : userProfiles) {
@@ -44,7 +44,7 @@ public class ScheduledService {
                 if (!searchParams.isEmpty()) {
                     for (SearchParams searchParam : searchParams) {
                         if (searchParam.getSearchState().equals(SearchParams.SearchState.SUBSCRIBED)) {
-                            jobService.makeScan(searchParam, 1440000L);
+                            jobService.makeScan(searchParam, 14400L);
                         }
                     }
                     if (initialSize < savedJobService.getNewJobsByUserId(user.getChatId()).size()) {
