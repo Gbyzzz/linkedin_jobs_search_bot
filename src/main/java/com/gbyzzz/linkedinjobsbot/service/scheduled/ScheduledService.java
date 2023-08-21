@@ -34,7 +34,6 @@ public class ScheduledService {
     @Scheduled(cron = "0 0/60 * * * ?")
     public void makeScan() throws IOException {
         System.out.println("Scheduled");
-//        List<SearchParams> searchParams = searchParamsService.findAll();
         List<UserProfile> userProfiles = userProfileService.getAll();
         if (!userProfiles.isEmpty()) {
             for(UserProfile user : userProfiles) {
