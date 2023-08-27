@@ -7,6 +7,7 @@ import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
+import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -21,6 +22,7 @@ public class GetAllSearchesCommand implements Command {
 
     private final SearchParamsService searchParamsService;
     private final PaginationKeyboard paginationKeyboard;
+    private final UserProfileService userProfileService;
 
     @Override
     public Reply execute(Update update) throws IOException {
@@ -40,6 +42,9 @@ public class GetAllSearchesCommand implements Command {
             sendMessage = new SendMessage(id.toString(),
                     MessageText.GET_ALL_SEARCHES_REPLY);
         }
+        UserProfile userProfile = userProfileService.getUserProfileById(id).get();
+        userProfile.setBotState(UserProfile.BotState.SEARCHES);
+        userProfileService.save(userProfile);
         return new Reply(sendMessage, false);
     }
 }

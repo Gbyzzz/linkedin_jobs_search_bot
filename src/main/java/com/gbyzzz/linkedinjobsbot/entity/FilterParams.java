@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gbyzzz.linkedinjobsbot.entity.converter.KeywordConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,7 @@ public class FilterParams {
     private String[] includeWordsInDescription;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "search_params_id")
     private SearchParams searchParams;
 
