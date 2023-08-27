@@ -25,18 +25,22 @@ public class AddKeywordsCommand implements Command {
 
     @Override
     public Reply execute(Update update) {
-        SearchParams searchParams = new SearchParams();
-        searchParams.setSearchFilters(new HashMap<>());
-        String[] keywords = update.getMessage().getText().split(MessageText.SPACE);
-        searchParams.setKeywords(keywords);
-        UserProfile userProfile = userProfileService.getUserProfileById(
-                update.getMessage().getChatId()).orElse(null);
-        searchParams.setUserProfile(userProfile);
-
-        redisService.saveToTempRepository(searchParams, update.getMessage().getChatId());
-        userProfile.setBotState(UserProfile.BotState.ADD_LOCATION);
-        userProfileService.save(userProfile);
-
+        Long id = update.getMessage().getChatId();
+        UserProfile userProfile = userProfileService.getUserProfileById(id).orElse(null);
+        SearchParams searchParams = redisService.getFromTempRepository(id);
+        if (searchParams == null) {
+            searchParams = new SearchParams();
+            searchParams.setSearchFilters(new HashMap<>());
+            searchParams.setUserProfile(userProfile);
+        }
+        String[] keywords = searchParams.getKeywords();
+        if (!update.getMessage().getText().equals(MessageText.PLUS)) {
+            keywords = update.getMessage().getText().split(MessageText.SPACE);
+            searchParams.setKeywords(keywords);
+            redisService.saveToTempRepository(searchParams, update.getMessage().getChatId());
+        }
+            userProfile.setBotState(UserProfile.BotState.ADD_LOCATION);
+            userProfileService.save(userProfile);
         StringBuilder reply = new StringBuilder(MessageText.INPUTTED_KEYWORDS);
         reply.append(MessageText.NEW_LINE);
         for (String word : keywords) {
@@ -44,6 +48,10 @@ public class AddKeywordsCommand implements Command {
         }
         reply.append(MessageText.NEW_LINE);
         reply.append(MessageText.ENTER_LOCATION);
+        if (searchParams.getLocation() != null) {
+            reply.append(MessageText.NEW_LINE).append(MessageText.LOCATION_EDIT)
+                    .append(searchParams.getLocation()).append(MessageText.NEW_LINE);
+        }
         SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(),
                 reply.toString());
         sendMessage.setReplyMarkup(locationKeyboard.getReplyButtons());

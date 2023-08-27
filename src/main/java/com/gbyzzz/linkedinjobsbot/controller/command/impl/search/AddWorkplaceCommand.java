@@ -35,13 +35,21 @@ public class AddWorkplaceCommand implements Command {
             userProfile.setBotState(UserProfile.BotState.ADD_FILTER_INCLUDE);
             userProfileService.save(userProfile);
             String workplaceType = getWorkplaceValue();
+            SearchParams searchParams = redisService.getFromTempRepository(id);
             if(!workplaceType.isEmpty()) {
-                SearchParams searchParams = redisService.getFromTempRepository(id);
                 searchParams.getSearchFilters().put(MessageText.WORKPLACE_TYPE, workplaceType);
                 redisService.saveToTempRepository(searchParams, id);
             }
+            StringBuilder stringBuilder = new StringBuilder(MessageText.ADD_WORKPLACE_REPLY);
+            if(searchParams.getFilterParams().getIncludeWordsInDescription() != null) {
+                stringBuilder.append(MessageText.INCLUDE_EDIT_START);
+                for (String include : searchParams.getFilterParams().getIncludeWordsInDescription()) {
+                    stringBuilder.append(include).append(MessageText.SPACE);
+                }
+                stringBuilder.append(MessageText.TEXT_INPUT_EDIT_END);
+            }
             reply = new Reply(new SendMessage(id.toString(),
-                    MessageText.ADD_WORKPLACE_REPLY), false);
+                    stringBuilder.toString()), false);
         } else {
             getWorkplaceCallbackAction(data);
             sendMessage = new SendMessage(id.toString(),

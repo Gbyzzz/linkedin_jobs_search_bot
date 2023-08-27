@@ -33,4 +33,12 @@ public enum JobTypes {
         }
         return null;
     }
+    public static Integer getStateId(final String id) {
+        for (JobTypes e: JobTypes.values()) {
+            if (Objects.equals(e.id, id)) {
+                return e.stateId;
+            }
+        }
+        return null;
+    }
 }

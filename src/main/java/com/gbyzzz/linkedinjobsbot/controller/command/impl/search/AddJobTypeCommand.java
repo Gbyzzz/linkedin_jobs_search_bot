@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard.getJobTypeCallbackAction;
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard.getJobTypeValue;
+import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard.putWorkplaceValue;
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard.setWorkplaceKeyboardFalse;
 
 @Component(MessageText.ADD_JOB_TYPE)
@@ -40,12 +41,15 @@ public class AddJobTypeCommand implements Command {
             sendMessage = new SendMessage(id.toString(),
                     MessageText.ADD_JOB_TYPE_REPLY_NEXT);
             String jobType = getJobTypeValue();
-            if(!jobType.isEmpty()) {
-                SearchParams searchParams = redisService.getFromTempRepository(id);
+            SearchParams searchParams = redisService.getFromTempRepository(id);
+            if (!jobType.isEmpty()) {
                 searchParams.getSearchFilters().put(MessageText.JOB_TYPE, jobType);
                 redisService.saveToTempRepository(searchParams, id);
             }
             setWorkplaceKeyboardFalse();
+            if (searchParams.getSearchFilters().get(MessageText.WORKPLACE_TYPE) != null) {
+                putWorkplaceValue(searchParams.getSearchFilters().get(MessageText.WORKPLACE_TYPE));
+            }
             sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, false);
         } else {

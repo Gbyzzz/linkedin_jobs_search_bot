@@ -25,12 +25,14 @@ public class AddFilterExcludeCommand implements Command {
     @Override
     public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
-        String [] keywords = update.getMessage().getText().split(MessageText.SPACE);
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId()).get();
         SearchParams searchParams = redisService.getFromTempRepository(id);
-        searchParams.getFilterParams().setExcludeWordsFromTitle(keywords);
-        redisService.saveToTempRepository(searchParams, id);
+        if (!update.getMessage().getText().equals(MessageText.PLUS)) {
+            String [] keywords = update.getMessage().getText().split(MessageText.SPACE);
+            searchParams.getFilterParams().setExcludeWordsFromTitle(keywords);
+            redisService.saveToTempRepository(searchParams, id);
+        }
         userProfile.setBotState(UserProfile.BotState.NEW);
         userProfileService.save(userProfile);
 

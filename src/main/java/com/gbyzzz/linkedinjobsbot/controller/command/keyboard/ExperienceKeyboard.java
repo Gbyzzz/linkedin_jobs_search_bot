@@ -87,14 +87,19 @@ public class ExperienceKeyboard {
         StringBuilder value = new StringBuilder();
         for (int i = 0; i < state.length; i++) {
             if (state[i]){
-                value.append(i+1);
-                value.append(MessageText.COMMA);
+                value.append(i+1).append(MessageText.COMMA);
             }
         }
         if (!value.isEmpty()) {
             value.replace(value.length() - 1, value.length(), MessageText.EMPTY);
         }
         return value.toString();
+    }
+    public static void putExperienceValue(String value) {
+        String[] values = value.split(MessageText.COMMA);
+        for (String s : values) {
+            state[Integer.parseInt(s) - 1] = true;
+        }
     }
 
     public static void getExperienceCallbackAction(String data) {

@@ -73,6 +73,13 @@ public class WorkplaceKeyboard {
         return value.toString();
     }
 
+    public static void putWorkplaceValue(String value) {
+       String[] values = value.split(MessageText.COMMA);
+        for (String s : values) {
+            state[Integer.parseInt(s) - 1] = true;
+        }
+    }
+
     public static void getWorkplaceCallbackAction(String data) {
 
         switch (data) {

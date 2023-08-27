@@ -2,11 +2,13 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
 import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
+import com.gbyzzz.linkedinjobsbot.controller.command.impl.search.AddSearchCommand;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,8 @@ public class ListOfJobsCommand implements Command {
     private final SavedJobService savedJobService;
     private final PaginationKeyboard paginationKeyboard;
     private final SearchParamsService searchParamsService;
+    private final AddSearchCommand addSearchCommand;
+    private final RedisService redisService;
 
     @Override
     public Reply execute(Update update) throws IOException {
@@ -48,7 +52,8 @@ public class ListOfJobsCommand implements Command {
                 jobs = savedJobService.getAppliedJobsByUserId(id);
                 targetId = jobs.get(Integer.parseInt(command[3])).getJobId();
             }
-            case MessageText.SEARCHES -> searchParams = searchParamsService.findAllByUserId(id);
+            case MessageText.SEARCHES, MessageText.EDIT ->
+                    searchParams = searchParamsService.findAllByUserId(id);
             case MessageText.SCHEDULED -> jobs = savedJobService.getNewJobsByUserId(id);
 
 
@@ -129,6 +134,11 @@ public class ListOfJobsCommand implements Command {
                         .get(Integer.parseInt(command[3])));
                 searchParams = null;
                 sendMessage = makeReply(0, MessageText.NEW, id, command[3]);
+            }
+            case MessageText.EDIT -> {
+                redisService.saveToTempRepository(searchParams.get(Integer.parseInt(command[3])),
+                        update.getCallbackQuery().getMessage().getChatId());
+                return addSearchCommand.execute(update);
             }
         }
         return new Reply(sendMessage, true);

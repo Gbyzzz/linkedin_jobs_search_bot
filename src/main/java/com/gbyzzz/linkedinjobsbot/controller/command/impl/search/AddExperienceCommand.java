@@ -39,13 +39,16 @@ public class AddExperienceCommand implements Command {
             userProfileService.save(userProfile);
 
             String experience = getExperienceValue();
+            SearchParams searchParams = redisService.getFromTempRepository(id);
             if(!experience.isEmpty()) {
-                SearchParams searchParams = redisService.getFromTempRepository(id);
                 searchParams.getSearchFilters().put(MessageText.EXPERIENCE, experience);
                 redisService.saveToTempRepository(searchParams, id);
             }
             sendMessage = new SendMessage(id.toString(), MessageText.ADD_EXPERIENCE_REPLY_NEXT);
             setJobTypeKeyboardFalse();
+            if(searchParams.getSearchFilters().get(MessageText.JOB_TYPE) != null) {
+                PutJobTypeValue(searchParams.getSearchFilters().get(MessageText.JOB_TYPE));
+            }
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, false);
         } else {
