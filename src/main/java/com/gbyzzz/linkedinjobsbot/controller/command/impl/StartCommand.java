@@ -30,8 +30,10 @@ public class StartCommand implements Command {
             userProfileService.save(new UserProfile(update.getMessage().getChatId(),
                     username,
                     UserProfile.BotState.NA, new Date(System.currentTimeMillis())));
+            StringBuilder stringBuilder = new StringBuilder(MessageText.START_REPLY);
+            stringBuilder.append(MessageText.MAIN_MENU_REPLY);
             sendMessage = new SendMessage(update.getMessage().getChatId().toString(),
-                    MessageText.START_REPLY);
+                    stringBuilder.toString());
             sendMessage.setReplyMarkup(mainMenuKeyboard.getReplyButtons());
         } else {
             sendMessage = new SendMessage(update.getMessage().getChatId().toString(),
