@@ -46,11 +46,11 @@ public class AddKeywordsCommand implements Command {
         for (String word : keywords) {
             reply.append(word).append(MessageText.NEW_LINE);
         }
-        reply.append(MessageText.NEW_LINE);
         if (searchParams.getLocation() != null) {
             reply.append(MessageText.NEW_LINE).append(MessageText.LOCATION_EDIT)
                     .append(searchParams.getLocation()).append(MessageText.NEW_LINE)
-                    .append(MessageText.NEW_LINE);
+                    .append(MessageText.CANCEL_EDITING_COMMAND).append(MessageText.NEW_LINE);
+
         }
         reply.append(MessageText.ENTER_LOCATION);
         SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(),

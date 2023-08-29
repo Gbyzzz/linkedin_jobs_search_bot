@@ -31,12 +31,12 @@ public class AddWorkplaceCommand implements Command {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String data = update.getCallbackQuery().getData();
         Reply reply;
+        SearchParams searchParams = redisService.getFromTempRepository(id);
         if (data.equals(MessageText.NEXT)) {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_FILTER_INCLUDE);
             userProfileService.save(userProfile);
             String workplaceType = getWorkplaceValue();
-            SearchParams searchParams = redisService.getFromTempRepository(id);
             if (searchParams.getFilterParams() == null) {
                 searchParams.setFilterParams(new FilterParams());
             }
@@ -52,7 +52,8 @@ public class AddWorkplaceCommand implements Command {
                 }
                 stringBuilder.append(MessageText.NEW_LINE).append(MessageText.NEW_LINE)
                         .append(MessageText.ADD_WORKPLACE_REPLY);
-                stringBuilder.append(MessageText.NEW_LINE).append(MessageText.TEXT_INPUT_EDIT_END);
+                stringBuilder.append(MessageText.NEW_LINE).append(MessageText.TEXT_INPUT_EDIT_END)
+                        .append(MessageText.CANCEL_EDITING_COMMAND);
             } else {
                 stringBuilder.append(MessageText.ADD_WORKPLACE_REPLY);
             }
@@ -60,8 +61,14 @@ public class AddWorkplaceCommand implements Command {
                     stringBuilder.toString()), false);
         } else {
             getWorkplaceCallbackAction(data);
-            sendMessage = new SendMessage(id.toString(),
-                    MessageText.ADD_WORKPLACE_REPLY);
+            StringBuilder stringBuilder = new StringBuilder();
+            if(searchParams.getId() != null) {
+                stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
+                        .append(MessageText.ADD_WORKPLACE_REPLY);
+            } else {
+                stringBuilder.append(MessageText.ADD_WORKPLACE_REPLY);
+            }
+            sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
             sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, true);
         }

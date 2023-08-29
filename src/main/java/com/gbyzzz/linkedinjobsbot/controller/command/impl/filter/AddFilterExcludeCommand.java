@@ -35,8 +35,13 @@ public class AddFilterExcludeCommand implements Command {
         }
         userProfile.setBotState(UserProfile.BotState.NEW);
         userProfileService.save(userProfile);
-
-        return new Reply(new SendMessage(id.toString(),
-                MessageText.ADD_FILTER_EXCLUDE_REPLY), false);
+        StringBuilder stringBuilder = new StringBuilder();
+        if (searchParams.getId() != null) {
+            stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
+                    .append(MessageText.ADD_FILTER_EXCLUDE_REPLY);
+        } else {
+            stringBuilder.append(MessageText.ADD_FILTER_EXCLUDE_REPLY);
+        }
+        return new Reply(new SendMessage(id.toString(),stringBuilder.toString()),false);
     }
 }

@@ -31,29 +31,43 @@ public class AddExperienceCommand implements Command {
         SendMessage sendMessage;
         Long id = update.getCallbackQuery().getMessage().getChatId();
         Reply reply;
-
+        SearchParams searchParams = redisService.getFromTempRepository(id);
         String data = update.getCallbackQuery().getData();
+        StringBuilder stringBuilder = new StringBuilder();
         if (data.equals(MessageText.NEXT)) {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_JOB_TYPE);
             userProfileService.save(userProfile);
 
             String experience = getExperienceValue();
-            SearchParams searchParams = redisService.getFromTempRepository(id);
-            if(!experience.isEmpty()) {
+
+            if (!experience.isEmpty()) {
                 searchParams.getSearchFilters().put(MessageText.EXPERIENCE, experience);
                 redisService.saveToTempRepository(searchParams, id);
             }
-            sendMessage = new SendMessage(id.toString(), MessageText.ADD_EXPERIENCE_REPLY_NEXT);
+            if (searchParams.getId() != null) {
+                stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
+                        .append(MessageText.ADD_EXPERIENCE_REPLY_NEXT);
+            } else {
+                stringBuilder.append(MessageText.ADD_EXPERIENCE_REPLY_NEXT);
+            }
+            sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
             setJobTypeKeyboardFalse();
-            if(searchParams.getSearchFilters().get(MessageText.JOB_TYPE) != null) {
+            if (searchParams.getSearchFilters().get(MessageText.JOB_TYPE) != null) {
                 PutJobTypeValue(searchParams.getSearchFilters().get(MessageText.JOB_TYPE));
             }
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, false);
         } else {
             getExperienceCallbackAction(data);
-            sendMessage = new SendMessage(id.toString(), MessageText.ADD_EXPERIENCE_REPLY);
+
+            if (searchParams.getId() != null) {
+                stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
+                        .append(MessageText.ADD_EXPERIENCE_REPLY);
+            } else {
+                stringBuilder.append(MessageText.ADD_EXPERIENCE_REPLY);
+            }
+            sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
             sendMessage.setReplyMarkup(experienceKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, true);
         }
