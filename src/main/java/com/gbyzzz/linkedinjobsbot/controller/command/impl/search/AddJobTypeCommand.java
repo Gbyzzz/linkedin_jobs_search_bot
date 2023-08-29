@@ -34,19 +34,26 @@ public class AddJobTypeCommand implements Command {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String data = update.getCallbackQuery().getData();
         Reply reply;
+        StringBuilder stringBuilder = new StringBuilder();
+        SearchParams searchParams = redisService.getFromTempRepository(id);
         if (data.equals(MessageText.NEXT)) {
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.ADD_WORKPLACE);
             userProfileService.save(userProfile);
-            sendMessage = new SendMessage(id.toString(),
-                    MessageText.ADD_JOB_TYPE_REPLY_NEXT);
+
             String jobType = getJobTypeValue();
-            SearchParams searchParams = redisService.getFromTempRepository(id);
             if (!jobType.isEmpty()) {
                 searchParams.getSearchFilters().put(MessageText.JOB_TYPE, jobType);
                 redisService.saveToTempRepository(searchParams, id);
             }
             setWorkplaceKeyboardFalse();
+            if(searchParams.getId() != null) {
+                stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
+                        .append(MessageText.ADD_JOB_TYPE_REPLY_NEXT);
+            } else {
+                stringBuilder.append(MessageText.ADD_JOB_TYPE_REPLY_NEXT);
+            }
+            sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
             if (searchParams.getSearchFilters().get(MessageText.WORKPLACE_TYPE) != null) {
                 putWorkplaceValue(searchParams.getSearchFilters().get(MessageText.WORKPLACE_TYPE));
             }
@@ -54,7 +61,14 @@ public class AddJobTypeCommand implements Command {
             reply = new Reply(sendMessage, false);
         } else {
             getJobTypeCallbackAction(data);
-            sendMessage = new SendMessage(id.toString(), MessageText.ADD_JOB_TYPE_REPLY);
+
+            if(searchParams.getId() != null) {
+                stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
+                        .append(MessageText.ADD_LOCATION_REPLY);
+            } else {
+                stringBuilder.append(MessageText.ADD_LOCATION_REPLY);
+            }
+            sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, true);
         }

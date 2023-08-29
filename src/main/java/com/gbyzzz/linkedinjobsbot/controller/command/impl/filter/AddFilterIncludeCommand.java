@@ -47,7 +47,8 @@ public class AddFilterIncludeCommand implements Command {
             }
             reply.append(MessageText.NEW_LINE).append(MessageText.NEW_LINE)
                     .append(MessageText.ADD_FILTER_INCLUDE_REPLY_END);
-            reply.append(MessageText.NEW_LINE).append(MessageText.TEXT_INPUT_EDIT_END);
+            reply.append(MessageText.NEW_LINE).append(MessageText.TEXT_INPUT_EDIT_END)
+                    .append(MessageText.CANCEL_EDITING_COMMAND);
         } else {
             reply.append(MessageText.ADD_FILTER_INCLUDE_REPLY_END);
         }
