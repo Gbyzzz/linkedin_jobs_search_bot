@@ -16,6 +16,7 @@ public class MainMenuKeyboard {
         KeyboardButton getAllSearches = new KeyboardButton(MessageText.BUTTON_GET_ALL_SEARCHES);
         KeyboardButton getMyJobs = new KeyboardButton(MessageText.BUTTON_GET_APPLIED_JOBS);
         KeyboardButton getNewJobs = new KeyboardButton(MessageText.BUTTON_GET_NEW_JOBS);
+        KeyboardButton mainMenu = new KeyboardButton(MessageText.BUTTON_MAIN_MENU);
 
 
         KeyboardRow row1 = new KeyboardRow();
@@ -24,9 +25,12 @@ public class MainMenuKeyboard {
         KeyboardRow row2 = new KeyboardRow();
         row2.add(getAllSearches);
         row2.add(addSearch);
+        KeyboardRow row3 = new KeyboardRow();
+        row3.add(mainMenu);
         List<KeyboardRow> keyboardButtonsRow = new ArrayList<>();
         keyboardButtonsRow.add(row1);
         keyboardButtonsRow.add(row2);
+        keyboardButtonsRow.add(row3);
         return new ReplyKeyboardMarkup(keyboardButtonsRow);
     }
 }
