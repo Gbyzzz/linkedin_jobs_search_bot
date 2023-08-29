@@ -4,6 +4,7 @@ import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
+import com.gbyzzz.linkedinjobsbot.entity.FilterParams;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
@@ -36,17 +37,24 @@ public class AddWorkplaceCommand implements Command {
             userProfileService.save(userProfile);
             String workplaceType = getWorkplaceValue();
             SearchParams searchParams = redisService.getFromTempRepository(id);
-            if(!workplaceType.isEmpty()) {
+            if (searchParams.getFilterParams() == null) {
+                searchParams.setFilterParams(new FilterParams());
+            }
+            if (!workplaceType.isEmpty()) {
                 searchParams.getSearchFilters().put(MessageText.WORKPLACE_TYPE, workplaceType);
                 redisService.saveToTempRepository(searchParams, id);
             }
-            StringBuilder stringBuilder = new StringBuilder(MessageText.ADD_WORKPLACE_REPLY);
-            if(searchParams.getFilterParams().getIncludeWordsInDescription() != null) {
+            StringBuilder stringBuilder = new StringBuilder();
+            if (searchParams.getFilterParams().getIncludeWordsInDescription() != null) {
                 stringBuilder.append(MessageText.INCLUDE_EDIT_START);
                 for (String include : searchParams.getFilterParams().getIncludeWordsInDescription()) {
                     stringBuilder.append(include).append(MessageText.SPACE);
                 }
-                stringBuilder.append(MessageText.TEXT_INPUT_EDIT_END);
+                stringBuilder.append(MessageText.NEW_LINE).append(MessageText.NEW_LINE)
+                        .append(MessageText.ADD_WORKPLACE_REPLY);
+                stringBuilder.append(MessageText.NEW_LINE).append(MessageText.TEXT_INPUT_EDIT_END);
+            } else {
+                stringBuilder.append(MessageText.ADD_WORKPLACE_REPLY);
             }
             reply = new Reply(new SendMessage(id.toString(),
                     stringBuilder.toString()), false);
