@@ -27,13 +27,6 @@ public class PaginationKeyboard {
                 state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
                 MessageText.BUTTON_VALUE_SEPARATOR + index);
 
-        InlineKeyboardButton resultsButton = new InlineKeyboardButton();
-        resultsButton.setText(MessageText.BUTTON_RESULTS_EMOJI + MessageText.SPACE +
-                MessageText.BUTTON_RESULTS);
-        resultsButton.setCallbackData(MessageText.RESULTS + MessageText.BUTTON_VALUE_SEPARATOR +
-                state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
-                MessageText.BUTTON_VALUE_SEPARATOR + index);
-
         InlineKeyboardButton appliedButton = new InlineKeyboardButton();
         appliedButton.setText(MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
                 MessageText.BUTTON_APPLIED);
@@ -62,7 +55,22 @@ public class PaginationKeyboard {
                 row1.add(appliedButton);
             }
             case MessageText.SEARCHES -> {
+                InlineKeyboardButton resultsButton = new InlineKeyboardButton();
+                resultsButton.setText(MessageText.BUTTON_RESULTS_EMOJI + MessageText.SPACE +
+                        MessageText.BUTTON_RESULTS);
+                resultsButton.setCallbackData(MessageText.RESULTS + MessageText.BUTTON_VALUE_SEPARATOR +
+                        state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                        MessageText.BUTTON_VALUE_SEPARATOR + index);
+
+                InlineKeyboardButton editButton = new InlineKeyboardButton();
+                editButton.setText(MessageText.BUTTON_EDIT_EMOJI + MessageText.SPACE +
+                        MessageText.BUTTON_EDIT);
+                editButton.setCallbackData(MessageText.EDIT + MessageText.BUTTON_VALUE_SEPARATOR +
+                        state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                        MessageText.BUTTON_VALUE_SEPARATOR + index);
+
                 row1.add(deleteButton);
+                row1.add(editButton);
                 row1.add(resultsButton);
             }
             case MessageText.APPLIED -> row1.add(rejectButton);

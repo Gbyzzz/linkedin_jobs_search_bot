@@ -41,7 +41,7 @@ public class JobTypeKeyboard {
         InlineKeyboardButton internshipButton = new InlineKeyboardButton();
         internshipButton.setText(state[4] ? MessageText.BUTTON_YES_CHECK_BOX + MessageText.SPACE +
                 MessageText.BUTTON_INTERNSHIP : MessageText.BUTTON_NO_CHECK_BOX +
-                MessageText.SPACE + MessageText.BUTTON_FULL_TIME);
+                MessageText.SPACE + MessageText.BUTTON_INTERNSHIP);
         internshipButton.setCallbackData(MessageText.BUTTON_INTERNSHIP_VALUE);
 
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
@@ -88,6 +88,13 @@ public class JobTypeKeyboard {
             value.replace(value.length() - 1, value.length(), MessageText.EMPTY);
         }
         return value.toString();
+    }
+
+    public static void PutJobTypeValue(String value) {
+       String[] values = value.split(MessageText.COMMA);
+        for (String s : values) {
+            state[JobTypes.getStateId(s)] = true;
+        }
     }
 
 

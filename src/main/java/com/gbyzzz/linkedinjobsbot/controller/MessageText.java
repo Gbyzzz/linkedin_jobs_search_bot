@@ -17,6 +17,7 @@ public abstract class MessageText {
     public static final String PREVIOUS = "previous";
     public static final String APPLY = "apply";
     public static final String DELETE = "delete";
+    public static final String EDIT = "edit";
     public static final String REJECTED = "rejected";
     public static final String NOTIFY = "notify";
     public static final String RESULTS = "results";
@@ -26,6 +27,7 @@ public abstract class MessageText {
     public static final String SCHEDULED = "SCHEDULED";
     public static final String ZERO = "0";
     public static final String ONE = "1";
+    public static final String PLUS = "+";
     public static final String OF = " of ";
     public static final String EXIT = "Your account have been deleted";
     public static final String ALL = "ALL";
@@ -64,6 +66,7 @@ public abstract class MessageText {
     public static final String START = "START";
     public static final String MAIN_MENU = "MAIN_MENU";
     public static final String WRONG = "WRONG";
+    public static final String CANCEL_EDITING = "CANCEL_EDITING";
 
     public static final String BUTTON_NEXT = "Next";
     public static final String BUTTON_NEXT_ARROW = "➡\uFE0F";
@@ -74,8 +77,11 @@ public abstract class MessageText {
     public static final String BUTTON_GET_ALL_SEARCHES = "/get_all_searches";
     public static final String BUTTON_GET_APPLIED_JOBS = "/get_applied_jobs";
     public static final String BUTTON_GET_NEW_JOBS = "/get_new_jobs";
+    public static final String BUTTON_MAIN_MENU = "/main";
     public static final String BUTTON_YES_CHECK_BOX = "✅";
     public static final String BUTTON_NO_CHECK_BOX = "❌";
+    public static final String BUTTON_EDIT_EMOJI = "📝";
+    public static final String BUTTON_EDIT = "Edit";
     public static final String BUTTON_INTERNSHIP = "Internship";
     public static final String BUTTON_INTERNSHIP_VALUE = "toggle_internship";
     public static final String BUTTON_ENTRY_LEVEL = "Entry Level";
@@ -114,7 +120,7 @@ public abstract class MessageText {
     public static final String BUTTON_RESULTS_EMOJI = "\uD83D\uDCCA";
     public static final String BUTTON_APPLIED = "Applied";
     public static final String BUTTON_VALUE_SEPARATOR = "_";
-
+    public static final String LOCATION_EDIT = "Preciously inputted location:\n";
     public static final String NO_ACCOUNT_REPLY = "You don't have an account, please input /start" +
             " to add";
     public static final String ADD_EXPERIENCE_REPLY  = "Search parameters added\nNow you can add " +
@@ -123,13 +129,19 @@ public abstract class MessageText {
     public static final String ADD_JOB_TYPE_REPLY = "Now add job type:";
     public static final String ADD_JOB_TYPE_REPLY_NEXT = "Now add workplace type:";
     public static final String INPUTTED_KEYWORDS = "Your keywords are:";
-    public static final String ENTER_LOCATION = "Please enter Location";
-    public static final String ADD_LOCATION_REPLY = "Search parameters added\n Now you can add " +
-            "additional search parameters, experience :";
-    public static final String ADD_SEARCH_REPLY = "Enter keywords = separate them by space) or " +
-            "/main_menu to return to main menu";
-    public static final String ADD_WORKPLACE_REPLY = "Enter keywords that should be included = " +
-            "separate them by space)";
+    public static final String ENTER_LOCATION = "Please choose location:";
+    public static final String ADD_LOCATION_REPLY = "Search parameters added\nNow you can add " +
+            "additional search parameters, experience:";
+    public static final String ADD_SEARCH_REPLY = "Enter keywords (separate them by space) or " +
+            "/main to return to main menu";
+    public static final String EXCLUDE_EDIT_START = "Editing words, that should be excluded from" +
+            " job title. The words that you have inputted before are:\n";
+    public static final String ADD_WORKPLACE_REPLY = "Enter keywords that should be included" +
+            "(separate them by space)";
+    public static final String INCLUDE_EDIT_START = "\nPreviously inputted words:\n";
+    public static final String TEXT_INPUT_EDIT_END = "\nIf you don't want to change anything, " +
+            "input plus sign - '+'";
+    public static final String CANCEL_EDITING_COMMAND = "\nTo cancel editing input /cancel\n";
     public static final String GET_APPLIED_JOBS_REPLY = "No new jobs at the moment, if " +
             "something comes up we will notice you";
     public static final String GET_ALL_SEARCHES_REPLY = "No search params found, please add one " +
@@ -146,10 +158,10 @@ public abstract class MessageText {
             " something will appear.\nStay tuned!";
     public static final String NO_SEARCH_PARAMS = "No search params found. Add new by pressing" +
             " /add_search";
+    public static final String EDIT_KEYWORDS_REPLY = "Editing search parameters:\n" +
+            "  Keywords:\n";
     public static final String WRONG_REPLY = "Wrong select";
-    public static final String MAIN_MENU_REPLY = "Input /add_search to add search to you account";
-    public static final String START_REPLY = "\uD83D\uDE80 Starting \uD83D\uDE80 \n " +
-            "Commands:\n\n" +
+    public static final String MAIN_MENU_REPLY = "Commands:\n\n" +
             "\uD83D\uDD38 /add_search - to add search to you account\n" +
             "\uD83D\uDD38 /get_all_searches - to show all your search parameters\n" +
             "\uD83D\uDD38 /get_applied_jobs - to show jobs which you have applied\n" +
@@ -158,6 +170,7 @@ public abstract class MessageText {
             "\uD83D\uDD39 To get new jobs of the particular search parameters go to " +
             "/get_all_searches navigate to desired search parameters and press \"Results(new)\"" +
             " button.\n\uD83D\uDD38 /exit - to delete your account from bot with all data";
+    public static final String START_REPLY = "\uD83D\uDE80 Starting \uD83D\uDE80 \n";
     public static final String START_REPLY_ALREADY_STARTED = "\uD83D\uDE80 Starting \uD83D\uDE80" +
             " \n Input /add_search to add search to you account";
     public static final String MAKE_FIRST_SEARCH_NO_RESULTS = "Nothing was found. Please check " +

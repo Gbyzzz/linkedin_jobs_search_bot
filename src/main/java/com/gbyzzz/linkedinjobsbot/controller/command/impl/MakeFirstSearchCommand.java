@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component(MessageText.MAKE_FIRST_SEARCH)
 @AllArgsConstructor
@@ -35,9 +36,19 @@ public class MakeFirstSearchCommand implements Command {
         searchParams.getFilterParams().setSearchParams(searchParams);
         SendMessage sendMessage;
         if(!searchParamsService.existSearchParam(searchParams)) {
-            searchParams.setSavedJobs(new HashSet<>());
-            searchParams.setSearchState(SearchParams.SearchState.NEW);
-            searchParams = searchParamsService.save(searchParams);
+            if(searchParams.getSavedJobs() == null) {
+                searchParams.setSavedJobs(new HashSet<>());
+                searchParams.setSearchState(SearchParams.SearchState.NEW);
+                searchParams = searchParamsService.save(searchParams);
+            } else {
+                searchParams.setSavedJobs(searchParamsService.findById(searchParams.getId()).getSavedJobs());
+                Set<SavedJob> jobsToDelete = deleteNewJobs(searchParams.getSavedJobs());
+                searchParams.setSearchState(SearchParams.SearchState.NEW);
+                searchParams = searchParamsService.save(searchParams);
+                savedJobService.deleteAll(jobsToDelete);
+            }
+//            searchParams.setSearchState(SearchParams.SearchState.NEW);
+//            searchParams = searchParamsService.save(searchParams);
             jobService.makeScan(searchParams, null);
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.NEW);
@@ -62,5 +73,20 @@ public class MakeFirstSearchCommand implements Command {
         }
         redisService.deleteFromTempRepository(id);
         return new Reply(sendMessage, false);
+    }
+
+    private Set<SavedJob> deleteNewJobs(Set<SavedJob> jobs){
+        Set<SavedJob> jobsToDelete = new HashSet<>();
+        Set<SavedJob> jobsToDeleteForever = new HashSet<>();
+        for(SavedJob job : jobs){
+            if(job.getReplyState().equals(SavedJob.ReplyState.NEW_JOB)){
+               jobsToDelete.add(job);
+               if(job.getSearchParams().size()==1){
+                   jobsToDeleteForever.add(job);
+               }
+            }
+        }
+        jobs.removeAll(jobsToDelete);
+        return jobsToDeleteForever;
     }
 }

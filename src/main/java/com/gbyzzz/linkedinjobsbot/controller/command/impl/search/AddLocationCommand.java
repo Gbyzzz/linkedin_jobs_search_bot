@@ -28,7 +28,6 @@ public class AddLocationCommand extends BotCommand implements Command {
     public Reply execute(Update update) {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         SendMessage sendMessage;
-        sendMessage = new SendMessage(id.toString(), MessageText.ADD_LOCATION_REPLY);
         SearchParams searchParams = redisService.getFromTempRepository(id);
         searchParams.setLocation(update.getCallbackQuery().getData());
         redisService.saveToTempRepository(searchParams, id);
@@ -37,6 +36,17 @@ public class AddLocationCommand extends BotCommand implements Command {
         userProfile.setBotState(UserProfile.BotState.ADD_EXPERIENCE);
         userProfileService.save(userProfile);
         setExperienceKeyboardFalse();
+        if (searchParams.getSearchFilters().get(MessageText.EXPERIENCE) != null) {
+            putExperienceValue(searchParams.getSearchFilters().get(MessageText.EXPERIENCE));
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        if(searchParams.getId() != null) {
+            stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
+                    .append(MessageText.ADD_LOCATION_REPLY);
+        } else {
+            stringBuilder.append(MessageText.ADD_LOCATION_REPLY);
+        }
+        sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
         sendMessage.setReplyMarkup(experienceKeyboard.getReplyButtons());
         return new Reply(sendMessage, false);
     }

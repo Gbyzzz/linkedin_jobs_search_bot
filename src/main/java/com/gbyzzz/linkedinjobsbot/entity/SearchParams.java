@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gbyzzz.linkedinjobsbot.entity.converter.KeywordConverter;
 import com.gbyzzz.linkedinjobsbot.entity.type.PGSearchParamsState;
 import com.gbyzzz.linkedinjobsbot.entity.type.PGUserProfileBotState;
@@ -52,6 +53,7 @@ public class SearchParams {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "searchParams", fetch = FetchType.EAGER)
     @JoinTable( name = "filter_params", joinColumns = @JoinColumn(name = "search_params_id"))
     private FilterParams filterParams;
+
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "searches_jobs", joinColumns = @JoinColumn(name = "search_params_id"),
