@@ -77,6 +77,7 @@ public abstract class MessageText {
     public static final String BUTTON_GET_ALL_SEARCHES = "/get_all_searches";
     public static final String BUTTON_GET_APPLIED_JOBS = "/get_applied_jobs";
     public static final String BUTTON_GET_NEW_JOBS = "/get_new_jobs";
+    public static final String BUTTON_MAIN_MENU = "/main";
     public static final String BUTTON_YES_CHECK_BOX = "✅";
     public static final String BUTTON_NO_CHECK_BOX = "❌";
     public static final String BUTTON_EDIT_EMOJI = "📝";
