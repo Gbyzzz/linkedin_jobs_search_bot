@@ -35,7 +35,8 @@ public class AddSearchCommand implements Command {
                 stringBuilder.append(MessageText.TWO_SPACES).append(keyword)
                         .append(MessageText.NEW_LINE);
             }
-            stringBuilder.append(MessageText.TEXT_INPUT_EDIT_END);
+            stringBuilder.append(MessageText.TEXT_INPUT_EDIT_END)
+                    .append(MessageText.CANCEL_EDITING_COMMAND);
         } else {
             stringBuilder = new StringBuilder(MessageText.ADD_SEARCH_REPLY);
         }
