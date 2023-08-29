@@ -54,7 +54,7 @@ public class SearchParams {
     @JoinTable( name = "filter_params", joinColumns = @JoinColumn(name = "search_params_id"))
     private FilterParams filterParams;
 
-    @JsonIgnore
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "searches_jobs", joinColumns = @JoinColumn(name = "search_params_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))
