@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -61,16 +62,27 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
+    public void deleteAll(Set<SavedJob> jobs) {
+       savedJobRepository.deleteAll(jobs);
+    }
+
+    @Override
     public void saveAllNewJobs(List<String> jobs, Long id) {
         UserProfile userProfile = userProfileService.getUserProfileById(id).get();
         saveAll(jobs.stream().map(
                 (jobId) -> new SavedJob(Long.parseLong(jobId),
-                        SavedJob.ReplyState.NEW_JOB, null, new HashSet<>(){{ add(userProfile);}}, null)
+                        SavedJob.ReplyState.NEW_JOB, null,
+                        new HashSet<>(){{ add(userProfile);}}, null)
                 ).toList());
     }
 
     @Override
     public Optional<SavedJob> getJobById(Long jobId) {
         return savedJobRepository.findById(jobId);
+    }
+
+    @Override
+    public void delete(SavedJob job) {
+        savedJobRepository.delete(job);
     }
 }

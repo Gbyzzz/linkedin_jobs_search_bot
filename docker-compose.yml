@@ -16,7 +16,7 @@ services:
     container_name: bot_redis
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "7917:7917"
     restart: always
   bar_mongodb:
     container_name: bar_mongodb

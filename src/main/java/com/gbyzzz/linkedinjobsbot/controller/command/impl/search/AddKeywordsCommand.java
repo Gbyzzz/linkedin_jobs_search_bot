@@ -47,11 +47,12 @@ public class AddKeywordsCommand implements Command {
             reply.append(word).append(MessageText.NEW_LINE);
         }
         reply.append(MessageText.NEW_LINE);
-        reply.append(MessageText.ENTER_LOCATION);
         if (searchParams.getLocation() != null) {
             reply.append(MessageText.NEW_LINE).append(MessageText.LOCATION_EDIT)
-                    .append(searchParams.getLocation()).append(MessageText.NEW_LINE);
+                    .append(searchParams.getLocation()).append(MessageText.NEW_LINE)
+                    .append(MessageText.NEW_LINE);
         }
+        reply.append(MessageText.ENTER_LOCATION);
         SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(),
                 reply.toString());
         sendMessage.setReplyMarkup(locationKeyboard.getReplyButtons());

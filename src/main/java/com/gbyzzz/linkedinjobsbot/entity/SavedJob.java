@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gbyzzz.linkedinjobsbot.entity.type.PGSavedJobReplyState;
 import com.gbyzzz.linkedinjobsbot.entity.type.PGUserProfileBotState;
 import jakarta.persistence.*;
@@ -31,12 +32,13 @@ public class SavedJob {
     @Column(name = "date_applied")
     private Date dateApplied;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToMany
     @JoinTable(name = "users_jobs", joinColumns = @JoinColumn(name = "job_id"),
             inverseJoinColumns = @JoinColumn(name = "user_chat_id"))
     private Set<UserProfile> userProfile;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @JsonIgnore
+    @ManyToMany
     @JoinTable(name = "searches_jobs", joinColumns = @JoinColumn(name = "job_id"),
             inverseJoinColumns = @JoinColumn(name = "search_params_id"))
     private Set<SearchParams> searchParams;

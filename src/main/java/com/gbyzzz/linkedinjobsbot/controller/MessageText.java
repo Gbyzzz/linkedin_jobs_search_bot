@@ -118,7 +118,7 @@ public abstract class MessageText {
     public static final String BUTTON_RESULTS_EMOJI = "\uD83D\uDCCA";
     public static final String BUTTON_APPLIED = "Applied";
     public static final String BUTTON_VALUE_SEPARATOR = "_";
-    public static final String LOCATION_EDIT = "Inputted location:\n";
+    public static final String LOCATION_EDIT = "Preciously inputted location:\n";
     public static final String NO_ACCOUNT_REPLY = "You don't have an account, please input /start" +
             " to add";
     public static final String ADD_EXPERIENCE_REPLY  = "Search parameters added\nNow you can add " +
@@ -127,18 +127,18 @@ public abstract class MessageText {
     public static final String ADD_JOB_TYPE_REPLY = "Now add job type:";
     public static final String ADD_JOB_TYPE_REPLY_NEXT = "Now add workplace type:";
     public static final String INPUTTED_KEYWORDS = "Your keywords are:";
-    public static final String ENTER_LOCATION = "Please enter Location";
+    public static final String ENTER_LOCATION = "Please choose location:";
     public static final String ADD_LOCATION_REPLY = "Search parameters added\nNow you can add " +
             "additional search parameters, experience:";
     public static final String ADD_SEARCH_REPLY = "Enter keywords = separate them by space) or " +
             "/main_menu to return to main menu";
-    public static final String EXCLUDE_EDIT_START = "Editing words, that should be excluded from job " +
-            "title. Words that you have inputted before:\n";
+    public static final String EXCLUDE_EDIT_START = "Editing words, that should be excluded from" +
+            " job title. The words that you have inputted before are:\n";
     public static final String ADD_WORKPLACE_REPLY = "Enter keywords that should be included" +
             "(separate them by space)";
     public static final String INCLUDE_EDIT_START = "\nPreviously inputted words:\n";
-    public static final String TEXT_INPUT_EDIT_END = "\nIf you don't want to change anything - " +
-            "input \"plus\" - '+'";
+    public static final String TEXT_INPUT_EDIT_END = "\nIf you don't want to change anything, " +
+            "input plus sign - '+'";
     public static final String GET_APPLIED_JOBS_REPLY = "No new jobs at the moment, if " +
             "something comes up we will notice you";
     public static final String GET_ALL_SEARCHES_REPLY = "No search params found, please add one " +

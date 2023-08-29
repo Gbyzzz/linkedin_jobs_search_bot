@@ -28,7 +28,7 @@ public class ScheduledService {
     private final ListOfJobsCommand listOfJobsCommand;
     private final SavedJobService savedJobService;
     private final LinkedInJobsBot linkedInJobsBot;
-    private final SendToEditMessageConverter converter;
+    private final SendToEditMessageConverter converter  ;
     private final UserProfileService userProfileService;
 
     @Scheduled(cron = "0 0/60 * * * ?")
@@ -43,7 +43,7 @@ public class ScheduledService {
                 if (!searchParams.isEmpty()) {
                     for (SearchParams searchParam : searchParams) {
                         if (searchParam.getSearchState().equals(SearchParams.SearchState.SUBSCRIBED)) {
-                            jobService.makeScan(searchParam, 14400L);
+                            jobService.makeScan(searchParam, 1440000L);
                         }
                     }
                     if (initialSize < savedJobService.getNewJobsByUserId(user.getChatId()).size()) {

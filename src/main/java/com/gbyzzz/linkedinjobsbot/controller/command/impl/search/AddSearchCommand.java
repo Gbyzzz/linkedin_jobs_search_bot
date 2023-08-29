@@ -27,19 +27,19 @@ public class AddSearchCommand implements Command {
         userProfile.setBotState(UserProfile.BotState.ADD_KEYWORDS);
         userProfileService.save(userProfile);
         SearchParams searchParams = redisService.getFromTempRepository(id);
-        SendMessage sendMessage;
+//        SendMessage sendMessage;
+        StringBuilder stringBuilder;
         if(searchParams != null) {
-            StringBuilder stringBuilder = new StringBuilder(MessageText.EDIT_KEYWORDS_REPLY);
+            stringBuilder = new StringBuilder(MessageText.EDIT_KEYWORDS_REPLY);
             for (String keyword : searchParams.getKeywords()){
                 stringBuilder.append(MessageText.TWO_SPACES).append(keyword)
                         .append(MessageText.NEW_LINE);
             }
-            sendMessage = new SendMessage(id.toString(),
-                    stringBuilder.toString());
+            stringBuilder.append(MessageText.TEXT_INPUT_EDIT_END);
         } else {
-            sendMessage = new SendMessage(id.toString(),
-                    MessageText.ADD_SEARCH_REPLY);
+            stringBuilder = new StringBuilder(MessageText.ADD_SEARCH_REPLY);
         }
-        return new Reply(sendMessage,false);
+        return new Reply(new SendMessage(id.toString(),stringBuilder.toString()),
+                false);
     }
 }
