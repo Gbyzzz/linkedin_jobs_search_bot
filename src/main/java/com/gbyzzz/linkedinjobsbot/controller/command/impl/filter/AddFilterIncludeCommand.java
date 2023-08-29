@@ -29,11 +29,8 @@ public class AddFilterIncludeCommand implements Command {
         SearchParams searchParams = redisService.getFromTempRepository(id);
         String[] keywords = searchParams.getFilterParams().getIncludeWordsInDescription();
         if (!update.getMessage().getText().equals(MessageText.PLUS)) {
-            FilterParams filterParams = searchParams.getFilterParams() == null ?
-                    new FilterParams() : searchParams.getFilterParams();
             keywords = update.getMessage().getText().split(MessageText.SPACE);
-            filterParams.setIncludeWordsInDescription(keywords);
-            searchParams.setFilterParams(filterParams);
+            searchParams.getFilterParams().setIncludeWordsInDescription(keywords);
             redisService.saveToTempRepository(searchParams, id);
         }
         userProfile.setBotState(UserProfile.BotState.ADD_FILTER_EXCLUDE);
@@ -42,12 +39,15 @@ public class AddFilterIncludeCommand implements Command {
         for (String word : keywords) {
             reply.append(word).append(MessageText.NEW_LINE);
         }
+        reply.append(MessageText.NEW_LINE);
         if (searchParams.getFilterParams().getExcludeWordsFromTitle() != null) {
             reply.append(MessageText.EXCLUDE_EDIT_START);
             for (String exclude : searchParams.getFilterParams().getExcludeWordsFromTitle()) {
                 reply.append(exclude).append(MessageText.SPACE);
             }
-            reply.append(MessageText.TEXT_INPUT_EDIT_END);
+            reply.append(MessageText.NEW_LINE).append(MessageText.NEW_LINE)
+                    .append(MessageText.ADD_FILTER_INCLUDE_REPLY_END);
+            reply.append(MessageText.NEW_LINE).append(MessageText.TEXT_INPUT_EDIT_END);
         } else {
             reply.append(MessageText.ADD_FILTER_INCLUDE_REPLY_END);
         }
