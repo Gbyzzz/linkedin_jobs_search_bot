@@ -256,21 +256,21 @@ public abstract class MessageText {
                     for (String val : entry.getValue().split(MessageText.COMMA)) {
                         reply.append(MessageText.FOUR_SPACES);
                         reply.append(Workplace.getName(Integer.parseInt(val)));
-                        reply.append(MessageText.NEW_LINE);
+                        reply.append(MessageText.SPACE);
                     }
                 }
                 case MessageText.EXPERIENCE -> {
                     for (String val : entry.getValue().split(MessageText.COMMA)) {
                         reply.append(MessageText.FOUR_SPACES);
                         reply.append(Experience.getName(val));
-                        reply.append(MessageText.NEW_LINE);
+                        reply.append(MessageText.SPACE);
                     }
                 }
                 case MessageText.JOB_TYPE -> {
                     for (String val : entry.getValue().split(MessageText.COMMA)) {
                         reply.append(MessageText.FOUR_SPACES);
                         reply.append(JobTypes.getName(val));
-                        reply.append(MessageText.NEW_LINE);
+                        reply.append(MessageText.SPACE);
                     }
                 }
             }
@@ -288,7 +288,7 @@ public abstract class MessageText {
                 .getIncludeWordsInDescription()) {
             reply.append(MessageText.FOUR_SPACES)
                     .append(include)
-                    .append(MessageText.NEW_LINE);
+                    .append(MessageText.SPACE);
         }
         reply.append(MessageText.NEW_LINE);
         reply.append(MessageText.TWO_SPACES)
@@ -299,7 +299,7 @@ public abstract class MessageText {
                 .getExcludeWordsFromTitle()) {
             reply.append(MessageText.FOUR_SPACES)
                     .append(exclude)
-                    .append(MessageText.NEW_LINE);
+                    .append(MessageText.SPACE);
         }
         reply.append(MessageText.NEW_LINE);
 
