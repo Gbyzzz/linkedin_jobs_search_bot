@@ -13,7 +13,10 @@ import java.util.Map;
 
 @Component
 public abstract class MessageText {
+    public static final String NA = "na";
+    public static final String FIRST = "first";
     public static final String NEXT = "next";
+    public static final String LAST = "last";
     public static final String PREVIOUS = "previous";
     public static final String APPLY = "apply";
     public static final String DELETE = "delete";
@@ -68,10 +71,15 @@ public abstract class MessageText {
     public static final String WRONG = "WRONG";
     public static final String CANCEL_EDITING = "CANCEL_EDITING";
 
+    public static final String BUTTON_DISABLED = "➖";
+    public static final String BUTTON_FIRST = "First";
+    public static final String BUTTON_FIRST_ARROW = "⏪";
+    public static final String BUTTON_LAST = "Last";
+    public static final String BUTTON_LAST_ARROW = "⏩";
     public static final String BUTTON_NEXT = "Next";
-    public static final String BUTTON_NEXT_ARROW = "➡\uFE0F";
+    public static final String BUTTON_NEXT_ARROW = "▶\uFE0F";
     public static final String BUTTON_PREVIOUS = "Previous";
-    public static final String BUTTON_PREVIOUS_ARROW = "⬅\uFE0F";
+    public static final String BUTTON_PREVIOUS_ARROW = "◀\uFE0F";
     public static final String BUTTON_START = "/start";
     public static final String BUTTON_ADD_SEARCH = "/add_search";
     public static final String BUTTON_GET_ALL_SEARCHES = "/get_all_searches";
