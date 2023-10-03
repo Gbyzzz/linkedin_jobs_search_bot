@@ -1,5 +1,4 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
-
 import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -67,7 +66,6 @@ public class PaginationKeyboard {
             previousButton.setCallbackData(MessageText.NA);
             row2.add(previousButton);
         }
-
 
 
         switch (state){
