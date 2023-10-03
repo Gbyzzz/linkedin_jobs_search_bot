@@ -60,16 +60,21 @@ public class ListOfJobsCommand implements Command {
         }
 
         switch (command[0]) {
-            case MessageText.NEXT, MessageText.PREVIOUS -> {
-                int index = Integer.parseInt(command[3]);
+            case MessageText.NEXT, MessageText.PREVIOUS, MessageText.LAST , MessageText.FIRST -> {
                 if (command[1].equals(MessageText.NEW) ||
                         command[1].equals(MessageText.APPLIED)) {
+                    int index = !command[0].equals(MessageText.LAST) ? Integer.parseInt(command[3]) :
+                            jobs.size() - 1;
                     sendMessage = makeReply(index, command[1], id, command[2]);
                     sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
                             index, jobs.size(), command[1], command[2]));
                 } else {
 
+                    int index = command[0].equals(MessageText.LAST) ? Integer.parseInt(command[3]) :
+                            searchParams.size() - 1;
                     sendMessage = makeReply(index, command[1], id, command[2]);
+                    sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
+                            index, searchParams.size(), command[1], command[2]));
                 }
             }
             case MessageText.APPLY -> {

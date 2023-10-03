@@ -36,16 +36,35 @@ public class PaginationKeyboard {
 
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
 
+        InlineKeyboardButton firstButton = new InlineKeyboardButton();
+        InlineKeyboardButton previousButton = new InlineKeyboardButton();
         if (index > 0) {
-            InlineKeyboardButton previousButton = new InlineKeyboardButton();
+            firstButton.setText(MessageText.BUTTON_FIRST_ARROW + MessageText.SPACE +
+                    MessageText.BUTTON_FIRST);
+            firstButton.setCallbackData(MessageText.FIRST +
+                    MessageText.BUTTON_VALUE_SEPARATOR + state +
+                    MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                    MessageText.BUTTON_VALUE_SEPARATOR + 0);
+            row2.add(firstButton);
+
+            previousButton = new InlineKeyboardButton();
             previousButton.setText(MessageText.BUTTON_PREVIOUS_ARROW + MessageText.SPACE +
                     MessageText.BUTTON_PREVIOUS);
             previousButton.setCallbackData(MessageText.PREVIOUS +
                     MessageText.BUTTON_VALUE_SEPARATOR + state +
                     MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
                     MessageText.BUTTON_VALUE_SEPARATOR + (index - 1));
-            row1.add(previousButton);
+            row2.add(previousButton);
+        } else {
+            firstButton.setText(MessageText.BUTTON_DISABLED);
+            firstButton.setCallbackData(MessageText.NA);
+            row2.add(firstButton);
+
+            previousButton.setText(MessageText.BUTTON_DISABLED);
+            previousButton.setCallbackData(MessageText.NA);
+            row2.add(previousButton);
         }
 
 
@@ -76,17 +95,35 @@ public class PaginationKeyboard {
             case MessageText.APPLIED -> row1.add(rejectButton);
         }
 
+        InlineKeyboardButton nextButton = new InlineKeyboardButton();
+        InlineKeyboardButton lastButton = new InlineKeyboardButton();
         if (index + 1 < size) {
-            InlineKeyboardButton nextButton = new InlineKeyboardButton();
             nextButton.setText(MessageText.BUTTON_NEXT_ARROW + MessageText.SPACE +
                     MessageText.BUTTON_NEXT);
             nextButton.setCallbackData(MessageText.NEXT + MessageText.BUTTON_VALUE_SEPARATOR +
                     state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
                     MessageText.BUTTON_VALUE_SEPARATOR + (index + 1));
-            row1.add(nextButton);
+            row2.add(nextButton);
+
+            lastButton = new InlineKeyboardButton();
+            lastButton.setText(MessageText.BUTTON_LAST_ARROW + MessageText.SPACE +
+                    MessageText.BUTTON_LAST);
+            lastButton.setCallbackData(MessageText.LAST + MessageText.BUTTON_VALUE_SEPARATOR +
+                    state + MessageText.BUTTON_VALUE_SEPARATOR + searchParamsId +
+                    MessageText.BUTTON_VALUE_SEPARATOR + (index + 1));
+            row2.add(lastButton);
+        } else {
+            nextButton.setText(MessageText.BUTTON_DISABLED);
+            nextButton.setCallbackData(MessageText.NA);
+            row2.add(nextButton);
+
+            lastButton.setText(MessageText.BUTTON_DISABLED);
+            lastButton.setCallbackData(MessageText.NA);
+            row2.add(lastButton);
         }
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         rows.add(row1);
+        rows.add(row2);
 
         return new InlineKeyboardMarkup(rows);
     }
