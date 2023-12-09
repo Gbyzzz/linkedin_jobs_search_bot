@@ -35,7 +35,7 @@ public class AddLocationCommand extends BotCommand implements Command {
                 .getUserProfileById(id).orElse(null);
         userProfile.setBotState(UserProfile.BotState.ADD_EXPERIENCE);
         userProfileService.save(userProfile);
-        setExperienceKeyboardFalse();
+        setExperienceKeyboardState(false);
         if (searchParams.getSearchFilters().get(MessageText.EXPERIENCE) != null) {
             putExperienceValue(searchParams.getSearchFilters().get(MessageText.EXPERIENCE));
         }

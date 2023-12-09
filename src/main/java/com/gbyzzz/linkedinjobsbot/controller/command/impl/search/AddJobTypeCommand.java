@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard.getJobTypeCallbackAction;
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard.getJobTypeValue;
 import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard.putWorkplaceValue;
-import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard.setWorkplaceKeyboardFalse;
+import static com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard.setWorkplaceKeyboardState;
 
 @Component(MessageText.ADD_JOB_TYPE)
 @AllArgsConstructor
@@ -46,7 +46,7 @@ public class AddJobTypeCommand implements Command {
                 searchParams.getSearchFilters().put(MessageText.JOB_TYPE, jobType);
                 redisService.saveToTempRepository(searchParams, id);
             }
-            setWorkplaceKeyboardFalse();
+            setWorkplaceKeyboardState(false);
             if(searchParams.getId() != null) {
                 stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
                         .append(MessageText.ADD_JOB_TYPE_REPLY_NEXT);

@@ -31,6 +31,7 @@ public class ScheduledService {
     private final SendToEditMessageConverter converter  ;
     private final UserProfileService userProfileService;
 
+
     @Scheduled(cron = "0 0/60 * * * ?")
 
     public void makeScan() throws IOException {

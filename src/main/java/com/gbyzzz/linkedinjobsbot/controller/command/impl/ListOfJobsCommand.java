@@ -70,7 +70,7 @@ public class ListOfJobsCommand implements Command {
                             index, jobs.size(), command[1], command[2]));
                 } else {
 
-                    int index = command[0].equals(MessageText.LAST) ? Integer.parseInt(command[3]) :
+                    int index = !command[0].equals(MessageText.LAST) ? Integer.parseInt(command[3]) :
                             searchParams.size() - 1;
                     sendMessage = makeReply(index, command[1], id, command[2]);
                     sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(
@@ -78,7 +78,7 @@ public class ListOfJobsCommand implements Command {
                 }
             }
             case MessageText.APPLY -> {
-                SavedJob savedJob = savedJobService.getJobById(targetId).get();
+                SavedJob savedJob = savedJobService.getJobByIdAndUserId(targetId, id).get();
                 savedJobService.saveJob(savedJob);
                 savedJob.setReplyState(SavedJob.ReplyState.APPLIED);
                 savedJob.setDateApplied(new Date(System.currentTimeMillis()));
@@ -94,7 +94,7 @@ public class ListOfJobsCommand implements Command {
             case MessageText.DELETE -> {
                 switch (command[1]) {
                     case MessageText.NEW, MessageText.APPLIED -> {
-                        SavedJob savedJob = savedJobService.getJobById(targetId).get();
+                        SavedJob savedJob = savedJobService.getJobByIdAndUserId(targetId, id).get();
                         savedJob.setReplyState(SavedJob.ReplyState.DELETED);
                         savedJobService.saveJob(savedJob);
                         updateJobs(id, command[2]);
@@ -120,7 +120,7 @@ public class ListOfJobsCommand implements Command {
 
             }
             case MessageText.REJECTED -> {
-                SavedJob savedJob = savedJobService.getJobById(targetId).get();
+                SavedJob savedJob = savedJobService.getJobByIdAndUserId(targetId, id).get();
                 savedJobService.saveJob(savedJob);
                 savedJob.setReplyState(SavedJob.ReplyState.REJECTED);
                 savedJobService.saveJob(savedJob);

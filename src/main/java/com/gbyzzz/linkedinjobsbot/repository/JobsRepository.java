@@ -9,11 +9,17 @@ import java.util.List;
 
 @Repository
 public interface JobsRepository extends MongoRepository<Job, Long> {
-    @Query("{ " +
-            "'description': { $regex: ?0, $options: 'i' }," +
-            "'name': { $regex: ?1, $options: 'i' }" +
-            "}")
-    List<Job> findJobsIncludingAndExcludingWords(String includeRegex, String excludeRegex);
+    @Query("{ '$and': [" +
+            "    { 'description': { $regex: ?0, $options: 'i' } }," +
+            "    { 'name': { $not: { $regex: ?1, $options: 'i' } } }," +
+            "    { 'searchParamsId': ?2 }" +
+            "  ] }")
+//    @Query("{ " +
+//            "'description': { $regex: ?0, $options: 'i' }," +
+//            "'name': { $regex: ?1, $options: 'i' }," +
+//            "'searchParamsId': ?2" +
+//            "}")
+    List<Job> findJobsIncludingAndExcludingWords(String includeRegex, String excludeRegex, Long searchParamsId);
 
 }
 

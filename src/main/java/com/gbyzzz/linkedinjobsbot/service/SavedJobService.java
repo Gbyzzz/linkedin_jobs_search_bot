@@ -22,7 +22,7 @@ public interface SavedJobService {
 
     void saveAllNewJobs(List<String> jobs, Long id);
 
-    Optional<SavedJob> getJobById(Long jobId);
+    Optional<SavedJob> getJobByIdAndUserId(Long jobId, Long userId);
 
     void delete(SavedJob job);
 }

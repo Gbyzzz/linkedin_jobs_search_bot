@@ -101,7 +101,11 @@ public abstract class MessageText {
     public static final String BUTTON_DIRECTOR = "Director";
     public static final String BUTTON_DIRECTOR_VALUE = "toggle_director";
     public static final String BUTTON_EXECUTIVE = "Executive";
+    public static final String BUTTON_ALL = "All";
     public static final String BUTTON_EXECUTIVE_VALUE = "toggle_executive";
+    public static final String BUTTON_ALL_EXPERIENCE = "toggle_all_experience";
+    public static final String BUTTON_ALL_JOB_TYPE = "toggle_all_job_type";
+    public static final String BUTTON_ALL_WORKPLACE = "toggle_all_workplace";
     public static final String BUTTON_FULL_TIME = "Full-time";
     public static final String BUTTON_FULL_TIME_VALUE = "toggle_full_time";
     public static final String BUTTON_PART_TIME = "Part-time";
@@ -224,8 +228,8 @@ public abstract class MessageText {
     public static final String COUNT_100 = "count=100";
     public static final String INCLUDE_REGEX_START = "\\b(?:";
     public static final String INCLUDE_REGEX_END = ")\\b";
-    public static final String EXCLUDE_REGEX_START = "^(?:(?!";
-    public static final String EXCLUDE_REGEX_END = ").)*$\\r?\\n?";
+    public static final String EXCLUDE_REGEX_START = "^(";
+    public static final String EXCLUDE_REGEX_END = ")$";
     public static final String REGEX_SEPARATOR = "|";
     public static final String JOBS_TASK_EXECUTOR = "jobsTaskExecutor";
     public static final String SEARCH_TASK_EXECUTOR = "searchTaskExecutor";

@@ -1,9 +1,7 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
 import com.gbyzzz.linkedinjobsbot.controller.MessageText;
-import com.gbyzzz.linkedinjobsbot.service.impl.Experience;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -52,6 +50,10 @@ public class ExperienceKeyboard {
                 MessageText.SPACE + MessageText.BUTTON_EXECUTIVE);
         executiveButton.setCallbackData(MessageText.BUTTON_EXECUTIVE_VALUE);
 
+        InlineKeyboardButton allExperienceButton = new InlineKeyboardButton();
+        allExperienceButton.setText(MessageText.BUTTON_ALL);
+        allExperienceButton.setCallbackData(MessageText.BUTTON_ALL_EXPERIENCE);
+
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
         nextButton.setText(MessageText.BUTTON_NEXT);
         nextButton.setCallbackData(MessageText.NEXT);
@@ -68,26 +70,30 @@ public class ExperienceKeyboard {
         row3.add(directorButton);
         row3.add(executiveButton);
         List<InlineKeyboardButton> row4 = new ArrayList<>();
-        row4.add(nextButton);
+        row4.add(allExperienceButton);
+
+        List<InlineKeyboardButton> row5 = new ArrayList<>();
+        row5.add(nextButton);
 
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
         rows.add(row4);
+        rows.add(row5);
 
         return new InlineKeyboardMarkup(rows);
     }
 
-    public static void setExperienceKeyboardFalse() {
-        Arrays.fill(state, false);
+    public static void setExperienceKeyboardState(boolean value) {
+        Arrays.fill(state, value);
     }
 
     public static String getExperienceValue() {
         StringBuilder value = new StringBuilder();
         for (int i = 0; i < state.length; i++) {
-            if (state[i]){
-                value.append(i+1).append(MessageText.COMMA);
+            if (state[i]) {
+                value.append(i + 1).append(MessageText.COMMA);
             }
         }
         if (!value.isEmpty()) {
@@ -95,6 +101,7 @@ public class ExperienceKeyboard {
         }
         return value.toString();
     }
+
     public static void putExperienceValue(String value) {
         String[] values = value.split(MessageText.COMMA);
         for (String s : values) {
@@ -111,6 +118,8 @@ public class ExperienceKeyboard {
             case MessageText.BUTTON_MID_SENIOR_LEVEL_VALUE -> state[3] = !state[3];
             case MessageText.BUTTON_DIRECTOR_VALUE -> state[4] = !state[4];
             case MessageText.BUTTON_EXECUTIVE_VALUE -> state[5] = !state[5];
+            case MessageText.BUTTON_ALL_EXPERIENCE -> setExperienceKeyboardState(true);
+
         }
     }
 }
