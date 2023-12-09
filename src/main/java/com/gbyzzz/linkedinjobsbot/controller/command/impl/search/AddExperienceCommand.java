@@ -52,7 +52,7 @@ public class AddExperienceCommand implements Command {
                 stringBuilder.append(MessageText.ADD_EXPERIENCE_REPLY_NEXT);
             }
             sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
-            setJobTypeKeyboardFalse();
+            setJobTypeKeyboardState(false);
             if (searchParams.getSearchFilters().get(MessageText.JOB_TYPE) != null) {
                 PutJobTypeValue(searchParams.getSearchFilters().get(MessageText.JOB_TYPE));
             }

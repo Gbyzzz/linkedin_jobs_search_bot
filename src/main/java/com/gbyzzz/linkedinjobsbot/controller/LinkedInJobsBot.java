@@ -30,7 +30,7 @@ public class LinkedInJobsBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         long start = System.currentTimeMillis();
         if ((update.getCallbackQuery() != null &&
-                update.getCallbackQuery().getData().split("_").length > 1) ||
+                !update.getCallbackQuery().getData().split("_")[0].equals(MessageText.NA)) ||
                 update.hasMessage()) {
             Command command = provider.getCommand(update);
             Reply reply;

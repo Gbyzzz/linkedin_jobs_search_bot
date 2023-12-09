@@ -13,6 +13,11 @@ CREATE TABLE user_profiles
     registered_at timestamp    NOT NULL
 );
 
+INSERT INTO user_profiles
+VALUES (5024120144, 'evgenii_borozna', 'ADD_KEYWORDS', '08/21/2023 3:06:40 PM'),
+       (1316219991, 'rndmgnrtdnmd', 'NEW', '12/06/2023 9:39:12 AM'),
+       (346235582, 'Gbyzzz', 'SEARCHES', '08/17/2023 4:30:07 PM');
+
 CREATE TABLE search_params
 (
     search_params_id bigserial PRIMARY KEY,
@@ -39,21 +44,17 @@ CREATE TABLE filter_params
 
 CREATE TABLE saved_jobs
 (
-    job_id       bigint PRIMARY KEY NOT NULL,
-    reply_state  reply_state        NOT NULL DEFAULT 'NEW_JOB',
-    date_applied timestamp
-);
-
-CREATE TABLE users_jobs
-(
-    job_id       bigint REFERENCES saved_jobs (job_id) ON DELETE CASCADE     NOT NULL,
+    id bigserial PRIMARY KEY,
+    job_ref_id       bigint                                           NOT NULL,
     user_chat_id bigint REFERENCES user_profiles (chat_id) ON DELETE CASCADE NOT NULL,
-    UNIQUE (job_id, user_chat_id)
+    reply_state  reply_state                                                 NOT NULL DEFAULT 'NEW_JOB',
+    date_applied timestamp,
+    UNIQUE (job_ref_id, user_chat_id)
 );
 
 CREATE TABLE searches_jobs
 (
-    job_id           bigint REFERENCES saved_jobs (job_id) ON DELETE CASCADE              NOT NULL,
+    job_id           bigint REFERENCES saved_jobs (id) ON DELETE CASCADE              NOT NULL,
     search_params_id bigint REFERENCES search_params (search_params_id) ON DELETE CASCADE NOT NULL,
     UNIQUE (job_id, search_params_id)
 );
