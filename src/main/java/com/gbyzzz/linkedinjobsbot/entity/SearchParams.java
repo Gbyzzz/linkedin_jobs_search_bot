@@ -55,7 +55,7 @@ public class SearchParams {
     private FilterParams filterParams;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "searches_jobs", joinColumns = @JoinColumn(name = "search_params_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))
     private Set<SavedJob> savedJobs;

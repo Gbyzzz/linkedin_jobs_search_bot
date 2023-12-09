@@ -2,7 +2,6 @@ package com.gbyzzz.linkedinjobsbot.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gbyzzz.linkedinjobsbot.entity.type.PGSavedJobReplyState;
-import com.gbyzzz.linkedinjobsbot.entity.type.PGUserProfileBotState;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -21,7 +20,11 @@ import java.util.Set;
 public class SavedJob {
 
     @Id
-    @Column(name = "job_id")
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "job_ref_id")
     private Long jobId;
 
     @Column(name = "reply_state")
@@ -32,10 +35,9 @@ public class SavedJob {
     @Column(name = "date_applied")
     private Date dateApplied;
 
-    @ManyToMany
-    @JoinTable(name = "users_jobs", joinColumns = @JoinColumn(name = "job_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_chat_id"))
-    private Set<UserProfile> userProfile;
+    @ManyToOne
+    @JoinColumn(name = "user_chat_id")
+    private UserProfile userProfile;
 
     @JsonIgnore
     @ManyToMany

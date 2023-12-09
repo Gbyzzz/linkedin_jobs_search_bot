@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -44,6 +45,10 @@ public class JobTypeKeyboard {
                 MessageText.SPACE + MessageText.BUTTON_INTERNSHIP);
         internshipButton.setCallbackData(MessageText.BUTTON_INTERNSHIP_VALUE);
 
+        InlineKeyboardButton allJobTypeButton = new InlineKeyboardButton();
+        allJobTypeButton.setText(MessageText.BUTTON_ALL);
+        allJobTypeButton.setCallbackData(MessageText.BUTTON_ALL_JOB_TYPE);
+
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
         nextButton.setText(MessageText.BUTTON_NEXT);
         nextButton.setCallbackData(MessageText.NEXT);
@@ -58,22 +63,25 @@ public class JobTypeKeyboard {
 
         List<InlineKeyboardButton> row3 = new ArrayList<>();
         row3.add(internshipButton);
+
         List<InlineKeyboardButton> row4 = new ArrayList<>();
-        row4.add(nextButton);
+        row4.add(allJobTypeButton);
+
+        List<InlineKeyboardButton> row5 = new ArrayList<>();
+        row5.add(nextButton);
 
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
         rows.add(row4);
+        rows.add(row5);
 
         return new InlineKeyboardMarkup(rows);
     }
 
-    public static void setJobTypeKeyboardFalse() {
-        for (int i = 0; i<state.length; i++) {
-            state[i] = false;
-        }
+    public static void setJobTypeKeyboardState(boolean value) {
+        Arrays.fill(state, value);
     }
 
     public static String getJobTypeValue() {
@@ -91,7 +99,7 @@ public class JobTypeKeyboard {
     }
 
     public static void PutJobTypeValue(String value) {
-       String[] values = value.split(MessageText.COMMA);
+        String[] values = value.split(MessageText.COMMA);
         for (String s : values) {
             state[JobTypes.getStateId(s)] = true;
         }
@@ -105,7 +113,8 @@ public class JobTypeKeyboard {
             case MessageText.BUTTON_PART_TIME_VALUE -> state[1] = !state[1];
             case MessageText.BUTTON_CONTRACT_VALUE -> state[2] = !state[2];
             case MessageText.BUTTON_TEMPORARY_VALUE -> state[3] = !state[3];
-                case MessageText.BUTTON_INTERNSHIP_VALUE -> state[4] = !state[4];
+            case MessageText.BUTTON_INTERNSHIP_VALUE -> state[4] = !state[4];
+            case MessageText.BUTTON_ALL_JOB_TYPE -> setJobTypeKeyboardState(true);
         }
     }
 

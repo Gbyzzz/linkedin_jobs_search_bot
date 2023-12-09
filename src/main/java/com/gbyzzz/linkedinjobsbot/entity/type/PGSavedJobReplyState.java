@@ -37,7 +37,8 @@ public class PGSavedJobReplyState implements UserType<SavedJob.ReplyState> {
     public SavedJob.ReplyState nullSafeGet(ResultSet rs, int position,
                                             SharedSessionContractImplementor session,
                                             Object owner) throws SQLException {
-        return SavedJob.ReplyState.valueOf(rs.getString(position));
+        String value = rs.getString(position);
+        return (value != null) ? SavedJob.ReplyState.valueOf(value) : null;
     }
 
     @Override

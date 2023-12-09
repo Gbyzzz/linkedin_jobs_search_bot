@@ -31,7 +31,7 @@ public class ScheduledService {
     private final SendToEditMessageConverter converter  ;
     private final UserProfileService userProfileService;
 
-    @Scheduled(cron = "0 0/60 * * * ?")
+    @Scheduled(cron = "0 0/2 * * * ?")
     public void makeScan() throws IOException {
         System.out.println("Scheduled");
         List<UserProfile> userProfiles = userProfileService.getAll();
