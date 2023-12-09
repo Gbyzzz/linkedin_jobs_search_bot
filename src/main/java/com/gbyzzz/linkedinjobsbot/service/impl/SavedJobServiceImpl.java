@@ -70,15 +70,14 @@ public class SavedJobServiceImpl implements SavedJobService {
     public void saveAllNewJobs(List<String> jobs, Long id) {
         UserProfile userProfile = userProfileService.getUserProfileById(id).get();
         saveAll(jobs.stream().map(
-                (jobId) -> new SavedJob(Long.parseLong(jobId),
-                        SavedJob.ReplyState.NEW_JOB, null,
-                        new HashSet<>(){{ add(userProfile);}}, null)
+                (jobId) -> new SavedJob(null, Long.parseLong(jobId),SavedJob.ReplyState.NEW_JOB,
+                        null, userProfile, null)
                 ).toList());
     }
 
     @Override
-    public Optional<SavedJob> getJobById(Long jobId) {
-        return savedJobRepository.findById(jobId);
+    public Optional<SavedJob> getJobByIdAndUserId(Long jobId, Long userId) {
+        return savedJobRepository.findSavedJobByJobIdAndUserProfileChatId(jobId, userId);
     }
 
     @Override

@@ -151,14 +151,18 @@ public class JobServiceImpl implements JobService {
                 String.join(MessageText.REGEX_SEPARATOR,
                         searchParams.getFilterParams().getExcludeWordsFromTitle())
                 + MessageText.EXCLUDE_REGEX_END;
-        List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude)
+        List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude, searchParamId)
                 .stream().map(job -> job.getId().toString()).collect(Collectors.toList());
         System.out.println(jobs.size());
         jobs.retainAll(foundIds);
 
-        List<SavedJob> jobsToSave = getNewJobsToSave(jobs, searchParams);
-        savedJobService.saveAll(jobsToSave);
-        System.out.println(jobsToSave.size());
+
+        if (!jobs.isEmpty()) {
+            List<SavedJob> jobsToSave = getNewJobsToSave(jobs, searchParams);
+            savedJobService.saveAll(jobsToSave);
+            System.out.println(jobsToSave.size());
+        }
+
     }
 
     private void getTotalResults() throws IOException {
@@ -172,7 +176,7 @@ public class JobServiceImpl implements JobService {
         Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
 
 
-        for (int i=0; i<keywords.length; i++) {
+        for (int i = 0; i < keywords.length; i++) {
             Matcher m = p.matcher(keywords[i]);
             if (m.find()) {
                 char[] characters = keywords[i].toCharArray();
@@ -185,7 +189,7 @@ public class JobServiceImpl implements JobService {
                     }
                 }
                 stringBuilder.append(MessageText.ALL_WORD_REGEX);
-                keywords[i]=stringBuilder.toString();
+                keywords[i] = stringBuilder.toString();
             }
         }
         return keywords;
@@ -228,21 +232,19 @@ public class JobServiceImpl implements JobService {
     private List<SavedJob> getNewJobsToSave(List<String> jobs, SearchParams searchParams) {
         List<SavedJob> newJobs = new ArrayList<>();
         for (String newJob : jobs) {
-            Optional<SavedJob> optionalSavedJob = savedJobService.getJobById(Long.parseLong(newJob));
-            if (optionalSavedJob.isPresent()) {
-                SavedJob savedJob = optionalSavedJob.get();
-                savedJob.getSearchParams().add(searchParams);
-                savedJob.getUserProfile().add(searchParams.getUserProfile());
-                searchParams.getSavedJobs().add(savedJob);
-                newJobs.add(savedJob);
-            } else {
-                newJobs.add(new SavedJob(Long.parseLong(newJob), SavedJob.ReplyState.NEW_JOB, null,
-                        new HashSet<>() {{
-                            add(searchParams.getUserProfile());
-                        }},
-                        new HashSet<>() {{
+            Optional<SavedJob> optionalSavedJob =
+                    savedJobService.getJobByIdAndUserId(Long.parseLong(newJob),
+                            searchParams.getUserProfile().getChatId());
+            if (!optionalSavedJob.isPresent()) {
+                newJobs.add(new SavedJob(null, Long.parseLong(newJob), SavedJob.ReplyState.NEW_JOB,
+                        null, searchParams.getUserProfile(), new HashSet<>() {{
                             add(searchParams);
                         }}));
+//                SavedJob savedJob = optionalSavedJob.get();
+//                savedJob.getSearchParams().add(searchParams);
+//                savedJob.getUserProfile().add(searchParams.getUserProfile());
+//                searchParams.getSavedJobs().add(savedJob);
+//                newJobs.add(savedJob);
             }
         }
         return newJobs;
@@ -285,6 +287,16 @@ public class JobServiceImpl implements JobService {
                 locations.add(location);
                 Job job = mapper.readValue(reply, Job.class);
                 job.setSearchLocations(locations);
+                if (job.getSearchParamsId() == null) {
+                    job.setSearchParamsId(new HashSet<>() {
+                        {
+                            add(searchParamId);
+                        }
+                    });
+                } else {
+                    job.getSearchParamsId().add(searchParamId);
+                }
+
                 jobsRepository.save(job);
             } catch (IOException e) {
                 throw new RuntimeException(e + MessageText.ID + id);
