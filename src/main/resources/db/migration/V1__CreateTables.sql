@@ -13,11 +13,6 @@ CREATE TABLE user_profiles
     registered_at timestamp    NOT NULL
 );
 
-INSERT INTO user_profiles
-VALUES (5024120144, 'evgenii_borozna', 'ADD_KEYWORDS', '08/21/2023 3:06:40 PM'),
-       (1316219991, 'rndmgnrtdnmd', 'NEW', '12/06/2023 9:39:12 AM'),
-       (346235582, 'Gbyzzz', 'SEARCHES', '08/17/2023 4:30:07 PM');
-
 CREATE TABLE search_params
 (
     search_params_id bigserial PRIMARY KEY,
