@@ -141,6 +141,7 @@ public class JobServiceImpl implements JobService {
 
     public void filterResults(SearchParams searchParams, List<String> foundIds) {
         System.out.println("Search id: " + searchParams.getId());
+
         String include = MessageText.INCLUDE_REGEX_START +
                 String.join(MessageText.REGEX_SEPARATOR,
                         processKeywords(searchParams.getFilterParams()
@@ -151,7 +152,9 @@ public class JobServiceImpl implements JobService {
                 String.join(MessageText.REGEX_SEPARATOR,
                         searchParams.getFilterParams().getExcludeWordsFromTitle())
                 + MessageText.EXCLUDE_REGEX_END;
+
         List<String> jobs = jobsRepository.findJobsIncludingAndExcludingWords(include, exclude, searchParamId)
+
                 .stream().map(job -> job.getId().toString()).collect(Collectors.toList());
         System.out.println(jobs.size());
         jobs.retainAll(foundIds);
