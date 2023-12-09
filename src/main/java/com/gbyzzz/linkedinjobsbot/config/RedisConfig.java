@@ -24,7 +24,8 @@ public class RedisConfig {
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
+        RedisStandaloneConfiguration redisStandaloneConfiguration =
+                new RedisStandaloneConfiguration(redisHost, redisPort);
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 

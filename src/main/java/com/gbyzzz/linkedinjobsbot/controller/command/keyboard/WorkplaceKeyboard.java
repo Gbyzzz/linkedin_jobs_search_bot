@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -31,6 +32,10 @@ public class WorkplaceKeyboard {
                 MessageText.SPACE + MessageText.BUTTON_HYBRID);
         hybridButton.setCallbackData(MessageText.BUTTON_HYBRID_VALUE);
 
+        InlineKeyboardButton allWorkplaceButton = new InlineKeyboardButton();
+        allWorkplaceButton.setText(MessageText.BUTTON_ALL);
+        allWorkplaceButton.setCallbackData(MessageText.BUTTON_ALL_WORKPLACE);
+
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
         nextButton.setText(MessageText.BUTTON_NEXT);
         nextButton.setCallbackData(MessageText.NEXT);
@@ -42,21 +47,25 @@ public class WorkplaceKeyboard {
         List<InlineKeyboardButton> row2 = new ArrayList<>();
         row2.add(hybridButton);
 
+
         List<InlineKeyboardButton> row3 = new ArrayList<>();
-        row3.add(nextButton);
+        row3.add(allWorkplaceButton);
+
+        List<InlineKeyboardButton> row4 = new ArrayList<>();
+        row4.add(nextButton);
 
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
 
         return new InlineKeyboardMarkup(rows);
     }
 
-    public static void setWorkplaceKeyboardFalse() {
-        for (int i = 0; i<state.length; i++) {
-            state[i] = false;
-        }
+    public static void setWorkplaceKeyboardState(boolean value) {
+        Arrays.fill(state, value);
+
     }
 
     public static String getWorkplaceValue() {
@@ -74,7 +83,7 @@ public class WorkplaceKeyboard {
     }
 
     public static void putWorkplaceValue(String value) {
-       String[] values = value.split(MessageText.COMMA);
+        String[] values = value.split(MessageText.COMMA);
         for (String s : values) {
             state[Integer.parseInt(s) - 1] = true;
         }
@@ -86,6 +95,7 @@ public class WorkplaceKeyboard {
             case MessageText.BUTTON_ON_SITE_VALUE -> state[0] = !state[0];
             case MessageText.BUTTON_REMOTE_VALUE -> state[1] = !state[1];
             case MessageText.BUTTON_HYBRID_VALUE -> state[2] = !state[2];
+            case MessageText.BUTTON_ALL_WORKPLACE -> setWorkplaceKeyboardState(true);
         }
     }
 }
