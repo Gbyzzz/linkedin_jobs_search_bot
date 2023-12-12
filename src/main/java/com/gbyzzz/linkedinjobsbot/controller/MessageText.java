@@ -228,8 +228,8 @@ public abstract class MessageText {
     public static final String COUNT_100 = "count=100";
     public static final String INCLUDE_REGEX_START = "\\b(?:";
     public static final String INCLUDE_REGEX_END = ")\\b";
-    public static final String EXCLUDE_REGEX_START = "^(";
-    public static final String EXCLUDE_REGEX_END = ")$";
+    public static final String EXCLUDE_REGEX_START = "^(?:(?!";
+    public static final String EXCLUDE_REGEX_END = ").)*$\\r?\\n?";
     public static final String REGEX_SEPARATOR = "|";
     public static final String JOBS_TASK_EXECUTOR = "jobsTaskExecutor";
     public static final String SEARCH_TASK_EXECUTOR = "searchTaskExecutor";
