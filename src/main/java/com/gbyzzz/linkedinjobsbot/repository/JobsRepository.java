@@ -11,7 +11,7 @@ import java.util.List;
 public interface JobsRepository extends MongoRepository<Job, Long> {
     @Query("{ '$and': [" +
             "    { 'description': { $regex: ?0, $options: 'i' } }," +
-            "    { 'name': { $not: { $regex: ?1, $options: 'i' } } }," +
+            "    { 'name': { $regex: ?1, $options: 'i' } }," +
             "    { 'searchParamsId': ?2 }" +
             "  ] }")
 //    @Query("{ " +

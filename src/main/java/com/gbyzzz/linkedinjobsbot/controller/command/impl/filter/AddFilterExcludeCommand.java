@@ -29,7 +29,7 @@ public class AddFilterExcludeCommand implements Command {
                 .getChatId()).get();
         SearchParams searchParams = redisService.getFromTempRepository(id);
         if (!update.getMessage().getText().equals(MessageText.PLUS)) {
-            String [] keywords = update.getMessage().getText().split("\\s+");
+            String [] keywords = update.getMessage().getText().split("[\\s\u00A0]+");
             searchParams.getFilterParams().setExcludeWordsFromTitle(keywords);
             redisService.saveToTempRepository(searchParams, id);
         }
