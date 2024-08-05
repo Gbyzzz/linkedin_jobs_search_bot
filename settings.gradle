@@ -1,1 +1,4 @@
 rootProject.name = 'linkedin-jobs-bot'
+
+includeBuild 'linkedin-jobs-bot-main'
+includeBuild 'job-scanner'
