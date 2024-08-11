@@ -1,4 +1,4 @@
-HELP.md
+linkedin-jobs-bot-main/HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
