@@ -24,7 +24,6 @@ import java.util.Set;
 public class MakeFirstSearchCommand implements Command {
 
     private final SearchParamsService searchParamsService;
-    private final PaginationKeyboard paginationKeyboard;
     private final RedisService redisService;
     private final SavedJobService savedJobService;
     private final UserProfileService userProfileService;
@@ -39,15 +38,13 @@ public class MakeFirstSearchCommand implements Command {
         if(!searchParamsService.existSearchParam(searchParams)) {
             if(searchParams.getSavedJobs() == null) {
                 searchParams.setSavedJobs(new HashSet<>());
-                searchParams = searchParamsService.save(searchParams);
+                searchParamsService.save(searchParams);
             } else {
                 searchParams.setSavedJobs(searchParamsService.findById(searchParams.getId()).getSavedJobs());
                 Set<SavedJob> jobsToDelete = deleteNewJobs(searchParams.getSavedJobs());
-                searchParams = searchParamsService.save(searchParams);
+                searchParamsService.save(searchParams);
                 savedJobService.deleteAll(jobsToDelete);
             }
-//            searchParams.setSearchState(SearchParams.SearchState.NEW);
-//            searchParams = searchParamsService.save(searchParams);
             UserProfile userProfile = userProfileService.getUserProfileById(id).get();
             userProfile.setBotState(UserProfile.BotState.NEW);
             userProfileService.save(userProfile);
@@ -56,7 +53,7 @@ public class MakeFirstSearchCommand implements Command {
             sendMessage = new SendMessage(id.toString(),
                     MessageText.MAKE_FIRST_SEARCH_PARAMS_ALREADY_EXISTS);
         }
-//        redisService.deleteFromTempRepository(id);
+        redisService.deleteFromTempRepository(id);
         return new Reply(sendMessage, false);
     }
 

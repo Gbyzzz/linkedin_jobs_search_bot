@@ -29,31 +29,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class JobServiceImpl implements JobService {
 
-    //    private int totalResults = 0;
     private final JobsRepository jobsRepository;
-    //    private CopyOnWriteArraySet<String> results = new CopyOnWriteArraySet<>();
-//    private final ObjectMapper mapper;
-//    private String location;
-//    private Long searchParamId;
-//    private List<String> newJobs = new ArrayList<>();
     private final SearchParamsService searchParamsService;
-    //
     private final SavedJobService savedJobService;
     private final MessageService messageService;
     private final LinkedInJobsBot linkedInJobsBot;
-    private final PaginationKeyboard paginationKeyboard;
 
-
-    //
-//
-//    public JobServiceImpl(JobsRepository jobsRepository, SearchParamsService searchParamsService, SavedJobService savedJobService) {
-//        this.jobsRepository = jobsRepository;
-//        this.searchParamsService = searchParamsService;
-//        this.savedJobService = savedJobService;
-////        this.mapper = new ObjectMapper();
-//    }
-
-    //
     @Override
     @KafkaListener(
             topics = "${application.kafka.topic.to_check_if_new}",
@@ -80,36 +61,11 @@ public class JobServiceImpl implements JobService {
             savedJobService.saveAll(jobsToSave);
             List<SavedJob> jobs = savedJobService.getNewJobsByUserId(searchParamsDTO.userId());
             SendMessage sendMessage = messageService.getNewJobByUserId(searchParamsDTO.userId(),
-                    MessageText.NEW + MessageText.BUTTON_VALUE_SEPARATOR + MessageText.FIRST +
-                    MessageText.BUTTON_VALUE_SEPARATOR + MessageText.ALL);
-//            SendMessage sendMessage = new SendMessage(searchParamsDTO.userId().toString(),MessageText.makeNewJobsReply(0, jobs));
-            //generate and send message to user
+                    new String[]{MessageText.NEW, MessageText.FIRST, MessageText.ALL});
             linkedInJobsBot.sendMessage(sendMessage);
         }
-
-//        if (!jobs.isEmpty()) {
-//            List<SavedJob> jobsToSave = getNewJobsToSave(jobs, searchParams);
-//            savedJobService.saveAll(jobsToSave);
-//            System.out.println(jobsToSave.size());
-//            return !jobsToSave.isEmpty();
-//        }
     }
 
-    //
-//    public boolean makeScan(SearchParams searchParams, Long timePostedRange) {
-//        List<String> foundIds = new ArrayList<>(results);
-//        System.out.println(results);
-//        System.out.println(totalResults);
-//        return filterResults(searchParams, foundIds);
-//    }
-//
-//    private void getTotalResults() throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        JsonNode jsonNode = mapper.readTree(makeRequest(new URL((urlBuilder + MessageText.ZERO)
-//                .replaceAll(MessageText.COUNT_100, MessageText.COUNT_0))));
-//        totalResults = jsonNode.get(MessageText.PAGING).get(MessageText.TOTAL).asInt();
-//    }
-//
     private String[] processKeywords(String[] keywords) {
         Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
 
@@ -133,41 +89,6 @@ public class JobServiceImpl implements JobService {
         return keywords;
     }
 
-    //
-//    private void getJobIds(String in) throws JsonProcessingException {
-//
-//        JsonNode jsonNode = mapper.readTree(in);
-//
-//        if (jsonNode.get(MessageText.JSON_NODE_METADATA)
-//                .has(MessageText.JSON_NODE_JOB_CARD_PREFETCH_QUERIES)) {
-//            String[] node = mapper.convertValue(jsonNode
-//                    .findPath(MessageText.JSON_NODE_PREFETCH_JOB_POSTING_CARD_URNS), String[].class);
-//            results.addAll(Arrays.stream(node).map(
-//                            (el) -> el.replaceAll(MessageText.NON_NUMERIC, MessageText.EMPTY))
-//                    .toList());
-//        }
-//    }
-//
-//    private String makeRequest(URL url) throws IOException {
-//        BufferedReader in;
-//        StringBuilder content = new StringBuilder();
-//        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//        con.setRequestProperty(MessageText.COOKIE, COOKIE);
-//        con.setRequestProperty(MessageText.CSRF_TOKEN, CSRF_TOKEN);
-//        con.setRequestMethod(MessageText.GET);
-//        while (content.isEmpty()) {
-//            in = new BufferedReader(
-//                    new InputStreamReader(con.getInputStream()));
-//            String inputLine;
-//            content = new StringBuilder();
-//            while ((inputLine = in.readLine()) != null) {
-//                content.append(inputLine);
-//            }
-//            in.close();
-//        }
-//        return content.toString();
-//    }
-//
     private List<SavedJob> getNewJobsToSave(List<String> jobs, SearchParams searchParams) {
         List<SavedJob> newJobs = new ArrayList<>();
         for (String newJob : jobs) {

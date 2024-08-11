@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/job-scanner/job-scanner.main.iml" filepath="$PROJECT_DIR$/.idea/modules/job-scanner/job-scanner.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/linkedin-jobs-bot-main/linkedin-jobs-bot-main.main.iml" filepath="$PROJECT_DIR$/.idea/modules/linkedin-jobs-bot-main/linkedin-jobs-bot-main.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/linkedin-jobs-bot-main/linkedin-jobs-bot-main.test.iml" filepath="$PROJECT_DIR$/.idea/modules/linkedin-jobs-bot-main/linkedin-jobs-bot-main.test.iml" />
     </modules>
   </component>
 </project>
