@@ -1,15 +1,10 @@
 package com.gbyzzz.linkedinjobsbot.service.impl;
 
 import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.repository.SavedJobRepository;
 import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +16,6 @@ import java.util.Set;
 public class SavedJobServiceImpl implements SavedJobService {
 
     private final SavedJobRepository savedJobRepository;
-    private final UserProfileService userProfileService;
 
     @Override
     public List<SavedJob> getJobsByUserId(Long id) {
@@ -34,24 +28,8 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
-    public List<SavedJob> getAppliedAndDeletedJobsByUserId(Long id) {
-        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.DELETED);
-    }
-
-    @Override
-    public List<SavedJob> getAppliedJobsByUserId(Long id) {
-        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.APPLIED);
-    }
-
-    @Override
     public List<SavedJob> getNewJobsByUserId(Long id) {
         return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.NEW_JOB);
-    }
-
-    @Override
-    public List<SavedJob> getNewJobsByUserIdAndSearchParams(Long id, SearchParams searchParams) {
-        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyStateAndSearchParamsContains(id,
-                SavedJob.ReplyState.NEW_JOB, searchParams);
     }
 
     @Override
@@ -65,22 +43,13 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
-    public void saveAllNewJobs(List<String> jobs, Long id) {
-//        UserProfileDTO userProfile = userProfileService.getUserProfileById(id);
-//        saveAll(jobs.stream().map(
-//                (jobId) -> new SavedJob(null, Long.parseLong(jobId),SavedJob.ReplyState.NEW_JOB.toString(),
-//                        null)
-//                ).toList());
-    }
-
-    @Override
-    public SavedJob getJobByIdAndUserId(Long jobId, Long userId) {
-        return savedJobRepository.findSavedJobByJobIdAndUserProfileChatId(jobId, userId).orElse(new SavedJob());
-    }
-
-    @Override
     public boolean existsJobByIdAndUserId(Long jobId, Long userId) {
         return savedJobRepository.existsSavedJobByJobIdAndUserProfileChatId(jobId, userId);
+    }
+
+    @Override
+    public SavedJob getJobById(Long jobId) {
+        return savedJobRepository.findById(jobId).orElseThrow();
     }
 
     @Override
@@ -93,23 +62,16 @@ public class SavedJobServiceImpl implements SavedJobService {
         return savedJobRepository.countSavedJobsByReplyStateAndUserProfile_ChatId(state, userId);
     }
 
-//    @Override
-//    public Page<SavedJob> getFirstSavedJob(Long userId, SavedJob.ReplyState state) {
-////        return savedJobRepository.findFirstBy(PageRequest.of(0, 1));
-//        return null;
-//    }
-
     @Override
     public int countSavedJobs(Long userId, SavedJob.ReplyState state, Long searchParamsId) {
-        return savedJobRepository.countSavedJobsByReplyStateAndSearchParams_IdAndUserProfile_ChatId(state, userId,
+        return savedJobRepository.countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(userId, state,
                 searchParamsId);
     }
 
     @Override
     public Optional<SavedJob> getNextSavedJob(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id) {
         return savedJobRepository.findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThan
-                (userId, state, id, searchParamsId);
-//        return null;
+                (userId, state, searchParamsId, id);
     }
 
     @Override
@@ -121,7 +83,6 @@ public class SavedJobServiceImpl implements SavedJobService {
     public Optional<SavedJob> getPrevSavedJob(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id) {
         return savedJobRepository.findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc
                 (userId, state, searchParamsId, id);
-//        return null;
     }
 
     @Override

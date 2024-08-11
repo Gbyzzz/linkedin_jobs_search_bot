@@ -21,31 +21,12 @@ import java.util.List;
 @AllArgsConstructor
 public class GetAppliedJobs implements Command {
 
-    private final SavedJobService savedJobService;
-    private final PaginationKeyboard paginationKeyboard;
-    private final UserProfileService userProfileService;
     private final MessageService messageService;
 
 
     @Override
     public Reply execute(Update update) throws IOException {
-//        Long id = update.getMessage().getChatId();
-//        SendMessage sendMessage;
-//        List<SavedJob> jobs = savedJobService.getAppliedJobsByUserId(id);
-//
-//        if (!jobs.isEmpty()) {
-//            UserProfile userProfile = userProfileService.getUserProfileById(id).get();
-//            userProfile.setBotState(UserProfile.BotState.APPLIED);
-//            userProfileService.save(userProfile);
-//            sendMessage = new SendMessage(id.toString(), MessageText.makeAppliedJobsReply(0,
-//                    jobs));
-//            sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(0, jobs.size(),
-//                    UserProfile.BotState.APPLIED.name(), MessageText.ALL));
-//        } else {
-//            sendMessage = new SendMessage(id.toString(),
-//                    MessageText.GET_APPLIED_JOBS_REPLY);
-//        }
         return new Reply(messageService.getAppliedJobByUserId(update.getMessage().getChatId(),
-                0L, null, 1, MessageText.FIRST), false);
+                new String[]{MessageText.APPLIED, MessageText.FIRST, MessageText.ALL}), false);
     }
 }

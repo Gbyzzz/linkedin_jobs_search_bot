@@ -5,7 +5,9 @@ import com.gbyzzz.linkedinjobsbot.entity.converter.KeywordConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -56,4 +58,20 @@ public class SearchParams {
             inverseJoinColumns = @JoinColumn(name = "job_id"))
     private Set<SavedJob> savedJobs;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SearchParams that = (SearchParams) o;
+        return Objects.deepEquals(keywords, that.keywords) &&
+                Objects.equals(location, that.location) &&
+                Objects.equals(userProfile, that.userProfile) &&
+                Objects.equals(searchFilters, that.searchFilters) &&
+                Objects.equals(filterParams, that.filterParams);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(keywords), location, userProfile, searchFilters, filterParams, savedJobs);
+    }
 }

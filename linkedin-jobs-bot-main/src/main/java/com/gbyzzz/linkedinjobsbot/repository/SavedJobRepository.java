@@ -28,11 +28,11 @@ public interface SavedJobRepository extends JpaRepository<SavedJob, Long> {
 
     int countSavedJobsByReplyStateAndUserProfile_ChatId(SavedJob.ReplyState state, Long userId);
 
-    int countSavedJobsByReplyStateAndSearchParams_IdAndUserProfile_ChatId(SavedJob.ReplyState state, Long userId,
+    int countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(Long userId, SavedJob.ReplyState state,
                                                                           Long searchParamsId);
 
     Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThan(
-            Long userProfileChatId, SavedJob.ReplyState replyState, Long id, Long searchParamsId);
+            Long userProfileChatId, SavedJob.ReplyState replyState, Long searchParamsId, Long id);
 
     Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndIdGreaterThan(
             Long userProfileChatId, SavedJob.ReplyState replyState, Long id);

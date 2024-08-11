@@ -3,10 +3,10 @@ package com.gbyzzz.linkedinjobsbot.service.impl;
 import com.gbyzzz.linkedinjobsbot.dto.mapper.SearchParamsTimeRangeDTOMapper;
 import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.repository.SearchParamsRepository;
+import com.gbyzzz.linkedinjobsbot.service.KafkaService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,19 +19,13 @@ public class SearchParamsServiceImpl implements SearchParamsService {
 
     private final SearchParamsRepository searchParamsRepository;
     private final SearchParamsTimeRangeDTOMapper searchParamsTimeRangeDTOMapper;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaService kafkaService;
 
     @Override
     public SearchParams save(SearchParams searchParams) throws IOException {
         SearchParams saved = searchParamsRepository.save(searchParams);
-        kafkaTemplate.send("to_search", String.valueOf(System.currentTimeMillis()),
-                searchParamsTimeRangeDTOMapper.toDTO(searchParams, null));
-        return searchParamsRepository.save(searchParams);
-    }
-
-    @Override
-    public List<SearchParams> findAll() {
-        return searchParamsRepository.findAll();
+        kafkaService.sendMessage("to_search", searchParamsTimeRangeDTOMapper.toDTO(saved, null));
+        return saved;
     }
 
     @Override
@@ -51,6 +45,7 @@ public class SearchParamsServiceImpl implements SearchParamsService {
     }
 
     @Override
+    @Transactional
     public List<SearchParams> findAllByUserId(Long id) {
         return searchParamsRepository.findSearchParamsByUserProfile_ChatId(id);
     }
@@ -62,12 +57,27 @@ public class SearchParamsServiceImpl implements SearchParamsService {
     }
 
     @Override
-    public Long getCountByUserId(Long userId) {
+    public void deleteById(Long searchParamsId) {
+        searchParamsRepository.deleteById(searchParamsId);
+    }
+
+    @Override
+    public int getCountByUserId(Long userId) {
         return searchParamsRepository.countSearchParamsByUserProfile_ChatId(userId);
     }
 
     @Override
-    public Optional<SearchParams> findPageByUserId(Long userId, Long id) {
+    public Optional<SearchParams> findNextSearchParams(Long userId, Long id) {
         return searchParamsRepository.findTopByUserProfileChatIdAndIdGreaterThan(userId, id);
+    }
+
+    @Override
+    public Optional<SearchParams> findPreviousSearchParams(Long userId, Long id) {
+        return searchParamsRepository.findTopByUserProfileChatIdAndIdLessThanOrderByIdDesc(userId, id);
+    }
+
+    @Override
+    public Optional<SearchParams> findLastSearchParams(Long userId) {
+        return searchParamsRepository.findTopByUserProfileChatIdAndIdGreaterThanOrderByIdDesc(userId, 0L);
     }
 }

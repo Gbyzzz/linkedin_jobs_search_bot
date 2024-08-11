@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface SearchParamsRepository extends JpaRepository<SearchParams, Long> {
     List<SearchParams> findSearchParamsByUserProfile_ChatId(Long id);
+    int countSearchParamsByUserProfile_ChatId(Long userId);
     Optional<SearchParams> findTopByUserProfileChatIdAndIdGreaterThan(Long userId, Long id);
-    Long countSearchParamsByUserProfile_ChatId(Long userId);
+    Optional<SearchParams> findTopByUserProfileChatIdAndIdLessThanOrderByIdDesc(Long userId, Long id);
+    Optional<SearchParams> findTopByUserProfileChatIdAndIdGreaterThanOrderByIdDesc(Long userId, Long id);
 }
