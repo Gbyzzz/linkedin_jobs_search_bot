@@ -21,34 +21,15 @@ import java.util.List;
 @AllArgsConstructor
 public class GetAllSearchesCommand implements Command {
 
-    private final SearchParamsService searchParamsService;
-    private final PaginationKeyboard paginationKeyboard;
     private final UserProfileService userProfileService;
     private final MessageService messageService;
 
     @Override
     public Reply execute(Update update) throws IOException {
-//        Long id = update.getMessage().getChatId();
-//        SendMessage sendMessage;
-//        List<SearchParams> searchParams = searchParamsService.findAllByUserId(id);
-//
-//        if (!searchParams.isEmpty()) {
-////            sendMessage = new SendMessage(searchParams.get(0).getUserProfile()
-////                    .getChatId().toString(),
-////                    MessageText.makeSearchReply(0, searchParams));
-//            sendMessage = new SendMessage(searchParams.get(0).getUserProfile()
-//                    .getChatId().toString(), "");
-//            sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(UserProfile.BotState.SEARCHES.name(),
-//                    MessageText.ZERO, 0,
-//                    searchParams.size(),));
-//        } else {
-//            sendMessage = new SendMessage(id.toString(),
-//                    MessageText.GET_ALL_SEARCHES_REPLY);
-//        }
-//        UserProfile userProfile = userProfileService.getUserProfileById(id).get();
-//        userProfile.setBotState(UserProfile.BotState.SEARCHES);
-//        userProfileService.save(userProfile);
+        UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage().getChatId()).get();
+        userProfile.setBotState(UserProfile.BotState.SEARCHES);
+        userProfileService.save(userProfile);
         return new Reply(messageService.getSearchByUserId(update.getMessage().getChatId(),
-                0L, 1, MessageText.FIRST), false);
+                new String[]{MessageText.SEARCHES, MessageText.FIRST}), false);
     }
 }

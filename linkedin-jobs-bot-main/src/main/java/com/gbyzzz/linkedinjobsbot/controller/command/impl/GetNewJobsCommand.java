@@ -27,7 +27,6 @@ public class GetNewJobsCommand implements Command {
     @Override
     public Reply execute(Update update) throws IOException {
         return new Reply(messageService.getNewJobByUserId(update.getMessage().getChatId(),
-                MessageText.NEW + MessageText.BUTTON_VALUE_SEPARATOR + MessageText.FIRST +
-                        MessageText.BUTTON_VALUE_SEPARATOR + MessageText.ALL), false);
+                new String[]{MessageText.NEW, MessageText.FIRST, MessageText.ALL}), false);
     }
 }

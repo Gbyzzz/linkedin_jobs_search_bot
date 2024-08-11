@@ -8,7 +8,7 @@ services:
       - "5433:5432"
     restart: always
     env_file:
-      - .env
+      - ../.env
     environment:
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: linkedin_jobs_bot
@@ -18,7 +18,7 @@ services:
     container_name: bot_redis
     image: redis:latest
     env_file:
-      - .env
+      - ../.env
     ports:
       - "7917:7917"
     environment:
@@ -29,7 +29,7 @@ services:
     image: mongodb/mongodb-community-server:latest
     command: mongod --port 27018
     env_file:
-      - .env
+      - ../.env
     ports:
       - "27018:27018"
     environment:
@@ -40,7 +40,7 @@ services:
     build: ./
     restart: always
     env_file:
-      - .env
+      - ../.env
     container_name: bot_backend
     depends_on:
       - "bot_postgres"
