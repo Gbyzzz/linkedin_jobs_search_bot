@@ -10,6 +10,8 @@ generate_certificates.bat
 /init
 *.jks
 *.crt
+application-dev.properties
+/Dockerfile
 
 ### STS ###
 .apt_generated
