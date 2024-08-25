@@ -1,0 +1,32 @@
+services:
+  kafka:
+    container_name: kafka
+    build: ./kafka
+    ports:
+      - "29093:9093"
+    environment:
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9092"
+      KAFKA_LISTENERS: BROKER://0.0.0.0:9093,CONTROLLER://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: BROKER://localhost:29093
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'BROKER'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: BROKER:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT
+      CLUSTER_ID: '4L6g3nShT-eMCtK--X86sw'
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_SASL_MECHANISM_CONTROLLER_PROTOCOL: PLAIN
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_LISTENER_NAME_BROKER_PLAIN_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="aa132435aa" user_admin="aa132435aa";
+      KAFKA_LISTENER_NAME_CONTROLLER_PLAIN_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="aa132435aa" user_admin="aa132435aa";
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+
+#      KAFKA_SSL_KEYSTORE_FILENAME: kafka.server.keystore.jks
+#      KAFKA_SSL_KEYSTORE_CREDENTIALS: keystore_credentials
+#      KAFKA_SSL_KEY_CREDENTIALS: key_credentials
+#      KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.server.truststore.jks
+#      KAFKA_SSL_TRUSTSTORE_CREDENTIALS: truststore_credentials
+#      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: " "
+#      KAFKA_SSL_CLIENT_AUTH: requested
