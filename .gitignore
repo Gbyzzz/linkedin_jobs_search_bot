@@ -12,7 +12,8 @@ build/
 application-dev.properties
 .secrets
 *.tar.gz
-
+./data
+bfg-1.14.0.jar
 
 ### STS ###
 .apt_generated
