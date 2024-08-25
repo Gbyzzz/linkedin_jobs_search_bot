@@ -1,0 +1,94 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v3.6.1
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_USERNAME_ONE: ${{ secrets.BOT_USERNAME_ONE }}
+          BOT_PASSWORD_ONE: ${{ secrets.BOT_PASSWORD_ONE }}
+          BOT_USERNAME_TWO: ${{ secrets.BOT_USERNAME_TWO }}
+          BOT_PASSWORD_TWO: ${{ secrets.BOT_PASSWORD_TWO }}
+          BOT_COOKIE_ONE: ${{ secrets.BOT_COOKIE_ONE }}
+          BOT_CSRF_TOKEN_ONE: ${{ secrets.BOT_CSRF_TOKEN_ONE }}
+          BOT_COOKIE_TWO: ${{ secrets.BOT_COOKIE_TWO }}
+          BOT_CSRF_TOKEN_TWO: ${{ secrets.BOT_CSRF_TOKEN_TWO }}
+                  
+      - name: Build and push Docker images
+        run: docker compose build
+
+      - name: Save Docker Images as .tar files
+        run: |
+            docker save -o bot_main.tar linkedin-jobs-bot-new-bot_main:latest
+            docker save -o bot_scanner_one.tar linkedin-jobs-bot-new-bot_scanner_one:latest
+            docker save -o bot_scanner_two.tar linkedin-jobs-bot-new-bot_scanner_two:latest
+
+
+      - name: Archive Docker Compose and Images
+        run: tar czf deploy.tar.gz docker-compose.yml bot_main.tar bot_scanner_one.tar bot_scanner_two.tar
+            
+#
+#      - name: Archive Docker Compose
+#        run: tar czf docker-compose.tar.gz docker-compose.yml
+#  upload:
+#     runs-on: ubuntu-latest
+#     needs: build
+#
+#     steps:
+      - name: Upload Docker Compose to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
+          source: "deploy.tar.gz"
+          target: "/root"
+
+#        uses: appleboy/scp-action@v0.1.7
+#        with:
+#          host: ${{ VPS_HOST }}
+#          username: ${{ VPS_USER }}
+#          password: ${{ PASSWORD }}
+#          port: 22
+#          source: "docker-compose.tar.gz"
+#          target: "/root/${{ VPS_USER }}/"
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: upload
+#
+#    steps:
+      - name: SSH and Deploy Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            mkdir /root/linkedin-jobs-bot-new
+            rm bot_main.tar bot_scanner_one.tar bot_scanner_two.tar
+            tar xzf deploy.tar.gz -C /root/linkedin-jobs-bot-new
+            cd /root/linkedin-jobs-bot-new
+            docker load -i bot_main.tar
+            docker load -i bot_scanner_one.tar
+            docker load -i bot_scanner_two.tar
+            docker compose up -d
+            rm /root/deploy.tar.gz
