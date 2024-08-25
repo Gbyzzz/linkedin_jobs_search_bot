@@ -1,15 +1,63 @@
 services:
+
+  kafka:
+    container_name: kafka
+    build: ./kafka
+    ports:
+      - "29093:9093"
+    environment:
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9092"
+      KAFKA_LISTENERS: BROKER://0.0.0.0:9093,CONTROLLER://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: BROKER://localhost:29093
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'BROKER'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: BROKER:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT
+      CLUSTER_ID: '4L6g3nShT-eMCtK--X86sw'
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_SASL_MECHANISM_CONTROLLER_PROTOCOL: PLAIN
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_LISTENER_NAME_BROKER_PLAIN_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="aa132435aa" user_admin="aa132435aa";
+      KAFKA_LISTENER_NAME_CONTROLLER_PLAIN_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="aa132435aa" user_admin="aa132435aa";
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  bot_redis:
+    container_name: bot_redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: ${PASSWORD}
+    restart: always
+
+  bot_mongodb:
+    container_name: bot_mongodb
+    image: mongodb/mongodb-community-server:latest
+    command: mongod --port 27017
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
+    restart: always
+
   bot_main:
     build: ./linkedin-jobs-bot-main
     restart: always
     container_name: bot_main
+    depends_on:
+      - kafka
+      - bot_redis
+      - bot_mongodb
     ports:
       - "8888:8080"
     network_mode: host
     working_dir: /app
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/linkedin_jobs_bot
-      - SPRING_DATASOURCE_PASSWORD=${PASSWORD}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
       - SPRING_DATA_MONGODB_HOST=localhost
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=jobs_db
@@ -23,20 +71,14 @@ services:
       - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="${PASSWORD}";
 
 
-  #      - SPRING_KAFKA_SSL_TRUSTSTORELOCATION=file:/app/build/resources/main/client-certs/kafka.producer.truststore.jks
-#      - SPRING_KAFKA_SSL_TRUSTSTOREPASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEYSTORELOCATION=file:/app/build/resources/main/client-certs/kafka.producer.keystore.jks
-#      - SPRING_KAFKA_SSL_KEYSTOREPASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEYPASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT
-#      - SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=PLAIN
-#      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
-
   bot_scanner_one:
     build: ./job-scanner
     restart: always
     container_name: bot_scanner_one
     depends_on:
+      - kafka
+      - bot_redis
+      - bot_mongodb
       - bot_main
     ports:
       - "8081:8081"
@@ -56,21 +98,14 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:29093
       - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="${PASSWORD}";
 
-#      - SPRING_KAFKA_SSL_TRUST_STORE_LOCATION=file:/app/build/resources/main/client-certs/kafka.consumer.truststore.jks
-#      - SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/app/build/resources/main/client-certs/kafka.consumer.keystore.jks
-#      - SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEY_PASSWORD=${PASSWORD}
-
-#      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT
-#      - SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=PLAIN
-#      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
-
   bot_scanner_two:
     build: ./job-scanner
     restart: always
     container_name: bot_scanner_two
     depends_on:
+      - kafka
+      - bot_redis
+      - bot_mongodb
       - bot_main
     ports:
       - "8082:8082"
@@ -89,14 +124,3 @@ services:
       - BOT_CSRF_TOKEN=${BOT_CSRF_TOKEN_TWO}
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:29093
       - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="${PASSWORD}";
-
-
-#      - SPRING_KAFKA_SSL_TRUST_STORE_LOCATION=file:/app/build/resources/main/client-certs/kafka.consumer.truststore.jks
-#      - SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/app/build/resources/main/client-certs/kafka.consumer.keystore.jks
-#      - SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEY_PASSWORD=${PASSWORD}
-#
-#      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT
-#      - SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=PLAIN
-#      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
