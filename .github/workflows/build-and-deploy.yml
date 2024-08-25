@@ -1,10 +1,19 @@
 name: Deploy to VPS
 
 on:
+  workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+
 
 jobs:
   build:
@@ -36,9 +45,9 @@ jobs:
 
       - name: Save Docker Images as .tar files
         run: |
-            docker save -o bot_main.tar linkedin-jobs-bot-new-bot_main:latest
-            docker save -o bot_scanner_one.tar linkedin-jobs-bot-new-bot_scanner_one:latest
-            docker save -o bot_scanner_two.tar linkedin-jobs-bot-new-bot_scanner_two:latest
+            docker save -o bot_main.tar bot_main:latest
+            docker save -o bot_scanner_one.tar bot_scanner_one:latest
+            docker save -o bot_scanner_two.tar bot_scanner_two:latest
 
 
       - name: Archive Docker Compose and Images
