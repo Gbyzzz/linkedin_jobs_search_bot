@@ -7,7 +7,6 @@ build/
 *.env
 *.bat
 /kafka/certs
-/postgres/init
 *.jks
 *.crt
 application-dev.properties
