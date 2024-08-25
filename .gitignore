@@ -11,9 +11,9 @@ build/
 *.jks
 *.crt
 application-dev.properties
-/postgres/Dockerfile
 .secrets
 *.tar.gz
+
 
 ### STS ###
 .apt_generated
