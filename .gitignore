@@ -14,6 +14,8 @@ application-dev.properties
 *.tar.gz
 ./data
 bfg-1.14.0.jar
+.idea
+gradle
 
 ### STS ###
 .apt_generated
