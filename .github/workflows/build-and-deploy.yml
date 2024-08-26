@@ -18,36 +18,48 @@ jobs:
 
       - name: Set up Docker Build
         uses: docker/setup-buildx-action@v3.6.1
-        env:
-          USERNAME: ${{ env.USERNAME }}
-          PASSWORD: ${{ env.PASSWORD }}
-          BOT_NAME: ${{ env.BOT_NAME }}
-          BOT_TOKEN: ${{ env.BOT_TOKEN }}
-          BOT_USERNAME_ONE: ${{ secrets.BOT_USERNAME_ONE }}
-          BOT_PASSWORD_ONE: ${{ secrets.BOT_PASSWORD_ONE }}
-          BOT_USERNAME_TWO: ${{ secrets.BOT_USERNAME_TWO }}
-          BOT_PASSWORD_TWO: ${{ secrets.BOT_PASSWORD_TWO }}
-          BOT_COOKIE_ONE: ${{ secrets.BOT_COOKIE_ONE }}
-          BOT_CSRF_TOKEN_ONE: ${{ secrets.BOT_CSRF_TOKEN_ONE }}
-          BOT_COOKIE_TWO: ${{ secrets.BOT_COOKIE_TWO }}
-          BOT_CSRF_TOKEN_TWO: ${{ secrets.BOT_CSRF_TOKEN_TWO }}
+#        env:
+#          USERNAME: ${{ secrets.USERNAME }}
+#          PASSWORD: ${{ secrets.PASSWORD }}
+#          BOT_NAME: ${{ secrets.BOT_NAME }}
+#          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+#          BOT_USERNAME_ONE: ${{ secrets.BOT_USERNAME_ONE }}
+#          BOT_PASSWORD_ONE: ${{ secrets.BOT_PASSWORD_ONE }}
+#          BOT_USERNAME_TWO: ${{ secrets.BOT_USERNAME_TWO }}
+#          BOT_PASSWORD_TWO: ${{ secrets.BOT_PASSWORD_TWO }}
+#          BOT_COOKIE_ONE: ${{ secrets.BOT_COOKIE_ONE }}
+#          BOT_CSRF_TOKEN_ONE: ${{ secrets.BOT_CSRF_TOKEN_ONE }}
+#          BOT_COOKIE_TWO: ${{ secrets.BOT_COOKIE_TWO }}
+#          BOT_CSRF_TOKEN_TWO: ${{ secrets.BOT_CSRF_TOKEN_TWO }}
                   
-      - name: Build and push Docker images
-        run: docker compose build
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+         push: false
+         secret-envs: |
+           USERNAME=${{ secrets.USERNAME }}
+           PASSWORD=${{ secrets.PASSWORD }}
+           BOT_NAME=${{ secrets.BOT_NAME }}
+           BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+           BOT_USERNAME_ONE=${{ secrets.BOT_USERNAME_ONE }}
+           BOT_PASSWORD_ONE=${{ secrets.BOT_PASSWORD_ONE }}
+           BOT_USERNAME_TWO=${{ secrets.BOT_USERNAME_TWO }}
+           BOT_PASSWORD_TWO=${{ secrets.BOT_PASSWORD_TWO }}
+           BOT_COOKIE_ONE=${{ secrets.BOT_COOKIE_ONE }}
+           BOT_CSRF_TOKEN_ONE=${{ secrets.BOT_CSRF_TOKEN_ONE }}
+           BOT_COOKIE_TWO=${{ secrets.BOT_COOKIE_TWO }}
+           BOT_CSRF_TOKEN_TWO=${{ secrets.BOT_CSRF_TOKEN_TWO }}
 
       - name: Save Docker Images as .tar files
         run: |
-            docker save -o bot_main.tar bot_main:latest
-            docker save -o bot_scanner_one.tar bot_scanner_one:latest
-            docker save -o bot_scanner_two.tar bot_scanner_two:latest
+            docker save -o bot_main.tar linkedin-jobs-bot-new-bot_main:latest
+            docker save -o bot_scanner_one.tar linkedin-jobs-bot-new-bot_scanner_one:latest
+            docker save -o bot_scanner_two.tar linkedin-jobs-bot-new-bot_scanner_two:latest
 
 
       - name: Archive Docker Compose and Images
         run: tar czf deploy.tar.gz docker-compose.yml bot_main.tar bot_scanner_one.tar bot_scanner_two.tar
-            
-#
-#      - name: Archive Docker Compose
-#        run: tar czf docker-compose.tar.gz docker-compose.yml
+
 #  upload:
 #     runs-on: ubuntu-latest
 #     needs: build
@@ -63,14 +75,6 @@ jobs:
           source: "deploy.tar.gz"
           target: "/root"
 
-#        uses: appleboy/scp-action@v0.1.7
-#        with:
-#          host: ${{ VPS_HOST }}
-#          username: ${{ VPS_USER }}
-#          password: ${{ PASSWORD }}
-#          port: 22
-#          source: "docker-compose.tar.gz"
-#          target: "/root/${{ VPS_USER }}/"
 #  deploy:
 #    runs-on: ubuntu-latest
 #    needs: upload
