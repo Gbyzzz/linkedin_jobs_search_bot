@@ -1,14 +1,6 @@
 name: Deploy to VPS
 
 on:
-  workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
-    secrets:
-      token:
-        required: true
   push:
     branches: [ "master" ]
   pull_request:
