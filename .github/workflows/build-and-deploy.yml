@@ -15,9 +15,24 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Build
+        uses: hoverkraft-tech/compose-action@v2.0.1
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_USERNAME_ONE: ${{ secrets.BOT_USERNAME_ONE }}
+          BOT_PASSWORD_ONE: ${{ secrets.BOT_PASSWORD_ONE }}
+          BOT_USERNAME_TWO: ${{ secrets.BOT_USERNAME_TWO }}
+          BOT_PASSWORD_TWO: ${{ secrets.BOT_PASSWORD_TWO }}
+          BOT_COOKIE_ONE: ${{ secrets.BOT_COOKIE_ONE }}
+          BOT_CSRF_TOKEN_ONE: ${{ secrets.BOT_CSRF_TOKEN_ONE }}
+          BOT_COOKIE_TWO: ${{ secrets.BOT_COOKIE_TWO }}
+          BOT_CSRF_TOKEN_TWO: ${{ secrets.BOT_CSRF_TOKEN_TWO }}
 
-      - name: Set up Docker Build
-        uses: docker/setup-buildx-action@v3.6.1
+#      - name: Set up Docker Build
+#        uses: docker/setup-buildx-action@v3.6.1
 #        env:
 #          USERNAME: ${{ secrets.USERNAME }}
 #          PASSWORD: ${{ secrets.PASSWORD }}
@@ -31,24 +46,9 @@ jobs:
 #          BOT_CSRF_TOKEN_ONE: ${{ secrets.BOT_CSRF_TOKEN_ONE }}
 #          BOT_COOKIE_TWO: ${{ secrets.BOT_COOKIE_TWO }}
 #          BOT_CSRF_TOKEN_TWO: ${{ secrets.BOT_CSRF_TOKEN_TWO }}
-                  
-      - name: Build
-        uses: docker/build-push-action@v6
-        with:
-         push: false
-         secret-envs: |
-           USERNAME=${{ secrets.USERNAME }}
-           PASSWORD=${{ secrets.PASSWORD }}
-           BOT_NAME=${{ secrets.BOT_NAME }}
-           BOT_TOKEN=${{ secrets.BOT_TOKEN }}
-           BOT_USERNAME_ONE=${{ secrets.BOT_USERNAME_ONE }}
-           BOT_PASSWORD_ONE=${{ secrets.BOT_PASSWORD_ONE }}
-           BOT_USERNAME_TWO=${{ secrets.BOT_USERNAME_TWO }}
-           BOT_PASSWORD_TWO=${{ secrets.BOT_PASSWORD_TWO }}
-           BOT_COOKIE_ONE=${{ secrets.BOT_COOKIE_ONE }}
-           BOT_CSRF_TOKEN_ONE=${{ secrets.BOT_CSRF_TOKEN_ONE }}
-           BOT_COOKIE_TWO=${{ secrets.BOT_COOKIE_TWO }}
-           BOT_CSRF_TOKEN_TWO=${{ secrets.BOT_CSRF_TOKEN_TWO }}
+#
+#      - name: Build and push Docker images
+#        run: docker compose build
 
       - name: Save Docker Images as .tar files
         run: |
