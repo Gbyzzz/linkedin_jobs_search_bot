@@ -68,7 +68,7 @@ public class SearchParamsServiceImpl implements SearchParamsService {
 
     @Override
     public Optional<SearchParams> findNextSearchParams(Long userId, Long id) {
-        return searchParamsRepository.findTopByUserProfileChatIdAndIdGreaterThan(userId, id);
+        return searchParamsRepository.findTopByUserProfileChatIdAndIdGreaterThanOrderByIdAsc(userId, id);
     }
 
     @Override
