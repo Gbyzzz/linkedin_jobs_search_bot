@@ -1,8 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.service;
 
 import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,13 +21,13 @@ public interface SavedJobService {
 
     void delete(SavedJob job);
     int countSavedJobs(Long userId, SavedJob.ReplyState state);
-    int countSavedJobs(Long userId, SavedJob.ReplyState state, Long searchParamsId);
-    Optional<SavedJob> getNextSavedJob(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id);
+    int countSavedJobsBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId);
+    Optional<SavedJob> getNextSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id);
     Optional<SavedJob> getNextSavedJob(Long userId, SavedJob.ReplyState state, Long id);
-    Optional<SavedJob> getPrevSavedJob(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id);
+    Optional<SavedJob> getPrevSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id);
     Optional<SavedJob> getPrevSavedJob(Long userId, SavedJob.ReplyState state, Long id);
 
-    Optional<SavedJob> getLastSavedJob(Long userId, SavedJob.ReplyState state, Long searchParamsId);
+    Optional<SavedJob> getLastSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId);
     Optional<SavedJob> getLastSavedJob(Long userId, SavedJob.ReplyState state);
 
 }

@@ -14,7 +14,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,47 +33,47 @@ public class MessageServiceImpl implements MessageService {
         SendMessage sendMessage;
         Optional<SavedJob> job = Optional.empty();
         int count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB) :
-                savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
+                savedJobService.countSavedJobsBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
         switch (commands[1]) {
             case MessageText.FIRST -> {
                 page = 1;
                 currentNewJobId = 0L;
                 job = searchParamsId == null ?
                         savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
-                        savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
+                        savedJobService.getNextSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
             }
             case MessageText.PREVIOUS -> {
                 page = page - 1;
                 job = searchParamsId == null ?
                         savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
-                        savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
+                        savedJobService.getPrevSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
             }
             case MessageText.NEXT -> {
                 page = page + 1;
                 job = searchParamsId == null ?
                         savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
-                        savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
+                        savedJobService.getNextSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
             }
             case MessageText.LAST -> {
                 page = count;
                 job = searchParamsId == null ? savedJobService.getLastSavedJob(userId, SavedJob.ReplyState.NEW_JOB) :
-                        savedJobService.getLastSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
+                        savedJobService.getLastSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
             }
             case MessageText.DELETE -> {
                 SavedJob jobToDelete = savedJobService.getJobById(currentNewJobId);
                 jobToDelete.setReplyState(SavedJob.ReplyState.DELETED);
                 savedJobService.saveJob(jobToDelete);
                 count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB) :
-                        savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
+                        savedJobService.countSavedJobsBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
                 if (page < count) {
                     job = searchParamsId == null ?
                             savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
-                            savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
+                            savedJobService.getNextSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
                 } else {
                     page -= 1;
                     job = searchParamsId == null ?
                             savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
-                            savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
+                            savedJobService.getPrevSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
                 }
             }
             case MessageText.APPLY -> {
@@ -83,16 +82,16 @@ public class MessageServiceImpl implements MessageService {
                 jobToApply.setDateApplied(new Date(System.currentTimeMillis()));
                 savedJobService.saveJob(jobToApply);
                 count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB) :
-                        savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
+                        savedJobService.countSavedJobsBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId);
                 if (page < count) {
                     job = searchParamsId == null ?
                             savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
-                            savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
+                            savedJobService.getNextSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
                 } else {
                     page -= 1;
                     job = searchParamsId == null ?
                             savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
-                            savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
+                            savedJobService.getPrevSavedJobBySearchParams(userId, SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
                 }
             }
         }
@@ -114,47 +113,47 @@ public class MessageServiceImpl implements MessageService {
         SendMessage sendMessage;
         Optional<SavedJob> job = Optional.empty();
         int count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.APPLIED) :
-                savedJobService.countSavedJobs(userId, SavedJob.ReplyState.APPLIED, searchParamsId);
+                savedJobService.countSavedJobsBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId);
         switch (commands[1]) {
             case MessageText.FIRST -> {
                 page = 1;
                 currentNewJobId = 0L;
                 job = searchParamsId == null ?
                         savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.APPLIED, currentNewJobId) :
-                        savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
+                        savedJobService.getNextSavedJobBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
             }
             case MessageText.PREVIOUS -> {
                 page = page - 1;
                 job = searchParamsId == null ?
                         savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.APPLIED, currentNewJobId) :
-                        savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
+                        savedJobService.getPrevSavedJobBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
             }
             case MessageText.NEXT -> {
                 page = page + 1;
                 job = searchParamsId == null ?
                         savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.APPLIED, currentNewJobId) :
-                        savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
+                        savedJobService.getNextSavedJobBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
             }
             case MessageText.LAST -> {
                 page = count;
                 job = searchParamsId == null ? savedJobService.getLastSavedJob(userId, SavedJob.ReplyState.APPLIED) :
-                        savedJobService.getLastSavedJob(userId, SavedJob.ReplyState.APPLIED, searchParamsId);
+                        savedJobService.getLastSavedJobBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId);
             }
             case MessageText.REJECTED -> {
                 SavedJob jobToApply = savedJobService.getJobById(currentNewJobId);
                 jobToApply.setReplyState(SavedJob.ReplyState.REJECTED);
                 savedJobService.saveJob(jobToApply);
                 count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.APPLIED) :
-                        savedJobService.countSavedJobs(userId, SavedJob.ReplyState.APPLIED, searchParamsId);
+                        savedJobService.countSavedJobsBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId);
                 if (page < count) {
                     job = searchParamsId == null ?
                             savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.APPLIED, currentNewJobId) :
-                            savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
+                            savedJobService.getNextSavedJobBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
                 } else {
                     page -= 1;
                     job = searchParamsId == null ?
                             savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.APPLIED, currentNewJobId) :
-                            savedJobService.getPrevSavedJob(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
+                            savedJobService.getPrevSavedJobBySearchParams(userId, SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
                 }
             }
 
