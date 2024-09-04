@@ -69,15 +69,14 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
-    public int countSavedJobsBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId) {
-        return savedJobRepository.countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(userId, state,
-                searchParamsId);
+    public int countSavedJobsBySearchParams(SavedJob.ReplyState state, Long searchParamsId) {
+        return savedJobRepository.countSavedJobByReplyStateAndSearchParams_Id(state, searchParamsId);
     }
 
     @Override
-    public Optional<SavedJob> getNextSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id) {
-        return savedJobRepository.findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc
-                (userId, state, searchParamsId, id);
+    public Optional<SavedJob> getNextSavedJobBySearchParams(SavedJob.ReplyState state, Long searchParamsId, Long id) {
+        return savedJobRepository.findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc(state,
+                searchParamsId, id);
     }
 
     @Override
@@ -86,9 +85,9 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
-    public Optional<SavedJob> getPrevSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id) {
-        return savedJobRepository.findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc
-                (userId, state, searchParamsId, id);
+    public Optional<SavedJob> getPrevSavedJobBySearchParams(SavedJob.ReplyState state, Long searchParamsId, Long id) {
+        return savedJobRepository.findTopByReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc(state, searchParamsId,
+                id);
     }
 
     @Override
@@ -97,9 +96,9 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
-    public Optional<SavedJob> getLastSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId) {
-        return savedJobRepository.findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(
-                userId, state, searchParamsId, 0L);
+    public Optional<SavedJob> getLastSavedJobBySearchParams(SavedJob.ReplyState state, Long searchParamsId) {
+        return savedJobRepository.findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(state,
+                searchParamsId, 0L);
     }
 
     @Override

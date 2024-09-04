@@ -105,10 +105,10 @@ class SavedJobServiceImplTest implements PostgreSQLContainerInitializer {
 
     @Test
     void countSavedJobsBySearchParams() {
-        int newJobCount1 = savedJobService.countSavedJobsBySearchParams(1L, SavedJob.ReplyState.NEW_JOB, 1L);
-        int appliedCount1 = savedJobService.countSavedJobsBySearchParams(1L, SavedJob.ReplyState.APPLIED, 1L);
-        int newJobCount2 = savedJobService.countSavedJobsBySearchParams(2L, SavedJob.ReplyState.NEW_JOB, 3L);
-        int appliedCount2 = savedJobService.countSavedJobsBySearchParams(2L, SavedJob.ReplyState.APPLIED, 3L);
+        int newJobCount1 = savedJobService.countSavedJobsBySearchParams(SavedJob.ReplyState.NEW_JOB, 1L);
+        int appliedCount1 = savedJobService.countSavedJobsBySearchParams(SavedJob.ReplyState.APPLIED, 1L);
+        int newJobCount2 = savedJobService.countSavedJobsBySearchParams(SavedJob.ReplyState.NEW_JOB, 3L);
+        int appliedCount2 = savedJobService.countSavedJobsBySearchParams(SavedJob.ReplyState.APPLIED, 3L);
 
         assertEquals(18, newJobCount1);
         assertEquals(10, appliedCount1);
