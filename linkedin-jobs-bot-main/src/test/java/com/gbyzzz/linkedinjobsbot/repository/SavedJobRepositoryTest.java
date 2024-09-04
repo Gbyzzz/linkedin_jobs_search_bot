@@ -86,14 +86,14 @@ class SavedJobRepositoryTest implements PostgreSQLContainerInitializer {
     }
 
     @Test
-    void countSavedJobsReplyStateAndSearchParams_Id() {
-        int newCount1 = savedJobRepository.countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(1L,
+    void countSavedJobByReplyStateAndSearchParams_Id() {
+        int newCount1 = savedJobRepository.countSavedJobByReplyStateAndSearchParams_Id(
                 SavedJob.ReplyState.NEW_JOB, 1L);
-        int newCount2 = savedJobRepository.countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(1L,
+        int newCount2 = savedJobRepository.countSavedJobByReplyStateAndSearchParams_Id(
                 SavedJob.ReplyState.NEW_JOB, 2L);
-        int newCount3 = savedJobRepository.countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(2L,
+        int newCount3 = savedJobRepository.countSavedJobByReplyStateAndSearchParams_Id(
                 SavedJob.ReplyState.NEW_JOB, 3L);
-        int newCount4 = savedJobRepository.countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(2L,
+        int newCount4 = savedJobRepository.countSavedJobByReplyStateAndSearchParams_Id(
                 SavedJob.ReplyState.NEW_JOB, 4L);
 
         assertEquals(18, newCount1);
@@ -103,10 +103,10 @@ class SavedJobRepositoryTest implements PostgreSQLContainerInitializer {
     }
 
     @Test
-    void findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc() {
+    void findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc() {
         Optional<SavedJob> first = savedJobRepository
-                .findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc(1L,
-                SavedJob.ReplyState.NEW_JOB, 1L, 0L);
+                .findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc(SavedJob.ReplyState.NEW_JOB,
+                        1L, 0L);
 
         assertEquals(10L, first.get().getJobId());
     }
@@ -126,10 +126,10 @@ class SavedJobRepositoryTest implements PostgreSQLContainerInitializer {
     }
 
     @Test
-    void findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc() {
+    void findTopByReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc() {
         Optional<SavedJob> prev = savedJobRepository
-                .findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc(1L,
-                SavedJob.ReplyState.NEW_JOB, 1L, 87L);
+                .findTopByReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc(
+                        SavedJob.ReplyState.NEW_JOB, 1L, 87L);
         assertEquals(73L, prev.get().getJobId());
     }
 
@@ -143,18 +143,19 @@ class SavedJobRepositoryTest implements PostgreSQLContainerInitializer {
     }
 
     @Test
-    void findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc() {
+    void findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc() {
         Optional<SavedJob> last1 = savedJobRepository
-                .findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(1L,
-                SavedJob.ReplyState.NEW_JOB, 1L, 0L);
+                .findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(
+                        SavedJob.ReplyState.NEW_JOB, 1L, 0L);
 
         Optional<SavedJob> last2 = savedJobRepository
-                .findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(1L,
+                .findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(
                         SavedJob.ReplyState.NEW_JOB, 1L, 15L);
 
         assertEquals(88L, last1.get().getJobId());
         assertEquals(88L, last2.get().getJobId());
     }
+
 
     @Test
     void findTopByUserProfileChatIdAndReplyStateAndIdGreaterThanOrderByIdDesc() {
