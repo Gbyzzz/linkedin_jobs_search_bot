@@ -21,13 +21,13 @@ public interface SavedJobService {
 
     void delete(SavedJob job);
     int countSavedJobs(Long userId, SavedJob.ReplyState state);
-    int countSavedJobsBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId);
-    Optional<SavedJob> getNextSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id);
+    int countSavedJobsBySearchParams(SavedJob.ReplyState state, Long searchParamsId);
+    Optional<SavedJob> getNextSavedJobBySearchParams(SavedJob.ReplyState state, Long searchParamsId, Long id);
     Optional<SavedJob> getNextSavedJob(Long userId, SavedJob.ReplyState state, Long id);
-    Optional<SavedJob> getPrevSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId, Long id);
+    Optional<SavedJob> getPrevSavedJobBySearchParams(SavedJob.ReplyState state, Long searchParamsId, Long id);
     Optional<SavedJob> getPrevSavedJob(Long userId, SavedJob.ReplyState state, Long id);
 
-    Optional<SavedJob> getLastSavedJobBySearchParams(Long userId, SavedJob.ReplyState state, Long searchParamsId);
+    Optional<SavedJob> getLastSavedJobBySearchParams(SavedJob.ReplyState state, Long searchParamsId);
     Optional<SavedJob> getLastSavedJob(Long userId, SavedJob.ReplyState state);
 
 }

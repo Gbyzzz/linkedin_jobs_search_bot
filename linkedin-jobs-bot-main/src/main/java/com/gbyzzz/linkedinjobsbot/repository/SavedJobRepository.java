@@ -23,24 +23,43 @@ public interface SavedJobRepository extends JpaRepository<SavedJob, Long> {
 
     int countSavedJobsByReplyStateAndUserProfile_ChatId(SavedJob.ReplyState state, Long userId);
 
-    int countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(Long userId, SavedJob.ReplyState state,
-                                                                          Long searchParamsId);
+//    int countSavedJobsByUserProfile_ChatIdAndReplyStateAndSearchParams_Id(Long userId, SavedJob.ReplyState state,
+//                                                                          Long searchParamsId);
 
-    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc(
-            Long userProfileChatId, SavedJob.ReplyState replyState, Long searchParamsId, Long id);
+    int countSavedJobByReplyStateAndSearchParams_Id(SavedJob.ReplyState state, Long searchParamsId);
+
+//    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc(
+//            Long userProfileChatId, SavedJob.ReplyState replyState, Long searchParamsId, Long id);
+
+    Optional<SavedJob> findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdAsc(
+            SavedJob.ReplyState replyState, Long searchParamsId, Long id);
 
     Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndIdGreaterThanOrderByIdAsc(
             Long userProfileChatId, SavedJob.ReplyState replyState, Long id);
 
-    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc(
-            Long userProfileChatId, SavedJob.ReplyState replyState, Long searchParamsId, Long id);
+
+
+//    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc(
+//            Long userProfileChatId, SavedJob.ReplyState replyState, Long searchParamsId, Long id);
+
+    Optional<SavedJob> findTopByReplyStateAndSearchParams_IdAndIdLessThanOrderByIdDesc(SavedJob.ReplyState replyState,
+                                                                                       Long searchParamsId, Long id);
+
+
 
     Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndIdLessThanOrderByIdDesc(
             Long userProfileChatId, SavedJob.ReplyState replyState, Long id);
 
-    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(
-            Long userProfileChatId, SavedJob.ReplyState replyState, Long searchParamsId, Long id);
 
-    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndIdGreaterThanOrderByIdDesc(
-            Long userProfileChatId, SavedJob.ReplyState replyState, Long id);
+//
+//    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(
+//            Long userProfileChatId, SavedJob.ReplyState replyState, Long searchParamsId, Long id);
+
+    Optional<SavedJob> findTopByReplyStateAndSearchParams_IdAndIdGreaterThanOrderByIdDesc(SavedJob.ReplyState replyState,
+                                                                                          Long searchParamsId, Long id);
+
+
+
+    Optional<SavedJob> findTopByUserProfileChatIdAndReplyStateAndIdGreaterThanOrderByIdDesc(Long userProfileChatId,
+                                                                                            SavedJob.ReplyState replyState, Long id);
 }
