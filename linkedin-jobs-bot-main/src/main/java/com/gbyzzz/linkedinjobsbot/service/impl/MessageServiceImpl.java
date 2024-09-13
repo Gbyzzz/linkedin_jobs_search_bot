@@ -98,7 +98,7 @@ public class MessageServiceImpl implements MessageService {
         if (!job.isEmpty()) {
             sendMessage = new SendMessage(userId.toString(), makeNewJobsReply(page, job.get(), count));
             sendMessage.setReplyMarkup(paginationKeyboard.getReplyButtons(UserProfile.BotState.NEW.name(),
-                    MessageText.ALL, page, count, job.get().getId()));
+                    commands[2], page, count, job.get().getId()));
         } else {
             sendMessage = new SendMessage(userId.toString(), MessageText.GET_NEW_JOBS_REPLY);
         }
