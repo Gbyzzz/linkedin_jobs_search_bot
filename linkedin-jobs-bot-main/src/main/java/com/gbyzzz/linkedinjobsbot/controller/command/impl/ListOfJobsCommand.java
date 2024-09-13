@@ -3,25 +3,16 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.impl.search.AddSearchCommand;
-import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
-import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.service.MessageService;
 import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
 import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Component(MessageText.WATCH_LIST_OF_JOBS)
 @AllArgsConstructor
@@ -35,8 +26,7 @@ public class ListOfJobsCommand implements Command {
     @Override
     public Reply execute(Update update) throws IOException {
         Long id = update.getCallbackQuery().getMessage().getChatId();
-        String[] command = update.getCallbackQuery().getData()
-                .split(MessageText.BUTTON_VALUE_SEPARATOR);
+        String[] command = update.getCallbackQuery().getData().split(MessageText.BUTTON_VALUE_SEPARATOR);
         SendMessage sendMessage = null;
 
         switch (command[0]) {
