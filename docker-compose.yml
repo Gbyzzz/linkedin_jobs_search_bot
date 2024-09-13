@@ -1,3 +1,4 @@
+name: linkedin_jobs_bot
 services:
   bot_main:
     build: ./linkedin-jobs-bot-main
