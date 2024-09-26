@@ -37,6 +37,7 @@ public class SavedJob {
 
     @ManyToOne
     @JoinColumn(name = "user_chat_id")
+//    @Fetch(value = FetchMode.JOIN)
     private UserProfile userProfile;
 
     @JsonIgnore
