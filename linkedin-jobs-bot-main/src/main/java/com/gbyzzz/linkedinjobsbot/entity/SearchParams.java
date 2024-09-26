@@ -48,7 +48,7 @@ public class SearchParams {
     private Map<String, String> searchFilters;
 
     @ToString.Include
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "searchParams", fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "searchParams")
     @JoinTable( name = "filter_params", joinColumns = @JoinColumn(name = "search_params_id"))
     private FilterParams filterParams;
 
