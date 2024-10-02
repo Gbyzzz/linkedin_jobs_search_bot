@@ -65,7 +65,7 @@ public class MessageServiceImpl implements MessageService {
                 savedJobService.saveJob(jobToDelete);
                 count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB) :
                         savedJobService.countSavedJobsBySearchParams(SavedJob.ReplyState.NEW_JOB, searchParamsId);
-                if (page < count) {
+                if (page <= count) {
                     job = searchParamsId == null ?
                             savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
                             savedJobService.getNextSavedJobBySearchParams(SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
@@ -83,7 +83,7 @@ public class MessageServiceImpl implements MessageService {
                 savedJobService.saveJob(jobToApply);
                 count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.NEW_JOB) :
                         savedJobService.countSavedJobsBySearchParams(SavedJob.ReplyState.NEW_JOB, searchParamsId);
-                if (page < count) {
+                if (page <= count) {
                     job = searchParamsId == null ?
                             savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.NEW_JOB, currentNewJobId) :
                             savedJobService.getNextSavedJobBySearchParams(SavedJob.ReplyState.NEW_JOB, searchParamsId, currentNewJobId);
@@ -145,7 +145,7 @@ public class MessageServiceImpl implements MessageService {
                 savedJobService.saveJob(jobToApply);
                 count = searchParamsId == null ? savedJobService.countSavedJobs(userId, SavedJob.ReplyState.APPLIED) :
                         savedJobService.countSavedJobsBySearchParams(SavedJob.ReplyState.APPLIED, searchParamsId);
-                if (page < count) {
+                if (page <= count) {
                     job = searchParamsId == null ?
                             savedJobService.getNextSavedJob(userId, SavedJob.ReplyState.APPLIED, currentNewJobId) :
                             savedJobService.getNextSavedJobBySearchParams(SavedJob.ReplyState.APPLIED, searchParamsId, currentNewJobId);
@@ -197,7 +197,7 @@ public class MessageServiceImpl implements MessageService {
             case MessageText.DELETE -> {
                 searchParamsService.deleteById(currentSearchParamsId);
                 count = searchParamsService.getCountByUserId(userId);
-                if(page < count) {
+                if(page <= count) {
                     searchParams = searchParamsService.findNextSearchParams(userId, currentSearchParamsId);
                 } else {
                     page = page - 1;
