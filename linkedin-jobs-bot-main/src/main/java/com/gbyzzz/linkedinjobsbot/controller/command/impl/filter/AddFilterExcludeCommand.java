@@ -1,12 +1,12 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.filter;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
-import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -26,11 +26,15 @@ public class AddFilterExcludeCommand implements Command {
     public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
-                .getChatId()).get();
+                .getChatId());
         SearchParams searchParams = redisService.getFromTempRepository(id);
         if (!update.getMessage().getText().equals(MessageText.PLUS)) {
-            String [] keywords = update.getMessage().getText().split("[\\s\u00A0]+");
-            searchParams.getFilterParams().setExcludeWordsFromTitle(keywords);
+            if(update.getMessage().getText().equals(MessageText.MINUS)) {
+                searchParams.getFilterParams().setIncludeWordsInDescription(MessageText.EMPTY_STRING_ARRAY);
+            } else {
+                String[] keywords = update.getMessage().getText().split(MessageText.SPACES);
+                searchParams.getFilterParams().setExcludeWordsFromTitle(keywords);
+            }
             redisService.saveToTempRepository(searchParams, id);
         }
         userProfile.setBotState(UserProfile.BotState.NEW);

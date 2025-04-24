@@ -1,22 +1,22 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
-import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
-import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
-import com.gbyzzz.linkedinjobsbot.service.*;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SavedJobService;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SearchParamsService;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Component(MessageText.MAKE_FIRST_SEARCH)
@@ -45,7 +45,7 @@ public class MakeFirstSearchCommand implements Command {
                 searchParamsService.save(searchParams);
                 savedJobService.deleteAll(jobsToDelete);
             }
-            UserProfile userProfile = userProfileService.getUserProfileById(id).get();
+            UserProfile userProfile = userProfileService.getUserProfileById(id);
             userProfile.setBotState(UserProfile.BotState.NEW);
             userProfileService.save(userProfile);
             sendMessage = new SendMessage(id.toString(), MessageText.SAVED_SUCCESSFUL);

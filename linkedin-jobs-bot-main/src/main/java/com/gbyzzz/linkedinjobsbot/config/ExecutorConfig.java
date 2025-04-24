@@ -1,6 +1,5 @@
 package com.gbyzzz.linkedinjobsbot.config;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

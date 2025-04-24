@@ -1,6 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;

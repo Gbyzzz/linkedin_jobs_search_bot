@@ -1,4 +1,9 @@
 rootProject.name = 'linkedin-jobs-bot'
 
-includeBuild 'linkedin-jobs-bot-main'
-includeBuild 'job-scanner'
+include 'linkedin-jobs-bot-main'
+include 'job-scanner'
+include 'modules:commons'
+include 'modules:postgresdb'
+include 'modules:mongodb'
+include 'modules:redisdb'
+include 'modules:kafka'

@@ -1,14 +1,14 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.search;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
-import com.gbyzzz.linkedinjobsbot.entity.FilterParams;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
-import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.FilterParams;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -33,7 +33,7 @@ public class AddWorkplaceCommand implements Command {
         Reply reply;
         SearchParams searchParams = redisService.getFromTempRepository(id);
         if (data.equals(MessageText.NEXT)) {
-            UserProfile userProfile = userProfileService.getUserProfileById(id).get();
+            UserProfile userProfile = userProfileService.getUserProfileById(id);
             userProfile.setBotState(UserProfile.BotState.ADD_FILTER_INCLUDE);
             userProfileService.save(userProfile);
             String workplaceType = getWorkplaceValue();
