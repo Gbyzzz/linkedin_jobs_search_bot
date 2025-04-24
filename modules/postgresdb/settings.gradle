@@ -1,0 +1,4 @@
+rootProject.name = 'postgresdb'
+
+include 'modules:kafka'
+project(":modules:kafka").projectDir = new File("../kafka")

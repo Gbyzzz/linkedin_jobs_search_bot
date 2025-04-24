@@ -1,8 +1,8 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;

@@ -1,19 +1,17 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl.search;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.LocationKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
-import com.gbyzzz.linkedinjobsbot.service.RedisService;
-import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.HashMap;
 
 @Component(MessageText.ADD_KEYWORDS)
 @AllArgsConstructor
@@ -26,12 +24,10 @@ public class AddKeywordsCommand implements Command {
     @Override
     public Reply execute(Update update) {
         Long id = update.getMessage().getChatId();
-        UserProfile userProfile = userProfileService.getUserProfileById(id).orElse(null);
+        UserProfile userProfile = userProfileService.getUserProfileById(id);
         SearchParams searchParams = redisService.getFromTempRepository(id);
         if (searchParams == null) {
-            searchParams = new SearchParams();
-            searchParams.setSearchFilters(new HashMap<>());
-            searchParams.setUserProfile(userProfile);
+            searchParams = new SearchParams(userProfile);
         }
         String[] keywords = searchParams.getKeywords();
         if (!update.getMessage().getText().equals(MessageText.PLUS)) {

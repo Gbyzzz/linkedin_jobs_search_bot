@@ -10,10 +10,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class SavedJobRepositoryTest implements PostgreSQLContainerInitializer {
 
     @Autowired
@@ -137,7 +137,7 @@ class SavedJobRepositoryTest implements PostgreSQLContainerInitializer {
     void findTopByUserProfileChatIdAndReplyStateAndIdLessThanOrderByIdDesc() {
         Optional<SavedJob> prev = savedJobRepository
                 .findTopByUserProfileChatIdAndReplyStateAndIdLessThanOrderByIdDesc(1L,
-                SavedJob.ReplyState.NEW_JOB, 87L);
+                        SavedJob.ReplyState.NEW_JOB, 87L);
 
         assertEquals(83L, prev.get().getJobId());
     }

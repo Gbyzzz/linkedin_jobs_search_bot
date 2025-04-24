@@ -1,13 +1,16 @@
 package com.gbyzzz.linkedinjobsbot.service.impl;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.PaginationKeyboard;
-import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
-import com.gbyzzz.linkedinjobsbot.entity.SearchParams;
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.Experience;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.JobTypes;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.Workplace;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SavedJobService;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.MessageService;
-import com.gbyzzz.linkedinjobsbot.service.SavedJobService;
-import com.gbyzzz.linkedinjobsbot.service.SearchParamsService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
