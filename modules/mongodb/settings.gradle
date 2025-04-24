@@ -1,0 +1,4 @@
+rootProject.name = 'mongodb'
+
+include 'modules:commons'
+project(":modules:commons").projectDir = new File("../commons")

@@ -4,18 +4,17 @@ services:
     build: ./linkedin-jobs-bot-main
     restart: always
     container_name: bot_main
-    ports:
-      - "8888:8080"
     network_mode: host
     working_dir: /app
     environment:
+      - SERVER_PORT=8090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/linkedin_jobs_bot
       - SPRING_DATASOURCE_PASSWORD=${PASSWORD}
       - SPRING_DATA_MONGODB_HOST=localhost
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=jobs_db
       - SPRING_DATA_MONGODB_PASSWORD=${PASSWORD}
-      - SPRING_DATA_MONGODB_USERNAME=${USERNAME}
+      - SPRING_DATA_MONGODB_USERNAME=${USER}
       - SPRING_DATA_REDIS_HOST=localhost
       - SPRING_DATA_REDIS_PASSWORD=${PASSWORD}
       - BOT_NAME=${BOT_NAME}
@@ -39,17 +38,15 @@ services:
     container_name: bot_scanner_one
     depends_on:
       - bot_main
-    ports:
-      - "8081:8081"
     network_mode: host
     working_dir: /app
     environment:
-      - SERVER_PORT=8081
+      - SERVER_PORT=8091
       - SPRING_DATA_MONGODB_HOST=localhost
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=jobs_db
       - SPRING_DATA_MONGODB_PASSWORD=${PASSWORD}
-      - SPRING_DATA_MONGODB_USERNAME=${USERNAME}
+      - SPRING_DATA_MONGODB_USERNAME=${USER}
       - BOT_USERNAME=${BOT_USERNAME_ONE}
       - BOT_PASSWORD=${BOT_PASSWORD_ONE}
       - BOT_COOKIE=${BOT_COOKIE_ONE}
@@ -73,17 +70,15 @@ services:
     container_name: bot_scanner_two
     depends_on:
       - bot_main
-    ports:
-      - "8082:8082"
     network_mode: host
     working_dir: /app
     environment:
-      - SERVER_PORT=8082
+      - SERVER_PORT=8092
       - SPRING_DATA_MONGODB_HOST=localhost
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=jobs_db
       - SPRING_DATA_MONGODB_PASSWORD=${PASSWORD}
-      - SPRING_DATA_MONGODB_USERNAME=${USERNAME}
+      - SPRING_DATA_MONGODB_USERNAME=${USER}
       - BOT_USERNAME=${BOT_USERNAME_TWO}
       - BOT_PASSWORD=${BOT_PASSWORD_TWO}
       - BOT_COOKIE=${BOT_COOKIE_TWO}

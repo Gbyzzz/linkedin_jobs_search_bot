@@ -1,1 +1,10 @@
 rootProject.name = 'job-scanner'
+
+include 'modules:commons'
+project(":modules:commons").projectDir = new File("../modules/commons")
+
+include 'modules:mongodb'
+project(":modules:mongodb").projectDir = new File("../modules/mongodb")
+
+include 'modules:kafka'
+project(":modules:kafka").projectDir = new File("../modules/kafka")

@@ -1,9 +1,9 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
-import com.gbyzzz.linkedinjobsbot.service.UserProfileService;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

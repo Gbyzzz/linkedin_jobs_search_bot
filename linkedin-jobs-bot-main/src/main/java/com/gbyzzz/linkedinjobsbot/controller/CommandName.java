@@ -1,6 +1,8 @@
 package com.gbyzzz.linkedinjobsbot.controller;
 
-import com.gbyzzz.linkedinjobsbot.entity.UserProfile;
+
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;

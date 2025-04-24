@@ -1,6 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.controller.command.keyboard;
 
-import com.gbyzzz.linkedinjobsbot.controller.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -73,9 +73,10 @@ public class WorkplaceKeyboard {
             }
         }
         if (!value.isEmpty()) {
-            value.replace(value.length() - 1, value.length(), MessageText.EMPTY);
+           return value.replace(value.length() - 1, value.length(), MessageText.EMPTY).toString();
+        } else {
+            return MessageText.EMPTY;
         }
-        return value.toString();
     }
 
     public static void putWorkplaceValue(String value) {

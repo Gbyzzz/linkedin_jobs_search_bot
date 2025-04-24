@@ -1,0 +1,3 @@
+rootProject.name = 'linkedin-jobs-bot-entity-service'
+include 'kafka'
+project(":kafka").projectDir = new File("../kafka")
