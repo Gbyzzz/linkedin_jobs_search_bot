@@ -3,6 +3,9 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.kafka.service.KafkaService;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.dto.mapper.SearchParamsDTOMapper;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.dto.mapper.SearchParamsTimeRangeDTOMapper;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
@@ -27,13 +30,17 @@ public class MakeFirstSearchCommand implements Command {
     private final RedisService redisService;
     private final SavedJobService savedJobService;
     private final UserProfileService userProfileService;
+    private final SearchParamsDTOMapper searchParamsDtoMapper;
+    private final KafkaService kafkaService;
+    private final SearchParamsTimeRangeDTOMapper searchParamsTimeRangeDTOMapper;
 
 
     @Override
     public Reply execute(Update update) throws IOException {
         Long id = update.getMessage().getChatId();
-        SearchParams searchParams = redisService.getFromTempRepository(id);
+        SearchParams searchParams = searchParamsDtoMapper.toEntity(redisService.getFromTempRepository(id));
         searchParams.getFilterParams().setSearchParams(searchParams);
+        searchParams.setUserProfile(userProfileService.getUserProfileById(id));
         SendMessage sendMessage;
         if(!searchParamsService.existSearchParam(searchParams)) {
             if(searchParams.getSavedJobs() == null) {
@@ -49,11 +56,13 @@ public class MakeFirstSearchCommand implements Command {
             userProfile.setBotState(UserProfile.BotState.NEW);
             userProfileService.save(userProfile);
             sendMessage = new SendMessage(id.toString(), MessageText.SAVED_SUCCESSFUL);
+            kafkaService.sendMessage("to_search",
+                    searchParamsTimeRangeDTOMapper.toDTO(searchParams, 0L));
         } else {
             sendMessage = new SendMessage(id.toString(),
                     MessageText.MAKE_FIRST_SEARCH_PARAMS_ALREADY_EXISTS);
         }
-        redisService.deleteFromTempRepository(id);
+//        redisService.deleteFromTempRepository(id);
         return new Reply(sendMessage, false);
     }
 

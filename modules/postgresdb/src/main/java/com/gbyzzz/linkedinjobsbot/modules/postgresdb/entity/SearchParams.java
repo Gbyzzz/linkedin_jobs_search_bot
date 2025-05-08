@@ -33,6 +33,7 @@ public class SearchParams {
     private String location;
 
     @OneToOne()
+    @JsonIgnore
     @JoinColumn(name = "user_chat_id")
     private UserProfile userProfile;
 

@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.impl;
 
+
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.repository.SavedJobRepository;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SavedJobService;

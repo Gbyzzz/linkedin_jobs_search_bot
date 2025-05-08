@@ -1,6 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.type;
 
-import com.gbyzzz.linkedinjobsbotentityservice.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
@@ -34,8 +34,8 @@ public class PGSavedJobReplyState implements UserType<SavedJob.ReplyState> {
 
     @Override
     public SavedJob.ReplyState nullSafeGet(ResultSet rs, int position,
-                                            SharedSessionContractImplementor session,
-                                            Object owner) throws SQLException {
+                                           SharedSessionContractImplementor session,
+                                           Object owner) throws SQLException {
         String value = rs.getString(position);
         return (value != null) ? SavedJob.ReplyState.valueOf(value) : null;
     }
@@ -70,7 +70,7 @@ public class PGSavedJobReplyState implements UserType<SavedJob.ReplyState> {
 
     @Override
     public SavedJob.ReplyState replace(SavedJob.ReplyState detached, SavedJob.ReplyState managed,
-                                        Object owner) {
+                                       Object owner) {
         return detached;
     }
 }

@@ -5,7 +5,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
@@ -33,7 +33,7 @@ public class AddExperienceCommand implements Command {
         SendMessage sendMessage;
         Long id = update.getCallbackQuery().getMessage().getChatId();
         Reply reply;
-        SearchParams searchParams = redisService.getFromTempRepository(id);
+        SearchParamsDTO searchParams = redisService.getFromTempRepository(id);
         String data = update.getCallbackQuery().getData();
         StringBuilder stringBuilder = new StringBuilder();
         if (data.equals(MessageText.NEXT)) {
@@ -44,10 +44,10 @@ public class AddExperienceCommand implements Command {
             String experience = getExperienceValue();
 
             if (!experience.isEmpty()) {
-                searchParams.getSearchFilters().put(MessageText.EXPERIENCE, experience);
+                searchParams.searchFilters().put(MessageText.EXPERIENCE, experience);
                 redisService.saveToTempRepository(searchParams, id);
             }
-            if (searchParams.getId() != null) {
+            if (searchParams.id() != null) {
                 stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
                         .append(MessageText.ADD_EXPERIENCE_REPLY_NEXT);
             } else {
@@ -55,15 +55,15 @@ public class AddExperienceCommand implements Command {
             }
             sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
             setJobTypeKeyboardState(false);
-            if (searchParams.getSearchFilters().get(MessageText.JOB_TYPE) != null) {
-                PutJobTypeValue(searchParams.getSearchFilters().get(MessageText.JOB_TYPE));
+            if (searchParams.searchFilters().get(MessageText.JOB_TYPE) != null) {
+                PutJobTypeValue(searchParams.searchFilters().get(MessageText.JOB_TYPE));
             }
             sendMessage.setReplyMarkup(jobTypeKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, false);
         } else {
             getExperienceCallbackAction(data);
 
-            if (searchParams.getId() != null) {
+            if (searchParams.id() != null) {
                 stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
                         .append(MessageText.ADD_EXPERIENCE_REPLY);
             } else {

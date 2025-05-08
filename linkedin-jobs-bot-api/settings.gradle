@@ -1,0 +1,16 @@
+rootProject.name = 'linkedin-jobs-bot-api'
+
+include 'modules:postgresdb'
+project(":modules:postgresdb").projectDir = new File("../modules/postgresdb")
+
+include 'modules:mongodb'
+project(":modules:mongodb").projectDir = new File("../modules/mongodb")
+
+include 'modules:dto'
+project(":modules:dto").projectDir = new File("../modules/dto")
+
+include 'modules:commons'
+project(":modules:commons").projectDir = new File("../modules/commons")
+
+include 'modules:kafka'
+project(":modules:kafka").projectDir = new File("../modules/kafka")
