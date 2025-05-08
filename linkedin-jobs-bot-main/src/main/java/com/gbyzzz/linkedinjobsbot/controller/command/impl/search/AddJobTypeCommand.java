@@ -5,7 +5,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.JobTypeKeyboard;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
@@ -35,7 +35,7 @@ public class AddJobTypeCommand implements Command {
         String data = update.getCallbackQuery().getData();
         Reply reply;
         StringBuilder stringBuilder = new StringBuilder();
-        SearchParams searchParams = redisService.getFromTempRepository(id);
+        SearchParamsDTO searchParams = redisService.getFromTempRepository(id);
         if (data.equals(MessageText.NEXT)) {
             UserProfile userProfile = userProfileService.getUserProfileById(id);
             userProfile.setBotState(UserProfile.BotState.ADD_WORKPLACE);
@@ -43,26 +43,26 @@ public class AddJobTypeCommand implements Command {
 
             String jobType = getJobTypeValue();
             if (!jobType.isEmpty()) {
-                searchParams.getSearchFilters().put(MessageText.JOB_TYPE, jobType);
+                searchParams.searchFilters().put(MessageText.JOB_TYPE, jobType);
                 redisService.saveToTempRepository(searchParams, id);
             }
             setWorkplaceKeyboardState(false);
-            if(searchParams.getId() != null) {
+            if(searchParams.id() != null) {
                 stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
                         .append(MessageText.ADD_JOB_TYPE_REPLY_NEXT);
             } else {
                 stringBuilder.append(MessageText.ADD_JOB_TYPE_REPLY_NEXT);
             }
             sendMessage = new SendMessage(id.toString(), stringBuilder.toString());
-            if (searchParams.getSearchFilters().get(MessageText.WORKPLACE_TYPE) != null) {
-                putWorkplaceValue(searchParams.getSearchFilters().get(MessageText.WORKPLACE_TYPE));
+            if (searchParams.searchFilters().get(MessageText.WORKPLACE_TYPE) != null) {
+                putWorkplaceValue(searchParams.searchFilters().get(MessageText.WORKPLACE_TYPE));
             }
             sendMessage.setReplyMarkup(workplaceKeyboard.getReplyButtons());
             reply = new Reply(sendMessage, false);
         } else {
             getJobTypeCallbackAction(data);
 
-            if(searchParams.getId() != null) {
+            if(searchParams.id() != null) {
                 stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
                         .append(MessageText.ADD_LOCATION_REPLY);
             } else {

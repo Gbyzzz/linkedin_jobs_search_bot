@@ -1,6 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.converter;
 
-import com.gbyzzz.linkedinjobsbotentityservice.utils.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

@@ -1,7 +1,6 @@
 package com.gbyzzz.jobscanner.service;
 
-
-import com.gbyzzz.linkedinjobsbot.modules.commons.dto.SearchParamsTimeRangeDTO;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsTimeRangeDTO;
 
 import java.io.IOException;
 

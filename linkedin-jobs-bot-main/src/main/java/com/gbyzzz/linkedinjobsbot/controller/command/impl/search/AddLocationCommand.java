@@ -4,7 +4,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.ExperienceKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
@@ -28,19 +28,20 @@ public class AddLocationCommand implements Command {
     public Reply execute(Update update) {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         SendMessage sendMessage;
-        SearchParams searchParams = redisService.getFromTempRepository(id);
-        searchParams.setLocation(update.getCallbackQuery().getData());
-        redisService.saveToTempRepository(searchParams, id);
+        SearchParamsDTO searchParams = redisService.getFromTempRepository(id);
+        redisService.saveToTempRepository(new SearchParamsDTO(searchParams.id(), searchParams.keywords(),
+                update.getCallbackQuery().getData(), searchParams.searchFilters(),
+                searchParams.filterParams()), id);
         UserProfile userProfile = userProfileService
                 .getUserProfileById(id);
         userProfile.setBotState(UserProfile.BotState.ADD_EXPERIENCE);
         userProfileService.save(userProfile);
         setExperienceKeyboardState(false);
-        if (searchParams.getSearchFilters().get(MessageText.EXPERIENCE) != null) {
-            putExperienceValue(searchParams.getSearchFilters().get(MessageText.EXPERIENCE));
+        if (searchParams.searchFilters().get(MessageText.EXPERIENCE) != null) {
+            putExperienceValue(searchParams.searchFilters().get(MessageText.EXPERIENCE));
         }
         StringBuilder stringBuilder = new StringBuilder();
-        if(searchParams.getId() != null) {
+        if(searchParams.id() != null) {
             stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
                     .append(MessageText.ADD_LOCATION_REPLY);
         } else {

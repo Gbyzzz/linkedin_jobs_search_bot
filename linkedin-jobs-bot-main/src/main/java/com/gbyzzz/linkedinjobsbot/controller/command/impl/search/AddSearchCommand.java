@@ -3,7 +3,7 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl.search;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
@@ -26,12 +26,12 @@ public class AddSearchCommand implements Command {
         UserProfile userProfile = userProfileService.getUserProfileById(id);
         userProfile.setBotState(UserProfile.BotState.ADD_KEYWORDS);
         userProfileService.save(userProfile);
-        SearchParams searchParams = redisService.getFromTempRepository(id);
+        SearchParamsDTO searchParams = redisService.getFromTempRepository(id);
 //        SendMessage sendMessage;
         StringBuilder stringBuilder;
         if(searchParams != null) {
             stringBuilder = new StringBuilder(MessageText.EDIT_KEYWORDS_REPLY);
-            for (String keyword : searchParams.getKeywords()){
+            for (String keyword : searchParams.keywords()){
                 stringBuilder.append(MessageText.TWO_SPACES).append(keyword)
                         .append(MessageText.NEW_LINE);
             }
