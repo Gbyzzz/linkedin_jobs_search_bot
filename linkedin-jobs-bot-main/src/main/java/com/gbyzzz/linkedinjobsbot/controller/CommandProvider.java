@@ -23,16 +23,19 @@ final class CommandProvider {
                 update.getMessage().getChatId();
         CommandName commandName = null;
 //        Optional<UserProfile> userProfile = userProfileService.getUserProfileById(id);
-        if (!userProfileService.userProfileExistsByChatId(id) && !update.getMessage().getText()
-                .equals(MessageText.BUTTON_START)) {
+
+        boolean isUserExist = userProfileService.userProfileExistsByChatId(id);
+
+        if (!isUserExist && !update.getMessage().getText().equals(MessageText.BUTTON_START)) {
             commandName = CommandName.getValue(MessageText.NO_ACCOUNT);
         } else {
-            UserProfile userProfile = userProfileService.getUserProfileById(id);
-            if (update.hasCallbackQuery()) {
+            if (isUserExist && update.hasCallbackQuery()) {
+                UserProfile userProfile = userProfileService.getUserProfileById(id);
                 commandName = CommandName.getValue(userProfile.getBotState().name());
             } else {
-                UserProfile.BotState botState = userProfile.getBotState() != null ? userProfile.getBotState() :
-                        UserProfile.BotState.NA;
+
+                UserProfile.BotState botState = isUserExist && userProfileService.getUserProfileById(id).getBotState() != null ?
+                        userProfileService.getUserProfileById(id).getBotState() : UserProfile.BotState.NA;
                 if (update.getMessage().getText().charAt(0) == MessageText.SLASH.charAt(0)) {
                     commandName = CommandName.getValue(update.getMessage().getText());
                 } else {

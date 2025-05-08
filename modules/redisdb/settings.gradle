@@ -1,7 +1,4 @@
 rootProject.name = 'redisdb'
 
-include 'modules:kafka'
-project(":modules:kafka").projectDir = new File("../kafka")
-
-include 'modules:postgresdb'
-project(":modules:postgresdb").projectDir = new File("../postgresdb")
+include 'modules:dto'
+project(":modules:dto").projectDir = new File("../dto")

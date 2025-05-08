@@ -1,6 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.redisdb.config;
 
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -40,11 +40,11 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, SearchParams> redisTemplate2() {
-        RedisTemplate<String, SearchParams> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, SearchParamsDTO> redisTemplate2() {
+        RedisTemplate<String, SearchParamsDTO> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchParams.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchParamsDTO.class));
 
         return redisTemplate;
     }

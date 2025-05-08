@@ -1,7 +1,8 @@
 package com.gbyzzz.linkedinjobsbot.modules.redisdb.service.impl;
 
 
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RedisServiceImpl implements RedisService {
 
-    private final RedisTemplate<String, SearchParams> redisTemplateSearchParams;
+    private final RedisTemplate<String, SearchParamsDTO> redisTemplateSearchParams;
 
     private final RedisTemplate<String, List<String>> redisTemplateList;
     @Override
@@ -22,11 +23,11 @@ public class RedisServiceImpl implements RedisService {
         redisTemplateSearchParams.delete(chatId.toString());
     }
     @Override
-    public void saveToTempRepository(SearchParams searchParams, Long chatId) {
+    public void saveToTempRepository(SearchParamsDTO searchParams, Long chatId) {
         redisTemplateSearchParams.opsForValue().set(chatId.toString(), searchParams);
     }
     @Override
-    public SearchParams getFromTempRepository(Long chatId) {
+    public SearchParamsDTO getFromTempRepository(Long chatId) {
         return redisTemplateSearchParams.opsForValue().get(chatId.toString());
     }
 }

@@ -1,7 +1,8 @@
 package com.gbyzzz.linkedinjobsbot.repository;
 
-import com.gbyzzz.linkedinjobsbot.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.initializer.PostgreSQLContainerInitializer;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.repository.SavedJobRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

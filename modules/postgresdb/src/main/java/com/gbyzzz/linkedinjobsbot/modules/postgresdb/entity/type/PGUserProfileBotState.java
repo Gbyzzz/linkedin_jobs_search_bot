@@ -1,6 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.type;
 
-import com.gbyzzz.linkedinjobsbotentityservice.entity.UserProfile;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 

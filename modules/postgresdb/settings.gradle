@@ -1,4 +1,10 @@
 rootProject.name = 'postgresdb'
 
+include 'modules:commons'
+project(":modules:commons").projectDir = new File("../commons")
+
 include 'modules:kafka'
 project(":modules:kafka").projectDir = new File("../kafka")
+
+include 'modules:dto'
+project(":modules:dto").projectDir = new File("../dto")

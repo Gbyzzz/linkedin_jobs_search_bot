@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.impl;
 
+
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.repository.UserProfileRepository;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;

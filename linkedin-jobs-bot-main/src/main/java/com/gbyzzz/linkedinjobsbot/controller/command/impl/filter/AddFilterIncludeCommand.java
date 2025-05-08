@@ -3,7 +3,7 @@ package com.gbyzzz.linkedinjobsbot.controller.command.impl.filter;
 import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
@@ -25,15 +25,15 @@ public class AddFilterIncludeCommand implements Command {
 
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage()
                 .getChatId());
-        SearchParams searchParams = redisService.getFromTempRepository(id);
-        String[] keywords = searchParams.getFilterParams().getIncludeWordsInDescription();
+        SearchParamsDTO searchParams = redisService.getFromTempRepository(id);
+        String[] keywords = searchParams.filterParams().getIncludeWordsInDescription();
         if (!update.getMessage().getText().equals(MessageText.PLUS)) {
             if(update.getMessage().getText().equals(MessageText.MINUS)) {
                 keywords = MessageText.EMPTY_STRING_ARRAY;
             } else {
                 keywords = update.getMessage().getText().split(MessageText.SPACES);
             }
-            searchParams.getFilterParams().setIncludeWordsInDescription(keywords);
+            searchParams.filterParams().setIncludeWordsInDescription(keywords);
             redisService.saveToTempRepository(searchParams, id);
         }
         userProfile.setBotState(UserProfile.BotState.ADD_FILTER_EXCLUDE);
@@ -43,9 +43,9 @@ public class AddFilterIncludeCommand implements Command {
             reply.append(word).append(MessageText.NEW_LINE);
         }
         reply.append(MessageText.NEW_LINE);
-        if (searchParams.getFilterParams().getExcludeWordsFromTitle() != null) {
+        if (searchParams.filterParams().getExcludeWordsFromTitle() != null) {
             reply.append(MessageText.EXCLUDE_EDIT_START);
-            for (String exclude : searchParams.getFilterParams().getExcludeWordsFromTitle()) {
+            for (String exclude : searchParams.filterParams().getExcludeWordsFromTitle()) {
                 reply.append(exclude).append(MessageText.SPACE);
             }
             reply.append(MessageText.NEW_LINE).append(MessageText.NEW_LINE)

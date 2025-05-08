@@ -5,6 +5,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.impl.search.AddSearchCommand;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.dto.mapper.SearchParamsDTOMapper;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
 import com.gbyzzz.linkedinjobsbot.service.MessageService;
@@ -23,6 +24,7 @@ public class ListOfJobsCommand implements Command {
     private final AddSearchCommand addSearchCommand;
     private final RedisService redisService;
     private final MessageService messageService;
+    private final SearchParamsDTOMapper searchParamsDtoMapper;
 
     @Override
     public Reply execute(Update update) throws IOException {
@@ -35,7 +37,7 @@ public class ListOfJobsCommand implements Command {
             case MessageText.APPLIED -> sendMessage = messageService.getAppliedJobByUserId(id, command);
             case MessageText.SEARCHES -> {
                 if(command[1].equals(MessageText.EDIT)){
-                    redisService.saveToTempRepository(searchParamsService.findById(Long.parseLong(command[4])),
+                    redisService.saveToTempRepository(searchParamsDtoMapper.toDTO(searchParamsService.findById(Long.parseLong(command[4]))),
                             update.getCallbackQuery().getMessage().getChatId());
                     return addSearchCommand.execute(update);
                 }

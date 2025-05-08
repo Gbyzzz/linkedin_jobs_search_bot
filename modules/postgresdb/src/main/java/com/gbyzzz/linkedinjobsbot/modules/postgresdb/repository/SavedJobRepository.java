@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.postgresdb.repository;
 
+
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -4,8 +4,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.controller.command.keyboard.WorkplaceKeyboard;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.FilterParams;
-import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsDTO;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.UserProfileService;
 import com.gbyzzz.linkedinjobsbot.modules.redisdb.service.RedisService;
@@ -31,23 +30,23 @@ public class AddWorkplaceCommand implements Command {
         Long id = update.getCallbackQuery().getMessage().getChatId();
         String data = update.getCallbackQuery().getData();
         Reply reply;
-        SearchParams searchParams = redisService.getFromTempRepository(id);
+        SearchParamsDTO searchParams = redisService.getFromTempRepository(id);
         if (data.equals(MessageText.NEXT)) {
             UserProfile userProfile = userProfileService.getUserProfileById(id);
             userProfile.setBotState(UserProfile.BotState.ADD_FILTER_INCLUDE);
             userProfileService.save(userProfile);
             String workplaceType = getWorkplaceValue();
-            if (searchParams.getFilterParams() == null) {
-                searchParams.setFilterParams(new FilterParams());
-            }
+//            if (searchParams.filterParams() == null) {
+//                searchParams.setFilterParams(new FilterParams());
+//            }
             if (!workplaceType.isEmpty()) {
-                searchParams.getSearchFilters().put(MessageText.WORKPLACE_TYPE, workplaceType);
+                searchParams.searchFilters().put(MessageText.WORKPLACE_TYPE, workplaceType);
                 redisService.saveToTempRepository(searchParams, id);
             }
             StringBuilder stringBuilder = new StringBuilder();
-            if (searchParams.getFilterParams().getIncludeWordsInDescription() != null) {
+            if (searchParams.filterParams().getIncludeWordsInDescription() != null) {
                 stringBuilder.append(MessageText.INCLUDE_EDIT_START);
-                for (String include : searchParams.getFilterParams().getIncludeWordsInDescription()) {
+                for (String include : searchParams.filterParams().getIncludeWordsInDescription()) {
                     stringBuilder.append(include).append(MessageText.SPACE);
                 }
                 stringBuilder.append(MessageText.NEW_LINE).append(MessageText.NEW_LINE)
@@ -62,7 +61,7 @@ public class AddWorkplaceCommand implements Command {
         } else {
             getWorkplaceCallbackAction(data);
             StringBuilder stringBuilder = new StringBuilder();
-            if(searchParams.getId() != null) {
+            if(searchParams.id() != null) {
                 stringBuilder.append(MessageText.CANCEL_EDITING_COMMAND)
                         .append(MessageText.ADD_WORKPLACE_REPLY);
             } else {

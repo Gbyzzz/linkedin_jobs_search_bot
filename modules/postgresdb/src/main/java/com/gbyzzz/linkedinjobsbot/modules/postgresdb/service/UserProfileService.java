@@ -1,5 +1,6 @@
 package com.gbyzzz.linkedinjobsbot.modules.postgresdb.service;
 
+
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.UserProfile;
 
 import java.util.List;
