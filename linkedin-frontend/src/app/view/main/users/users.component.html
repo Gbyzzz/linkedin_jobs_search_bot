@@ -1,0 +1,28 @@
+<!-- search-params.component.html -->
+<table class="table table-bordered">
+  <thead class="table-dark">
+  <tr>
+    <th>ID</th>
+    <th>User (Username)</th>
+    <th>Bot State</th>
+    <th>Date of registration</th>
+    <th>User Role</th>
+    <th>Search params</th>
+    <th>Jobs(New/Applied/Total)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let userProfile of userProfiles">
+    <tr>
+      <td class="border-1">{{ userProfile.chatId}}</td>
+      <td class="border-1">{{ userProfile.username }}</td>
+      <td class="border-1">{{ userProfile.botState }}</td>
+      <td class="border-1">{{ userProfile.registeredAt}}</td>
+      <td class="border-1">{{ userProfile.userRole }}</td>
+      <td class="border-1">{{ userProfile.botState }}</td>
+      <td class="border-1">{{ userProfile.chatId}}</td>
+    </tr>
+
+  </ng-container>
+  </tbody>
+</table>

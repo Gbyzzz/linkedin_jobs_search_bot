@@ -1,0 +1,13 @@
+.align-center-top {
+  vertical-align: top;
+  text-align: center;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #393d40;
+  color: white;
+}
+
+//.custom-checkbox .form-check-input:checked {
+//  background-color: #212529 !important;
+//  border-color: #212529 !important;
+//}
