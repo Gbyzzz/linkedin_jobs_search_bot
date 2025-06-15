@@ -6,11 +6,13 @@ import com.gbyzzz.linkedinjobsbot.modules.dto.dto.SearchParamsTimeRangeDTO;
 import com.gbyzzz.linkedinjobsbot.modules.mongodb.service.JobService;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SearchParams;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.pagination.Pagination;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SavedJobService;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SearchParamsService;
 import com.gbyzzz.linkedinjobsbot.service.MessageService;
 import com.gbyzzz.linkedinjobsbot.service.NewJobService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -57,7 +59,8 @@ public class NewJobServiceImpl implements NewJobService {
             List<String> jobDTO = new ArrayList<>(toSave);
             List<SavedJob> jobsToSave = getNewJobsToSave(jobDTO, searchParamsService.findById(searchParamsDTO.id()));
             savedJobService.saveAll(jobsToSave);
-            List<SavedJob> jobs = savedJobService.getNewJobsByUserId(searchParamsDTO.userId());
+//            Page<SavedJob> jobs = savedJobService.getNewJobsByUserId(searchParamsDTO.userId(),
+//                    new Pagination(1,1, Pagination.SortDirection.ASC));
             SendMessage sendMessage = messageService.getNewJobByUserId(searchParamsDTO.userId(),
                     new String[]{MessageText.NEW, MessageText.FIRST, MessageText.ALL});
             linkedInJobsBot.sendMessage(sendMessage);

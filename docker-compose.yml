@@ -1,7 +1,9 @@
 name: linkedin_jobs_bot
 services:
   bot_main:
-    build: ./linkedin-jobs-bot-main
+    build:
+      context: .
+      dockerfile: ./linkedin-jobs-bot-main/Dockerfile
     restart: always
     container_name: bot_main
     network_mode: host
@@ -23,7 +25,48 @@ services:
       - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="${PASSWORD}";
 
 
-  #      - SPRING_KAFKA_SSL_TRUSTSTORELOCATION=file:/app/build/resources/main/client-certs/kafka.producer.truststore.jks
+  bot_api:
+    build:
+      context: .
+      dockerfile: ./linkedin-jobs-bot-api/Dockerfile
+    restart: always
+    container_name: bot_api
+    network_mode: host
+    working_dir: /app
+    environment:
+      - SERVER_PORT=8091
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/linkedin_jobs_bot
+      - SPRING_DATASOURCE_PASSWORD=${PASSWORD}
+      - SPRING_DATA_MONGODB_HOST=localhost
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=jobs_db
+      - SPRING_DATA_MONGODB_PASSWORD=${PASSWORD}
+      - SPRING_DATA_MONGODB_USERNAME=${USER}
+      - SPRING_DATA_REDIS_HOST=localhost
+      - SPRING_DATA_REDIS_PASSWORD=${PASSWORD}
+      - BOT_NAME=${BOT_NAME}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=localhost:29093
+      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="${PASSWORD}";
+
+
+
+  bar_frontend:
+    build:
+      context: ./linkedin-frontend
+      args:
+        - ENV=${ENV}
+    container_name: linkedin-frontend
+    restart: always
+    volumes:
+      - ./certbot/conf/:/var/www/certbot/:ro
+    networks:
+      - app_network
+    ports:
+      - "443:443"
+      - "80:80"
+
+#      - SPRING_KAFKA_SSL_TRUSTSTORELOCATION=file:/app/build/resources/main/client-certs/kafka.producer.truststore.jks
 #      - SPRING_KAFKA_SSL_TRUSTSTOREPASSWORD=${PASSWORD}
 #      - SPRING_KAFKA_SSL_KEYSTORELOCATION=file:/app/build/resources/main/client-certs/kafka.producer.keystore.jks
 #      - SPRING_KAFKA_SSL_KEYSTOREPASSWORD=${PASSWORD}
@@ -33,7 +76,9 @@ services:
 #      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
 
   bot_scanner_one:
-    build: ./job-scanner
+    build:
+      context: .
+      dockerfile: ./job-scanner/Dockerfile
     restart: always
     container_name: bot_scanner_one
     depends_on:
@@ -41,7 +86,7 @@ services:
     network_mode: host
     working_dir: /app
     environment:
-      - SERVER_PORT=8091
+      - SERVER_PORT=8092
       - SPRING_DATA_MONGODB_HOST=localhost
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=jobs_db
@@ -65,7 +110,9 @@ services:
 #      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
 
   bot_scanner_two:
-    build: ./job-scanner
+    build:
+      context: .
+      dockerfile: ./job-scanner/Dockerfile
     restart: always
     container_name: bot_scanner_two
     depends_on:
@@ -73,7 +120,7 @@ services:
     network_mode: host
     working_dir: /app
     environment:
-      - SERVER_PORT=8092
+      - SERVER_PORT=8093
       - SPRING_DATA_MONGODB_HOST=localhost
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=jobs_db
@@ -96,3 +143,8 @@ services:
 #      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT
 #      - SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=PLAIN
 #      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
+
+
+networks:
+  app_network:
+    external: true
