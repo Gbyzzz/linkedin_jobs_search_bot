@@ -1,0 +1,71 @@
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+  <tr>
+    <th class="align-center-top" style="width: 5vw;">ID</th>
+    <th class="align-center-top"style="width: 10vw;">Job ID</th>
+    <th class="align-center-top" style="width: 10vw;">Reply State
+      <select class="form-select mt-1" (change)="onReplyStateChange($event)">
+        <option value="All">All</option>
+        <option *ngFor="let state of replyStates" (change)="onReplyStateChange($event)" [value]="state">{{ state }}</option>
+      </select>
+    </th>
+    <th class="align-center-top" *ngIf="selectedReplyState != 'NEW_JOB'" style="width: 20vw;">Date Applied</th>
+    <th class="align-center-top">Apply
+      <input class="form-check-input" type="checkbox"
+             [checked]="allAppliedChecked()"
+             (change)="onAllApplyChange($event)">
+    </th>
+    <th class="align-center-top">Delete
+      <input class="form-check-input" type="checkbox"
+             [checked]="allDeletedChecked()"
+             (change)="onAllDeleteChange($event)">
+    </th>
+    <th class="align-center-top">Reject
+      <input class="form-check-input" type="checkbox"
+             [checked]="allRejectedChecked()"
+             (change)="onAllRejectChange($event)">
+    </th>
+    <th class="align-center-top">Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let savedJob of savedJobs">
+    <tr>
+      <td class="border-1" (click)="openLink(savedJob.jobId)">{{ savedJob.id }}</td>
+      <td class="border-1" (click)="openLink(savedJob.jobId)">{{ savedJob.jobId }}</td>
+      <td class="border-1" (click)="openLink(savedJob.jobId)">{{ savedJob.replyState }}</td>
+      <td class="border-1" (click)="openLink(savedJob.jobId)"
+          *ngIf="selectedReplyState != 'NEW_JOB'"> {{ savedJob.dateApplied | date:'MMMM d, y, h:mm a':'short' }}
+      </td>
+      <td><input class="form-check-input" type="checkbox"
+                 [checked]="savedJob.replyState === 'APPLIED' ||
+                    savedJob.replyState === 'REJECTED'"
+                 (change)="onApplyChange(savedJob.id, $event)"
+                 [disabled]="savedJob.replyState === 'DELETED' ||
+                  savedJob.replyState === 'REJECTED'"
+                 [id]="savedJob.id + ' applied'"></td>
+      <td><input class="form-check-input" type="checkbox"
+                 [checked]="savedJob.replyState === 'DELETED'"
+                 (change)="onDeleteChange(savedJob.id, $event)"
+                 [disabled]="savedJob.replyState === 'APPLIED' ||
+                  savedJob.replyState === 'REJECTED'"
+                 [id]="savedJob.id + ' deleted'"></td>
+      <td><input class="form-check-input" type="checkbox"
+                 [checked]="savedJob.replyState === 'REJECTED'"
+                 (change)="onRejectChange(savedJob.id, $event)"
+                 [disabled]="savedJob.replyState != 'APPLIED' &&
+                  savedJob.replyState != 'REJECTED'"
+                 [id]="savedJob.id + ' rejected'"></td>
+      <td></td>
+    </tr>
+  </ng-container>
+  </tbody>
+  <tr *ngIf="isChanged">
+    <button class="btn btn-dark mt-2" (click)="saveChanges()">Save Changes</button>
+    <button class="btn btn-dark mt-2" (click)="revertChanges()">Revert changes</button>
+  </tr>
+</table>
+<mat-paginator *ngIf="totalSavedJobsFound > 10" (page)="pageChanged($event)" [pageIndex]="pagination.pageNumber"
+               [pageSize]="pagination.pageSize" [length]="totalSavedJobsFound"
+               [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+

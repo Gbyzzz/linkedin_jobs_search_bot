@@ -27,9 +27,8 @@ public class StartCommand implements Command {
             String username = update.getMessage().getFrom().getUserName() != null ?
                     update.getMessage().getFrom().getUserName() :
                     update.getMessage().getFrom().getFirstName();
-            userProfileService.save(new UserProfile(update.getMessage().getChatId(),
-                    username,
-                    UserProfile.BotState.NA, new Date(System.currentTimeMillis())));
+            userProfileService.save(new UserProfile(update.getMessage().getChatId(), username, UserProfile.BotState.NA,
+                    new Date(System.currentTimeMillis()), "", UserProfile.UserRole.USER, ""));
             StringBuilder stringBuilder = new StringBuilder(MessageText.START_REPLY);
             stringBuilder.append(MessageText.MAIN_MENU_REPLY);
             sendMessage = new SendMessage(update.getMessage().getChatId().toString(),

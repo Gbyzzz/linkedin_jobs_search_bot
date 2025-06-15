@@ -1,0 +1,17 @@
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab *ngIf="userProfile && userProfile.userRole === 'ADMIN'" label="Users">
+      <ng-template matTabContent>
+        <app-users></app-users>
+      </ng-template>
+    </mat-tab>
+  <mat-tab label="Search parameters">
+    <ng-template matTabContent>
+      <app-search-params></app-search-params>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Jobs">
+    <ng-template matTabContent>
+      <app-jobs></app-jobs>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

@@ -2,16 +2,17 @@ package com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.impl;
 
 
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.SavedJob;
+import com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity.pagination.Pagination;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.repository.SavedJobRepository;
 import com.gbyzzz.linkedinjobsbot.modules.postgresdb.service.SavedJobService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -31,18 +32,48 @@ public class SavedJobServiceImpl implements SavedJobService {
     }
 
     @Override
-    public List<SavedJob> getNewJobsByUserId(Long id) {
-        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.NEW_JOB);
+    public Page<SavedJob> getNewJobsByUserId(Long id, Pagination pagination) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.NEW_JOB, makePageRequest(pagination));
+    }
+
+    @Override
+    public Page<SavedJob> getAppliedJobsByUserId(Long id, Pagination pagination) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.APPLIED, makePageRequest(pagination));
+    }
+
+    @Override
+    public Page<SavedJob> getRejectedJobsByUserId(Long id, Pagination pagination) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.REJECTED, makePageRequest(pagination));
+    }
+
+    @Override
+    public Page<SavedJob> getDeletedJobsByUserId(Long id, Pagination pagination) {
+        return savedJobRepository.findSavedJobByUserProfile_ChatIdAndReplyState(id, SavedJob.ReplyState.DELETED, makePageRequest(pagination));
+    }
+
+    @Override
+    public Page<SavedJob> getJobsByUserIdPage(Long id, Pagination pagination) {
+
+        return savedJobRepository.findSavedJobByUserProfile_ChatId(id, makePageRequest(pagination));
     }
 
     @Override
     public void saveAll(List<SavedJob> jobs) {
+        jobs.forEach(savedJob -> {
+            if (savedJob.getReplyState() == SavedJob.ReplyState.APPLIED &&
+                    savedJob.getDateApplied() == null) {
+                savedJob.setDateApplied(new Date(System.currentTimeMillis()));
+            } else if (savedJob.getReplyState() == SavedJob.ReplyState.NEW_JOB &&
+                    savedJob.getDateApplied() != null) {
+                savedJob.setDateApplied(null);
+            }
+        });
         savedJobRepository.saveAll(jobs);
     }
 
     @Override
     public void deleteAll(Set<SavedJob> jobs) {
-       savedJobRepository.deleteAll(jobs);
+        savedJobRepository.deleteAll(jobs);
     }
 
     @Override
@@ -106,5 +137,14 @@ public class SavedJobServiceImpl implements SavedJobService {
     public Optional<SavedJob> getLastSavedJob(Long userId, SavedJob.ReplyState state) {
         return savedJobRepository.findTopByUserProfileChatIdAndReplyStateAndIdGreaterThanOrderByIdDesc(
                 userId, state, 0L);
+    }
+
+    private PageRequest makePageRequest(Pagination pagination) {
+        Integer pageNumber = pagination.getPageNumber() != null ? pagination.getPageNumber() : null;
+        Integer pageSize = pagination.getPageSize() != null ? pagination.getPageSize() : null;
+        Sort sort = pagination.getSortDirection().equals(Pagination.SortDirection.DESC) ?
+                Sort.by(Sort.Direction.DESC, "id") :
+                Sort.by(Sort.Direction.ASC, "id");
+        return PageRequest.of(pageNumber, pageSize, sort);
     }
 }

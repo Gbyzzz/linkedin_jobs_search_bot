@@ -14,4 +14,5 @@ public interface UserProfileService {
 
     void delete(Long id);
     List<UserProfile> getAll();
+    UserProfile getUserProfileByUsername(String username);
 }

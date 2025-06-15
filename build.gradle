@@ -1,6 +1,16 @@
 group = 'com.gbyzzz.linkedin-jobs-bot'
 version = '1.0-SNAPSHOT'
 
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+}
+
 //buildscript {
 //    ext {
 //        springBootVersion = '3.4.4'

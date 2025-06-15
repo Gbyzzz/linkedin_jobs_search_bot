@@ -22,6 +22,7 @@ public class ToMainMenuCommand implements Command {
     public Reply execute(Update update) {
         UserProfile userProfile = userProfileService.getUserProfileById(update.getMessage().getChatId());
         userProfile.setBotState(UserProfile.BotState.ADD_KEYWORDS);
+
         userProfileService.save(userProfile);
         SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(),
                 MessageText.MAIN_MENU_REPLY);

@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.tabs-overrides((
+    active-focus-indicator-color: black,
+  ));
+}

@@ -1,0 +1,33 @@
+<table class="table table-bordered">
+  <thead class="table-dark">
+  <tr>
+    <th>ID</th>
+    <th>User (Username)</th>
+    <th>Location</th>
+    <th>Keywords</th>
+    <th>Search Filters</th>
+    <th>Include</th>
+    <th>Exclude</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let param of searchParams">
+    <tr>
+      <td class="border-1">{{ param.id }}</td>
+      <td class="border-1">{{ param.username }}</td>
+      <td class="border-1">{{ param.location }}</td>
+      <td class="border-1">{{ param.keywords.join(', ') }}</td>
+      <td class="border-1">
+  <pre *ngFor="let entry of param.searchFilters | keyvalue">
+{{ entry.key }}: {{ entry.value }}
+  </pre>
+      </td>
+      <td class="border-1">{{ param.filterParams.includeWordsInDescription.join(', ') }}</td>
+      <td class="border-1">{{ param.filterParams.excludeWordsFromTitle.join(', ') }}</td>
+
+
+    </tr>
+
+  </ng-container>
+  </tbody>
+</table>

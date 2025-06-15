@@ -6,8 +6,8 @@ project(":modules:postgresdb").projectDir = new File("../modules/postgresdb")
 //include 'modules:commons'
 //project(":modules:commons").projectDir = new File("../modules/commons")
 //
-//include 'modules:mongodb'
-//project(":modules:mongodb").projectDir = new File("../modules/mongodb")
+include 'modules:mongodb'
+project(":modules:mongodb").projectDir = new File("../modules/mongodb")
 
 include 'modules:redisdb'
 project(":modules:redisdb").projectDir = new File("../modules/redisdb")

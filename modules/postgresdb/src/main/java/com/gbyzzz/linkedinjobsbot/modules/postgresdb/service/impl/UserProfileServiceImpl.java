@@ -45,4 +45,9 @@ public class UserProfileServiceImpl implements UserProfileService {
     public List<UserProfile> getAll() {
         return userProfileRepository.findAll();
     }
+
+    @Override
+    public UserProfile getUserProfileByUsername(String username) {
+        return userProfileRepository.findByUsername(username).orElseThrow();
+    }
 }
