@@ -4,6 +4,7 @@ import {AuthService} from '../../service/auth/auth.service';
 import {LoginSharedService} from '../../service/auth/login-shared.service';
 import {TokenStorageService} from '../../service/auth/token-storage.service';
 import {Router} from '@angular/router';
+import { UserProfile } from '../../model/UserProfile';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,7 @@ export class LoginComponent implements OnInit {
     // Define the Telegram callback on the window object
     (window as any).onTelegramAuth = (user: any) => {
       console.log(user);
-      this.authService.telegramLogin(user).subscribe(data => {
+      this.authService.telegramLogin(user).subscribe((data: { token: string; user: UserProfile; }) => {
         this.tokenStorage.saveToken(data.token);
         this.tokenStorage.saveUser(data.user);
          this.router.navigate(['/']).then();

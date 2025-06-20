@@ -4,6 +4,7 @@ import com.gbyzzz.linkedinjobsbot.controller.command.Command;
 import com.gbyzzz.linkedinjobsbot.dto.Reply;
 import com.gbyzzz.linkedinjobsbot.dto.converter.SendToEditMessageConverter;
 import com.gbyzzz.linkedinjobsbot.modules.commons.values.MessageText;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
@@ -89,6 +90,7 @@ public class LinkedInJobsBot implements SpringLongPollingBot, LongPollingSingleT
     }
 
     @Override
+    @Timed(value = "bot.reply", description = "Time taken to execute the operation")
     public void consume(Update update) {
         long start = System.currentTimeMillis();
         if ((update.getCallbackQuery() != null &&
