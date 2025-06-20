@@ -6,7 +6,7 @@ import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 import {SEARCH_PARAMETERS_URL_TOKEN} from './service/entity/impl/SearchParamsServiceImpl';
 import {SAVED_JOB_URL_TOKEN} from './service/entity/impl/SavedJobServiceImpl';
-import {environment} from '../environments/environment.dev';
+import {environment} from '../environments/environment';
 import {USER_PROFILE_URL_TOKEN} from './service/entity/impl/UserProfileServiceImpl';
 import {authInterceptorProviders} from './service/auth/auth.interceptor';
 

@@ -1,7 +1,9 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.5' apply false
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' apply false
+    id 'io.spring.dependency-management'
 }
 
 group = 'com.gbyzzz.linkedinjobsbot.modules'
@@ -23,7 +25,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        mavenBom SpringBootPlugin.BOM_COORDINATES
     }
 }
 
@@ -31,7 +33,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
