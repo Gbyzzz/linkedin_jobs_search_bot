@@ -1,7 +1,9 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'java-library'
-    id 'org.springframework.boot' version '3.4.5' apply false
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' apply false
+    id 'io.spring.dependency-management'
 }
 
 group = 'com.gbyzzz.linkedinjobsbot.modules'
@@ -23,7 +25,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        mavenBom SpringBootPlugin.BOM_COORDINATES
     }
 }
 
@@ -39,9 +41,8 @@ dependencies {
     implementation 'org.flywaydb:flyway-database-postgresql:10.0.0'
     api project(':modules:kafka')
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'org.postgresql:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

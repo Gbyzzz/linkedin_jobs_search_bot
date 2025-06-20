@@ -21,8 +21,8 @@ final class CommandProvider {
         Long id = update.hasCallbackQuery() ?
                 update.getCallbackQuery().getMessage().getChatId() :
                 update.getMessage().getChatId();
-        CommandName commandName = null;
-//        Optional<UserProfile> userProfile = userProfileService.getUserProfileById(id);
+
+        CommandName commandName;
 
         boolean isUserExist = userProfileService.userProfileExistsByChatId(id);
 
@@ -30,13 +30,16 @@ final class CommandProvider {
             commandName = CommandName.getValue(MessageText.NO_ACCOUNT);
         } else {
             if (isUserExist && update.hasCallbackQuery()) {
-                UserProfile userProfile = userProfileService.getUserProfileById(id);
-                commandName = CommandName.getValue(userProfile.getBotState().name());
+                if(update.getCallbackQuery().getData().chars().filter(ch -> ch == '_').count() == 4){
+                    commandName = CommandName.getValue(UserProfile.BotState.NEW.name());
+                } else {
+                    UserProfile userProfile = userProfileService.getUserProfileById(id);
+                    commandName = CommandName.getValue(userProfile.getBotState().name());
+                }
             } else {
-
                 UserProfile.BotState botState = isUserExist && userProfileService.getUserProfileById(id).getBotState() != null ?
                         userProfileService.getUserProfileById(id).getBotState() : UserProfile.BotState.NA;
-                if (update.getMessage().getText().charAt(0) == MessageText.SLASH.charAt(0)) {
+                if (update.hasMessage() && update.getMessage().getText().charAt(0) == MessageText.SLASH.charAt(0)) {
                     commandName = CommandName.getValue(update.getMessage().getText());
                 } else {
                     commandName = CommandName.getValue(botState.name());
