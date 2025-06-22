@@ -11,5 +11,5 @@ FROM nginx:alpine
 ARG ENV
 COPY --from=builder /app/dist/linkedin-frontend/browser/ /usr/share/nginx/html/
 COPY /nginx-$ENV.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+EXPOSE 3002
 ENTRYPOINT ["nginx","-g","daemon off;"]
