@@ -1,0 +1,4 @@
+rootProject.name = 'linkedin-jobs-bot-ai'
+
+//include 'modules:postgresdb'
+//project(":modules:postgresdb").projectDir = new File("../modules/postgresdb")

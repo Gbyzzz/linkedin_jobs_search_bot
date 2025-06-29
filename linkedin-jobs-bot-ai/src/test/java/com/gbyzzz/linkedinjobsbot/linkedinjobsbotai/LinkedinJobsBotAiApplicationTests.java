@@ -1,11 +1,10 @@
-package com.gbyzzz.linkedinjobsbotapi;
+package com.gbyzzz.linkedinjobsbot.linkedinjobsbotai;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LinkedinJobsBotApiApplicationTests {
-
+class LinkedinJobsBotAiApplicationTests {
 
     @Test
     void contextLoads() {
