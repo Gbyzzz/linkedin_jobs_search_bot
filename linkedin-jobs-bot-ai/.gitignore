@@ -1,21 +1,9 @@
-linkedin-jobs-bot-main/HELP.md
+HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-*.env
-*.bat
-/kafka/certs
-*.jks
-*.crt
-application-dev.properties
-.secrets
-*.tar.gz
-./data
-bfg-1.15.0.jar
-.idea
-gradle
 
 ### STS ###
 .apt_generated
@@ -47,4 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-docker-compose.dev.yml
