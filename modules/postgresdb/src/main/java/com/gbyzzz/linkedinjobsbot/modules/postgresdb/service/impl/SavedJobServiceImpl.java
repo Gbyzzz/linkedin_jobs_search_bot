@@ -139,6 +139,18 @@ public class SavedJobServiceImpl implements SavedJobService {
                 userId, state, 0L);
     }
 
+    @Override
+    public List<SavedJob> getNewJobsByUserIdWhereResultIsNull(Long id) {
+        return savedJobRepository.findByUserProfile_ChatIdAndReplyStateAndGemmaGradeIsNull(id, SavedJob.ReplyState.NEW_JOB);
+    }
+
+    @Override
+    public List<SavedJob> getAppliedJobsByUserIdWhereResultIsNull(Long id) {
+        return savedJobRepository.findByUserProfile_ChatIdAndReplyStateAndGemmaGradeIsNull(id, SavedJob.ReplyState.NEW_JOB);
+    }
+
+
+
     private PageRequest makePageRequest(Pagination pagination) {
         Integer pageNumber = pagination.getPageNumber() != null ? pagination.getPageNumber() : null;
         Integer pageSize = pagination.getPageSize() != null ? pagination.getPageSize() : null;

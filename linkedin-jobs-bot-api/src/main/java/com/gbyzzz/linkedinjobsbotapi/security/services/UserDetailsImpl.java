@@ -41,7 +41,8 @@ public class UserDetailsImpl implements UserDetails {
 		return new UserDetailsImpl(
 				user.getChatId(),
 				user.getUsername(), 
-				user.getPassword(),
+//				user.getPassword(),
+				null,
 				authorities);
 	}
 

@@ -1,6 +1,6 @@
 name: linkedin_jobs_bot
 services:
-  bot_main:
+  bot-main:
     build:
       context: .
       dockerfile: ./linkedin-jobs-bot-main/Dockerfile
@@ -9,7 +9,7 @@ services:
       - app_network
     ports:
       - "8090:8090"
-    container_name: bot_main
+    container_name: bot-main
     working_dir: /app
     environment:
       - SERVER_PORT=8090
@@ -31,12 +31,12 @@ services:
       - SCAN_PERIOD=2
 
 
-  bot_api:
+  bot-api:
     build:
       context: .
       dockerfile: ./linkedin-jobs-bot-api/Dockerfile
     restart: always
-    container_name: bot_api
+    container_name: bot-api
     networks:
       - app_network
     ports:
@@ -62,7 +62,7 @@ services:
 
 
 
-  bot_frontend:
+  bot-frontend:
     build:
       context: ./linkedin-frontend
       args:
@@ -74,16 +74,16 @@ services:
     ports:
       - "3002:3002"
 
-  bot_scanner_one:
+  bot-scanner-one:
     build:
       context: .
       dockerfile: ./job-scanner/Dockerfile
     restart: always
-    container_name: bot_scanner_one
+    container_name: bot-scanner-one
     networks:
       - app_network
     depends_on:
-      - bot_main
+      - bot-main
     working_dir: /app
     ports:
       - "8092:8092"
@@ -112,14 +112,14 @@ services:
   #      - SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=PLAIN
   #      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
 
-  bot_scanner_two:
+  bot-scanner-two:
     build:
       context: .
       dockerfile: ./job-scanner/Dockerfile
     restart: always
-    container_name: bot_scanner_two
+    container_name: bot-scanner-two
     depends_on:
-      - bot_main
+      - bot-main
     networks:
       - app_network
     working_dir: /app
@@ -138,17 +138,31 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9093
       - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="${PASSWORD}";
 
-
-#      - SPRING_KAFKA_SSL_TRUST_STORE_LOCATION=file:/app/build/resources/main/client-certs/kafka.consumer.truststore.jks
-#      - SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/app/build/resources/main/client-certs/kafka.consumer.keystore.jks
-#      - SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=${PASSWORD}
-#      - SPRING_KAFKA_SSL_KEY_PASSWORD=${PASSWORD}
-#
-#      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT
-#      - SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=PLAIN
-#      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_ADMIN_USERNAME}" password="${KAFKA_ADMIN_PASSWORD}";
-
+  bot-ai:
+    build:
+      context: .
+      dockerfile: ./linkedin-jobs-bot-ai/Dockerfile
+    restart: always
+    container_name: bot-ai
+    depends_on:
+      - bot-main
+    networks:
+      - app_network
+    working_dir: /app
+    environment:
+      - SERVER_PORT=8094
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_DATABASE=jobs_db
+      - SPRING_DATA_MONGODB_PASSWORD=${PASSWORD}
+      - SPRING_DATA_MONGODB_USERNAME=${USER}
+      - BOT_USERNAME=${BOT_USERNAME_TWO}
+      - BOT_PASSWORD=${BOT_PASSWORD_TWO}
+      - BOT_COOKIE=${BOT_COOKIE_TWO}
+      - BOT_CSRF_TOKEN=${BOT_CSRF_TOKEN_TWO}
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="${PASSWORD}";
 
 networks:
   app_network:

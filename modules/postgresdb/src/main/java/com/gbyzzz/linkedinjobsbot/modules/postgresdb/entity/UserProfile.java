@@ -29,10 +29,8 @@ public class UserProfile {
     private BotState botState;
     @Column(name = "registered_at")
     private Date registeredAt;
-    private String password;
     @Type(PGUserProfileUserRole.class)
     private UserRole userRole;
-    private String userPic;
 
     public enum UserRole {
         ADMIN,

@@ -97,7 +97,7 @@ public class NewJobServiceImpl implements NewJobService {
                 newJobs.add(new SavedJob(null, Long.parseLong(newJob), SavedJob.ReplyState.NEW_JOB,
                         null, searchParams.getUserProfile(), new HashSet<>() {{
                     add(searchParams);
-                }}));
+                }}, null, null, null));
             }
 
         }

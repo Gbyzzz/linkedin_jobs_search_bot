@@ -18,14 +18,18 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    telegram = '9.0.0'
+}
+
 dependencies {
     implementation project(':modules:postgresdb')
     implementation project(':modules:redisdb')
     implementation project(':modules:mongodb')
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.telegram:telegrambots-longpolling:7.7.1'
-    implementation 'org.telegram:telegrambots-springboot-longpolling-starter:7.7.1'
-    implementation 'org.telegram:telegrambots-client:7.7.1'
+    implementation "org.telegram:telegrambots-longpolling:$telegram"
+    implementation "org.telegram:telegrambots-springboot-longpolling-starter:$telegram"
+    implementation "org.telegram:telegrambots-client:$telegram"
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'

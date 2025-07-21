@@ -34,5 +34,6 @@ public interface SavedJobService {
 
     Optional<SavedJob> getLastSavedJobBySearchParams(SavedJob.ReplyState state, Long searchParamsId);
     Optional<SavedJob> getLastSavedJob(Long userId, SavedJob.ReplyState state);
-
+    List<SavedJob> getNewJobsByUserIdWhereResultIsNull(Long id);
+    List<SavedJob> getAppliedJobsByUserIdWhereResultIsNull(Long id);
 }

@@ -46,6 +46,15 @@ public class SavedJob {
             inverseJoinColumns = @JoinColumn(name = "search_params_id"))
     private Set<SearchParams> searchParams;
 
+    @Column(name = "llama_job_grade")
+    private Integer llamaGrade;
+
+    @Column(name = "gemma_job_grade")
+    private Integer gemmaGrade;
+
+    @Column(name = "mistral_job_grade")
+    private Integer mistralGrade;
+
 
 
     public enum ReplyState {

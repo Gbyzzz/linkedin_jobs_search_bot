@@ -20,6 +20,9 @@ public interface SavedJobRepository extends JpaRepository<SavedJob, Long> {
     Page<SavedJob> findSavedJobByUserProfile_ChatId(Long id, Pageable pageable);
 
     @EntityGraph(attributePaths = {"userProfile"})
+    List<SavedJob> findByUserProfile_ChatIdAndReplyStateAndGemmaGradeIsNull(Long chatId, SavedJob.ReplyState state);
+
+    @EntityGraph(attributePaths = {"userProfile"})
     Page<SavedJob> findSavedJobByUserProfile_ChatIdAndReplyState(Long id, SavedJob.ReplyState state, Pageable pageable);
 
     boolean existsSavedJobByJobIdAndUserProfileChatId(Long jobId, Long userId);

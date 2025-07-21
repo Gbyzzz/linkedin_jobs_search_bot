@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @EnableJpaRepositories(basePackages = "com.gbyzzz.linkedinjobsbot.modules.postgresdb.repository")
 @EnableMongoRepositories(basePackages = "com.gbyzzz.linkedinjobsbot.modules.mongodb.repository")
 @EntityScan(basePackages = "com.gbyzzz.linkedinjobsbot.modules.postgresdb.entity")
-@Component
 public class LinkedinJobsBotApiApplication {
 
     public static void main(String[] args) {

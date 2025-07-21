@@ -25,9 +25,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-//    private final PasswordEncoder encoder;
-//    private final UserProfileService userService;
-//    private final KafkaService kafkaService;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private final UserProfileRepository userRepository;
@@ -35,40 +32,11 @@ public class AuthServiceImpl implements AuthService {
     private final TelegramAuthService telegramAuthService;
     private final UsernameOnlyAuthenticationProvider usernameOnlyAuthenticationProvider;
 
-//    @Value("${gbyzzz.url.to.validate}")
-//    String urlToValidate;
-
     @Override
     public ResponseEntity<?> signIn(String username, String password) throws Exception {
         return authenticate(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,
                         password)));
     }
-
-//    @Override
-//    public boolean changePassword(ChangePasswordRequest changePasswordRequest) throws IOException {
-//        UserProfile user;
-//        boolean valid = false;
-//        if(changePasswordRequest.getEmail().equals("")) {
-//
-//            ResponseEntity<String> response = new RestTemplate().postForEntity(
-//                        urlToValidate + "/pass", changePasswordRequest.getOldPassword(), String.class);
-//            valid = response.hasBody();
-//
-//            if (valid) {
-//                user = userService.findByEmail(response.getBody());
-//                user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
-//                userService.updateUser(user, null);
-//            }
-//        } else {
-//            if (!isPasswordValid(changePasswordRequest)) {
-//                return false;
-//            }
-//            user = userService.findByEmail(changePasswordRequest.getEmail());
-//            user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
-//            valid = userService.updateUser(user, null) != null;
-//        }
-//        return valid;
-//    }
 
     @Override
     public boolean sendOnetimePassword(String email) {
@@ -78,19 +46,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> signInUsingTelegram(TelegramLoginRequest loginRequest) throws Exception {
         if(telegramAuthService.isDataValid(loginRequest)) {
-            Optional<UserProfile> userProfile = userRepository.findById(loginRequest.getId());
-            userProfile.ifPresent(profile -> checkImgUrl(loginRequest.getPhoto_url(), profile));
             return authenticate(usernameOnlyAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                     null)));
         }
         return ResponseEntity.status(403).build();
     }
 
-    private void checkImgUrl(String photoUrl, UserProfile userProfile) {
-        if(!Objects.equals(userProfile.getUserPic(), photoUrl)) {
-            userProfile.setUserPic(photoUrl);
-        }
-    }
 
     private ResponseEntity<?> authenticate(Authentication authentication) throws Exception {
         SecurityContextHolder.getContext().setAuthentication(authentication);
